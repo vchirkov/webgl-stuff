@@ -2,11 +2,8 @@
   "name": "webgl-stuff",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "",
+  "main": "./src/index.js",
+  "author": "vlad chirkou",
   "license": "ISC",
   "dependencies": {
     "dat.gui": "^0.6.1",
