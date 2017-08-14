@@ -1,0 +1,65 @@
+/**
+ * Created by vlad.chirkov on 2.6.17.
+ */
+import {Mesh, MeshBasicMaterial, NormalBlending, Color} from 'three';
+import RadialRingGeometry from './radialRingGeometry';
+import InlineTextureLoader from '../inlineTextureLoader';
+
+import base64Texture from './img/gradient.png';
+
+export default class LightRing {
+    constructor(innerR, outerR, segments, thetaLength, {color, opacity}) {
+        this._innerR = innerR;
+        this._outerR = outerR;
+        this._segments = segments;
+        this._color = color;
+        this._opacity = opacity;
+
+        this.geometry = new RadialRingGeometry(this._innerR, this._outerR, this._segments, null, 0, thetaLength);
+        this.material = this.material = new MeshBasicMaterial({
+            color: this._color,
+            map: InlineTextureLoader.load(base64Texture),
+            transparent: true,
+            opacity: this._opacity,
+            blending: NormalBlending
+        });
+        this.mesh = new Mesh(this.geometry, this.material);
+        this.mesh.position.set(0, 0, -10);
+    }
+
+    innerR(val) {
+        if (!_.isUndefined(val)) {
+            this._innerR = val;
+            this.geometry.dispose();
+            this.geometry = new RadialRingGeometry(this._innerR, this._outerR, this._segments);
+            this.mesh.geometry = this.geometry;
+        }
+        return this._innerR;
+    }
+
+    outerR(val) {
+        if (!_.isUndefined(val)) {
+            this._outerR = val;
+            this.geometry.dispose();
+            this.geometry = new RadialRingGeometry(this._innerR, this._outerR, this._segments);
+            this.mesh.geometry = this.geometry;
+        }
+        return this._outerR;
+    }
+
+    color(val) {
+        if (!_.isUndefined(val)) {
+            this._color = new Color(val);
+            this.material.color = this._color;
+        }
+        return this._color;
+    }
+
+    opacity(val) {
+        if (!_.isUndefined(val)) {
+            this._opacity = val;
+            this.material.opacity = val;
+        }
+        return this._opacity;
+    }
+}
