@@ -2,6 +2,7 @@
  * Created by vchirkov on 6/23/2017.
  */
 import _ from 'lodash';
+import {EventEmitter} from 'events';
 import {Color} from 'three';
 import DemoScene from './DemoScene';
 import {easeOutCubic as tween, linear as bgTween} from 'tween-functions';
@@ -110,8 +111,9 @@ const presets = {
     }
 };
 
-export default class WebglStuff {
+export default class WebglStuff extends EventEmitter {
     constructor(el = document.getElementById('container'), init = initial, preset = presets.normal) {
+        super();
         this.initial = _.extend({}, init, preset);
 
         this.demo = DemoScene.create(el, this.initial.background);
@@ -137,9 +139,12 @@ export default class WebglStuff {
         this.demo.scene.add(this.floats.mesh);
 
         this.demo.animate((step) => {
+            this.emit('beforeUpdate');
             this.update(step);
+            this.emit('update');
             this.highCircle.update(step);
             this.floats.update(step);
+            this.emit('afterUpdate');
         });
     }
 
