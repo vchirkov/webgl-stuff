@@ -6,7 +6,7 @@ import CircularPoints from './circularPoints/circularPoints';
 import LightRing from './lightRing/lightRing';
 
 export default class HighLightedCirclePoints {
-    constructor(circlesNumber, circlesVisible, radius, space, pointsNumber, {pointsColor, ringColor, opacity, impact, stabilityStart, stabilityEnd, diffusion, rotation, perlin, ringInside, ringOutside}) {
+    constructor(circlesNumber, circlesVisible, radius, space, pointsNumber, {pointsColor, ringColor, opacity, impact, stabilityStart, stabilityEnd, diffusion, rotation, perlin, ringInside, ringOutside, x, y, z}) {
         this._circlesNumber = circlesNumber;
         this._circlesVisible = circlesVisible;
         this._radius = radius;
@@ -40,13 +40,16 @@ export default class HighLightedCirclePoints {
             this.circles.push(new CircularPoints(r, n, {
                 color: pointsColor,
                 impact,
-                visibility: i < this._circlesVisible
+                visibility: i < this._circlesVisible,
+                x,
+                y,
+                z
             }));
         });
 
         this.stability(stabilityStart, stabilityEnd);
 
-        this.ring = new LightRing(this._innerR, this._outerR, 50, Math.PI * 2, {color: ringColor, opacity});
+        this.ring = new LightRing(this._innerR, this._outerR, 50, Math.PI * 2, {color: ringColor, opacity, x, y, z});
     }
 
     uniform(name, valFrom, valTo) {

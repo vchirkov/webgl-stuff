@@ -8,7 +8,7 @@ import InlineTextureLoader from '../inlineTextureLoader';
 import base64Texture from './img/gradient.png';
 
 export default class LightRing {
-    constructor(innerR, outerR, segments, thetaLength, {color, opacity}) {
+    constructor(innerR, outerR, segments, thetaLength, {color, opacity, x, y, z}) {
         this._innerR = innerR;
         this._outerR = outerR;
         this._segments = segments;
@@ -24,7 +24,7 @@ export default class LightRing {
             blending: NormalBlending
         });
         this.mesh = new Mesh(this.geometry, this.material);
-        this.mesh.position.set(0, 0, -10);
+        this.mesh.position.set(x, y, z - 10);
     }
 
     innerR(val) {

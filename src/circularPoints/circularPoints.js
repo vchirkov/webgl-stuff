@@ -9,7 +9,7 @@ import InlineTextureLoader from '../inlineTextureLoader';
 import base64Texture from './img/glow.png';
 
 export default class CircularPoints {
-    constructor(radius = 50, number, {color, impact, visibility, stability, perlin, rotation}) {
+    constructor(radius = 50, number, {color, impact, visibility, stability, perlin, rotation, x, y, z}) {
         this._radius = radius;
         this._number = number;
         this._color = color;
@@ -25,6 +25,7 @@ export default class CircularPoints {
         }, {impact, stability, perlin, rotation, spin: this._spin});
 
         this.mesh = new Points(this.geometry, this.material);
+        this.mesh.position.set(x, y, z);
         this.mesh.visible = visibility;
     }
 

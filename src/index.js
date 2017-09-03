@@ -10,6 +10,9 @@ import HighlightedCirclePoints from './highlightedCirclePoints';
 import Floats from './floats/floats';
 
 const initial = {
+    x: 0,
+    y: 0,
+    z: 0,
     circles: 45,
     r: 50,
     ringInside: 0.1,
@@ -129,7 +132,10 @@ export default class WebglStuff extends EventEmitter {
             rotation: this.initial.rotation,
             perlin: this.initial.perlin,
             ringInside: this.initial.ringInside,
-            ringOutside: this.initial.ringOutside
+            ringOutside: this.initial.ringOutside,
+            x: this.initial.x,
+            y: this.initial.y,
+            z: this.initial.z,
         });
 
         _.each(this.highCircle.circles, (circle) => this.demo.scene.add(circle.mesh));
