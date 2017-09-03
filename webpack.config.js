@@ -1,5 +1,4 @@
 const path = require('path');
-const webpack = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
@@ -9,6 +8,7 @@ module.exports = {
     },
     output: {
         filename: '[name].js',
+        libraryTarget: "umd",
         path: path.resolve(__dirname, './dist')
     },
     module: {
