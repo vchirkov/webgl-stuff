@@ -1,7 +1,7 @@
 /**
  * Created by vlad.chirkov on 31.5.17.
  */
-import _ from 'lodash';
+import {extend} from 'lodash';
 import {PointsMaterial, ShaderLib, UniformsUtils} from 'three';
 import noisePointsVert from './shaders/noisePointsVert.glsl';
 
@@ -12,7 +12,7 @@ export default  class CircularPointsMaterial extends PointsMaterial {
         this.type = 'CircularPointsMaterial';
 
         let shader = ShaderLib['points'];
-        this.uniforms = _.extend({
+        this.uniforms = extend({
             perlin: {
                 type: "f",
                 value: uniforms.perlin || 0.0

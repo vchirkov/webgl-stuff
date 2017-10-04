@@ -2,7 +2,7 @@
  * Created by vlad.chirkov on 14/07/2017.
  */
 import {PlaneGeometry, Mesh} from 'three';
-import FloatsMaterial from './floatsMaterial';
+import FloatsMaterial from './FloatsMaterial';
 
 export default class Floats {
     constructor({impact, speed, color, opacity}) {

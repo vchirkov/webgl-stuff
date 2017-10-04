@@ -2,8 +2,8 @@
  * Created by vlad.chirkov on 2.6.17.
  */
 import {Mesh, MeshBasicMaterial, NormalBlending, Color} from 'three';
-import RadialRingGeometry from './radialRingGeometry';
-import InlineTextureLoader from '../inlineTextureLoader';
+import RadialRingGeometry from './RadialRingGeometry';
+import InlineTextureLoader from '../util/InlineTextureLoader';
 
 import base64Texture from './img/gradient.png';
 

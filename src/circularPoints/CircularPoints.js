@@ -1,10 +1,10 @@
 /**
  * Created by vlad.chirkov on 30.5.17.
  */
-import {NormalBlending, Points, Color, ImageLoader} from 'three';
-import CircularPointsMaterial from './circularPointsMaterial';
-import CircularPointsGeometry from './circularPointsGeometry';
-import InlineTextureLoader from '../inlineTextureLoader';
+import {NormalBlending, Points, Color} from 'three';
+import CircularPointsMaterial from './CircularPointsMaterial';
+import CircularPointsGeometry from './CircularPointsGeometry';
+import InlineTextureLoader from '../util/InlineTextureLoader';
 
 import base64Texture from './img/glow.png';
 

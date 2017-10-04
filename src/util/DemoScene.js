@@ -1,4 +1,4 @@
-import * as THREE from 'three';
+import {WebGLRenderer, Scene, PerspectiveCamera} from 'three';
 import TrackballControls from 'three-trackballcontrols';
 import Stats from 'stats.js';
 import dat from 'dat.gui/build/dat.gui';
@@ -7,13 +7,13 @@ import dat from 'dat.gui/build/dat.gui';
 export  default class DemoScene {
     constructor(el, color = 0x000000, stats = false, gui = false, controls = false) {
         this.el = el;
-        this.renderer = new THREE.WebGLRenderer({antialias: true, alpha: true});
+        this.renderer = new WebGLRenderer({antialias: true, alpha: true});
         this.renderer.setClearColor(color, 1);
         this.el.appendChild(this.renderer.domElement);
         this._prevTime = 0;
 
-        this.scene = new THREE.Scene();
-        this.camera = new THREE.PerspectiveCamera(30, window.innerWidth / window.innerHeight, 5, 5000);
+        this.scene = new Scene();
+        this.camera = new PerspectiveCamera(30, window.innerWidth / window.innerHeight, 5, 5000);
         this.camera.position.set(0, 0, 500);
 
         if (gui) {
@@ -78,7 +78,7 @@ export  default class DemoScene {
         window.requestAnimationFrame(this._animate);
     }
 
-    _animate (time) {
+    _animate(time) {
         window.requestAnimationFrame(this._animate);
 
         let step = time - this._prevTime;

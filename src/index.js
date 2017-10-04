@@ -1,16 +1,16 @@
 /**
  * Created by vchirkov on 6/23/2017.
  */
-import _ from 'lodash';
+import {extend, each, defaults} from 'lodash';
 import {EventEmitter} from 'events';
 import {Color} from 'three';
 import {easeOutCubic as tween, linear as bgTween} from 'tween-functions';
 
-import DemoScene from './DemoScene';
-import HighlightedCirclePoints from './highlightedCirclePoints';
-import Floats from './floats/floats';
+import DemoScene from './util/DemoScene';
+import HighlightedCirclePoints from './HighlightedCirclePoints';
+import Floats from './floats/Floats';
 
-import * as constants from './constants';
+import * as constants from './util/constants';
 
 const presets = {
     normal: constants.neutral1,
@@ -43,7 +43,7 @@ export default class WebglStuff extends EventEmitter {
             throw new Error('container element is not found. Please pass it as first argument to WebglStuff constructor');
         }
 
-        this.initial = _.extend({}, initial, preset);
+        this.initial = extend({}, initial, preset);
 
         this.demo = DemoScene.create(el, this.initial.background);
 
@@ -64,7 +64,7 @@ export default class WebglStuff extends EventEmitter {
             z: this.initial.z,
         });
 
-        _.each(this.highCircle.circles, (circle) => this.demo.scene.add(circle.mesh));
+        each(this.highCircle.circles, (circle) => this.demo.scene.add(circle.mesh));
         this.demo.scene.add(this.highCircle.ring.mesh);
 
         this.floats = new Floats({color: this.initial.floatsColor, opacity: this.initial.floatsOpacity});
@@ -108,7 +108,7 @@ export default class WebglStuff extends EventEmitter {
             floatsOpacity: this.floats.material.opacity
         };
 
-        this._transitionTo = _.defaults({}, preset, this._transitionTo, this._transitionFrom);
+        this._transitionTo = defaults({}, preset, this._transitionTo, this._transitionFrom);
 
         this._transitionCurrent = 0;
         this._transitionDuration = duration;
