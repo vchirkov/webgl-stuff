@@ -150,3 +150,8 @@ Events available:
 * **WebglStuff.ON_BEFORE_UPDATE** - emits, before any updates
 * **WebglStuff.ON_UPDATE** - emits, when transition params have been updated, but no changes were applied to the objects
 * **WebglStuff.ON_AFTER_UPDATE** - emits, when changes were applied to the objects
+
+Example:
+```javascript
+wgs.on(WebglStuff.ON_UPDATE, () => console.log(Date.now()));
+```
