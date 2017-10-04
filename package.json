@@ -1,17 +1,39 @@
 {
   "name": "webgl-stuff",
   "version": "1.0.0",
-  "description": "",
-  "main": "./src/index.js",
-  "author": "vlad chirkou",
-  "license": "ISC",
+  "description": "Circular set of points, that can change it's behaviour dynamically.",
+  "keywords": [
+    "webgl",
+    "loader",
+    "animation",
+    "background",
+    "THREE",
+    "three.js",
+    "circular",
+    "spinner",
+    "noise",
+    "perlin",
+    "3d",
+    "2d",
+    "killer-lama-ninja-warior"
+  ],
+  "homepage": "",
+  "bugs": "https://github.com/vchirkov/webgl-stuff/issues",
+  "license": "MIT",
+  "author": {
+    "name": "Vlad Chirkou",
+    "email": "vlad.chirkou@gmail.com"
+  },
+  "main": "./dist/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vchirkov/webgl-stuff.git"
+  },
+  "scripts": {
+  },
   "dependencies": {
-    "dat.gui": "^0.6.1",
     "lodash": "^4.17.4",
-    "stats.js": "git+https://github.com/mrdoob/stats.js.git",
-    "three": "^0.85.2",
-    "three-trackballcontrols": "0.0.5",
-    "tween-functions": "^1.2.0"
+    "three": "^0.85.2"
   },
   "devDependencies": {
     "aargs": "^1.0.6",
@@ -28,7 +50,17 @@
     "raw-loader": "^0.5.1",
     "run-sequence": "^2.2.0",
     "text-loader": "0.0.1",
+    "tween-functions": "^1.2.0",
     "webpack": "^2.5.1",
     "webpack-merge": "^4.1.0"
+  },
+  "bundleDependencies": [
+    "lodash",
+    "three"
+  ],
+  "optionalDependencies": {
+    "dat.gui": "^0.6.1",
+    "stats.js": "git+https://github.com/mrdoob/stats.js.git",
+    "three-trackballcontrols": "0.0.5"
   }
 }
