@@ -3,11 +3,14 @@
  */
 const path = require('path');
 const merge = require('webpack-merge');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const base = require('./webpack-base.config');
 
 module.exports = merge({}, base, {
     name: 'docs',
-    entry: path.resolve(__dirname, '../docs/index.js')
+    entry: path.resolve(__dirname, '../docs/index.js'),
+    output: {
+        path: path.resolve(__dirname, '../dist/docs'),
+        filename: 'index.js'
+    }
 });
