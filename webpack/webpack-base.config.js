@@ -13,6 +13,16 @@ module.exports = {
             {
                 test: /\.png/,
                 use: 'base64-image-loader'
+            },
+            {
+                test: /\.js$/,
+                exclude: /(node_modules)/,
+                use: [{
+                    loader: 'babel-loader',
+                    options: {
+                        presets: ['es2015']
+                    }
+                }]
             }
         ]
     },

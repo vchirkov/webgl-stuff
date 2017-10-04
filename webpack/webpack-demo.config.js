@@ -10,20 +10,6 @@ const base = require('./webpack-base.config');
 module.exports = merge({}, base, {
     name: 'demo',
     entry: path.resolve(__dirname, '../demo/index.js'),
-    module: {
-        rules: [
-            {
-                test: /\.js$/,
-                exclude: /(node_modules)/,
-                use: [{
-                    loader: 'babel-loader',
-                    options: {
-                        presets: ['es2015']
-                    }
-                }]
-            }
-        ]
-    },
     plugins: [
         new CopyWebpackPlugin([
             {

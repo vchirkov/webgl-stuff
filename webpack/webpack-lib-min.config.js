@@ -5,9 +5,9 @@ const path = require('path');
 const webpack = require('webpack');
 const merge = require('webpack-merge');
 
-const libES5 = require('./webpack-lib-es5.config');
+const lib = require('./webpack-lib.config');
 
-module.exports = merge({}, libES5, {
+module.exports = merge({}, lib, {
         name: 'min',
         plugins: [
             new webpack.optimize.UglifyJsPlugin({sourceMap: false})

@@ -30,6 +30,7 @@
     "url": "https://github.com/vchirkov/webgl-stuff.git"
   },
   "scripts": {
+    "build": "gulp build"
   },
   "dependencies": {
     "lodash": "^4.17.4",
@@ -44,6 +45,7 @@
     "base64-image-loader": "^1.2.0",
     "copy-webpack-plugin": "^4.0.1",
     "gulp": "^3.9.1",
+    "gulp-bump": "^2.8.0",
     "gulp-clean": "^0.3.2",
     "gulp-util": "^3.0.8",
     "image-webpack-loader": "^3.3.1",
