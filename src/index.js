@@ -6,7 +6,7 @@ import {EventEmitter} from 'events';
 import {Color} from 'three';
 import {easeOutCubic as tween, linear as bgTween} from 'tween-functions';
 
-import DemoScene from './util/DemoScene';
+import SceneSet from './util/SceneSet';
 import HighlightedCirclePoints from './HighlightedCirclePoints';
 import Floats from './floats/Floats';
 
@@ -45,7 +45,7 @@ export default class WebglStuff extends EventEmitter {
 
         this.initial = extend({}, initial, preset);
 
-        this.demo = DemoScene.create(el, this.initial.background);
+        this.sceneSet = new SceneSet(el, this.initial.background);
 
         this.highCircle = new HighlightedCirclePoints(this.initial.circles, this.initial.visible, this.initial.r, this.initial.space, this.initial.points, {
             pointsColor: this.initial.pointsColor,
@@ -64,13 +64,13 @@ export default class WebglStuff extends EventEmitter {
             z: this.initial.z,
         });
 
-        each(this.highCircle.circles, (circle) => this.demo.scene.add(circle.mesh));
-        this.demo.scene.add(this.highCircle.ring.mesh);
+        each(this.highCircle.circles, (circle) => this.sceneSet.scene.add(circle.mesh));
+        this.sceneSet.scene.add(this.highCircle.ring.mesh);
 
         this.floats = new Floats({color: this.initial.floatsColor, opacity: this.initial.floatsOpacity});
-        this.demo.scene.add(this.floats.mesh);
+        this.sceneSet.scene.add(this.floats.mesh);
 
-        this.demo.animate((step) => {
+        this.sceneSet.animate((step) => {
             this.emit(WebglStuff.ON_BEFORE_UPDATE);
             this.update(step);
             this.emit(WebglStuff.ON_UPDATE);
@@ -104,7 +104,7 @@ export default class WebglStuff extends EventEmitter {
             stabilityEnd: this.highCircle.stabilityEnd(),
             rotation: this.highCircle.rotation(),
             perlin: this.highCircle.perlin(),
-            background: this.demo.renderer.getClearColor(),
+            background: this.sceneSet.renderer.getClearColor(),
             floatsOpacity: this.floats.material.opacity
         };
 
@@ -141,7 +141,7 @@ export default class WebglStuff extends EventEmitter {
         this.highCircle.stability(tween(cur, from.stabilityStart, to.stabilityStart, dur), tween(cur, from.stabilityEnd, to.stabilityEnd, dur));
         this.highCircle.rotation(tween(cur, from.rotation, to.rotation, dur));
         // this.highCircle.perlin(tween(cur, from.perlin, to.perlin, dur));
-        this.demo.renderer.setClearColor(new Color(
+        this.sceneSet.renderer.setClearColor(new Color(
             bgTween(cur, from.background.r, to.background.r, dur),
             bgTween(cur, from.background.g, to.background.g, dur),
             bgTween(cur, from.background.b, to.background.b, dur)
