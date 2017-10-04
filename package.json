@@ -51,11 +51,11 @@
     "image-webpack-loader": "^3.3.1",
     "raw-loader": "^0.5.1",
     "run-sequence": "^2.2.0",
+    "semantic-release": "^8.0.3",
     "text-loader": "0.0.1",
     "tween-functions": "^1.2.0",
     "webpack": "^2.5.1",
-    "webpack-merge": "^4.1.0",
-    "semantic-release": "^8.0.3"
+    "webpack-merge": "^4.1.0"
   },
   "bundleDependencies": [
     "lodash",
