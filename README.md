@@ -65,36 +65,36 @@ export default class WebglStuff extends EventEmitter {
     //...
 ```
 
-#### **el**
-Any `<div/>` with reasonable size should work.  
-As calculation is executed per pixel, big elements can cause lags
-#### **initial** 
-Set of initial, unchangeable props
-  * **x: 0** - position by `x` axis
-  * **y: 0** - position by `y` axis
-  * **z: 0** - position by `z` axis
-  * **circles: 45** - number of particle circles
-  * **r: 50** - inner radius of ring set (radius of the smallest particle ring)
-  * **ringInside: 0.1** - inner radius of highlight circle
-  * **ringOutside: 1.5** - outer radius of highlight circle
-  * **space: 1** - distance between circles (biggest particle circle will have `radius = r + space * circles`)
-  * **points: 100** - number of points for smallest circle
-  * **diffusion: 0.5** - reduction of points based on ring index (`pointsNumber = points - diffusion * ringIndex`)
-  * **floatsColor: new Color(0x000000)** - color of background noise (*to avoid dirty blending better use either #000 or #fff*).
-#### **preset**
-Set of props, that can mutate through time
-  * **visible: 10** - how many circles are visible right now
-  * **opacityStep: 0.125** - how much should opacity change with each frame according to *visible* prop
-  * **pointsColor: new Color(1, 1, 1)** - color of circular points
-  * **ringColor: new Color(1, 1, 1)** - color of highlight ring
-  * **opacity: 0.1** - opacity of highlight ring
-  * **impact: 0.04** - how big is the *rattling* of rings
-  * **stabilityStart: 1.05** - how big is the amplitude for inner circle
-  * **stabilityEnd: 0.95** - how big is the amplitude for outer circle
-  * **rotation: 0.0005** - rotation speed for circles 
-  * **perlin: 0.00025** - perlin noise seed offset (don't think about it too much, just play around)
-  * **background: new Color(0.295, 0.295, 0.78)** - background color
-  * **floatsOpacity: 0.6** - opacity of noise background
+* **el**  
+  Any `<div/>` with reasonable size should work.  
+  **!As calculation is executed per pixel, big elements can cause lags!**
+* **initial**  
+  Set of initial, unchangeable props
+    * **x: 0** - position by `x` axis
+    * **y: 0** - position by `y` axis
+    * **z: 0** - position by `z` axis
+    * **circles: 45** - number of particle circles
+    * **r: 50** - inner radius of ring set (radius of the smallest particle ring)
+    * **ringInside: 0.1** - inner radius of highlight circle
+    * **ringOutside: 1.5** - outer radius of highlight circle
+    * **space: 1** - distance between circles (biggest particle circle will have `radius = r + space * circles`)
+    * **points: 100** - number of points for smallest circle
+    * **diffusion: 0.5** - reduction of points based on ring index (`pointsNumber = points - diffusion * ringIndex`)
+    * **floatsColor: new Color(0x000000)** - color of background noise (*to avoid dirty blending better use either #000 or #fff*).
+* **preset**  
+  Set of props, that can mutate through time
+    * **visible: 10** - how many circles are visible right now
+    * **opacityStep: 0.125** - how much should opacity change with each frame according to *visible* prop
+    * **pointsColor: new Color(1, 1, 1)** - color of circular points
+    * **ringColor: new Color(1, 1, 1)** - color of highlight ring
+    * **opacity: 0.1** - opacity of highlight ring
+    * **impact: 0.04** - how big is the *rattling* of rings
+    * **stabilityStart: 1.05** - how big is the amplitude for inner circle
+    * **stabilityEnd: 0.95** - how big is the amplitude for outer circle
+    * **rotation: 0.0005** - rotation speed for circles 
+    * **perlin: 0.00025** - perlin noise seed offset (don't think about it too much, just play around)
+    * **background: new Color(0.295, 0.295, 0.78)** - background color
+    * **floatsOpacity: 0.6** - opacity of noise background
 
 ## Methods
 ### transitTo()
