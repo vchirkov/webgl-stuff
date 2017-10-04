@@ -4,9 +4,9 @@
 
 import WebglStuff from '../src';
 
-let ws = new WebglStuff();
+let ws = new WebglStuff(document.getElementById('container'));
 
-(async() => {
+(async () => {
     await timeout(5000);
     await ws.transitTo(WebglStuff.presets.progress.bad, 5000);
     await timeout(5000);

@@ -4,120 +4,46 @@
 import _ from 'lodash';
 import {EventEmitter} from 'events';
 import {Color} from 'three';
-import DemoScene from './DemoScene';
 import {easeOutCubic as tween, linear as bgTween} from 'tween-functions';
+
+import DemoScene from './DemoScene';
 import HighlightedCirclePoints from './highlightedCirclePoints';
 import Floats from './floats/floats';
 
-const initial = {
-    x: 0,
-    y: 0,
-    z: 0,
-    circles: 45,
-    r: 50,
-    ringInside: 0.1,
-    ringOutside: 1.5,
-    space: 1,
-    points: 100,
-    diffusion: 0.5,
-    floatsColor: new Color(0x000000)
-};
+import * as constants from './constants';
 
 const presets = {
-    normal: {
-        visible: 10,
-        opacityStep: 0.125,
-        pointsColor: new Color(1, 1, 1),
-        ringColor: new Color(1, 1, 1),
-        opacity: 0.1,
-        impact: 0.04,
-        stabilityStart: 1.05,
-        stabilityEnd: 0.95,
-        rotation: 0.0005,
-        perlin: 0.00025,
-        background: new Color(0.295, 0.295, 0.78),
-        floatsOpacity: 0.6
-    },
+    normal: constants.neutral1,
     progress: {
-        bad: {
-            visible: 40,
-            opacityStep: 0.125,
-            pointsColor: new Color(1, 1, 0),
-            ringColor: new Color(1, 1, 0),
-            opacity: 0.3,
-            impact: 0.07,
-            stabilityStart: 1.25,
-            stabilityEnd: 0.85,
-            rotation: 0.001,
-            perlin: 0.0005,
-            background: new Color(1, 0, 0),
-            floatsOpacity: 1.1
-        },
-        normal: {
-            visible: 25,
-            opacityStep: 0.125,
-            pointsColor: new Color(1, 1, 1),
-            ringColor: new Color(1, 1, 1),
-            opacity: 0,
-            impact: 0.04,
-            stabilityStart: 1.05,
-            stabilityEnd: 0.95,
-            rotation: 0.0005,
-            perlin: 0.00025,
-            background: new Color(0.295, 0.295, 0.78),
-            floatsOpacity: 0.6
-        },
-        good: {
-            visible: 30,
-            opacityStep: 0.125,
-            pointsColor: new Color(1, 1, 1),
-            ringColor: new Color(1, 1, 1),
-            opacity: 0,
-            impact: 0.001,
-            stabilityStart: 1.25,
-            stabilityEnd: 1.25,
-            rotation: 0.0001,
-            perlin: 0.00005,
-            background: new Color(0.14, 0.9, 0.372),
-            floatsOpacity: 0.5
-        }
+        bad: constants.negative1,
+        normal: constants.neutral2,
+        good: constants.positive1
     },
     end: {
-        bad: {
-            visible: 40,
-            opacityStep: 0.125,
-            pointsColor: new Color(1, 1, 0),
-            ringColor: new Color(1, 1, 0),
-            opacity: 0.4,
-            impact: 0.08,
-            stabilityStart: 1.15,
-            stabilityEnd: 1.15,
-            rotation: 0.001,
-            perlin: 0.0005,
-            background: new Color(1, 0, 0),
-            floatsOpacity: 1.1
-        },
-        good: {
-            visible: 25,
-            opacityStep: 0.125,
-            pointsColor: new Color(1, 1, 1),
-            ringColor: new Color(1, 1, 1),
-            opacity: 0,
-            impact: 0.0001,
-            stabilityStart: 1.25,
-            stabilityEnd: 1.25,
-            rotation: 0.0001,
-            perlin: 0.00005,
-            background: new Color(0.14, 0.9, 0.372),
-            floatsOpacity: 0.7
-        }
+        bad: constants.negative2,
+        good: constants.positive2
     }
 };
 
+/**
+ * @class WebglStuff
+ * @extends EventEmitter
+ * @classdesc Class, that organizes CircularPoints, Floats and LightRing in one system
+ */
 export default class WebglStuff extends EventEmitter {
-    constructor(el = document.getElementById('container'), init = initial, preset = presets.normal) {
+    /**
+     * @constructor
+     * @param {HTMLElement} el - Container element for scene <canvas/>
+     * @param {Object} [initial = constants.initial] - params, that won't change through time
+     * @param {Object} [preset = constants.neutral1] - params, that can be changed
+     */
+    constructor(el, initial = constants.initial, preset = constants.neutral1) {
         super();
-        this.initial = _.extend({}, init, preset);
+        if (!el) {
+            throw new Error('container element is not found. Please pass it as first argument to WebglStuff constructor');
+        }
+
+        this.initial = _.extend({}, initial, preset);
 
         this.demo = DemoScene.create(el, this.initial.background);
 
@@ -145,19 +71,25 @@ export default class WebglStuff extends EventEmitter {
         this.demo.scene.add(this.floats.mesh);
 
         this.demo.animate((step) => {
-            this.emit('beforeUpdate');
+            this.emit(WebglStuff.ON_BEFORE_UPDATE);
             this.update(step);
-            this.emit('update');
+            this.emit(WebglStuff.ON_UPDATE);
             this.highCircle.update(step);
             this.floats.update(step);
-            this.emit('afterUpdate');
+            this.emit(WebglStuff.ON_AFTER_UPDATE);
         });
     }
 
     transitTo(preset, duration) {
-        return new Promise((res) => {
+        return new Promise((res, rej) => {
+            this._transitionRes && this._transitionRes();
+
             this._transitionRes = res;
-            this._beginTransition(preset, duration)
+            this._transitionRej = rej;
+
+            this._beginTransition(preset, duration);
+
+            this.emit(WebglStuff.ON_TRANSITION_START);
         });
     }
 
@@ -176,7 +108,7 @@ export default class WebglStuff extends EventEmitter {
             floatsOpacity: this.floats.material.opacity
         };
 
-        this._transitionTo = preset;
+        this._transitionTo = _.defaults({}, preset, this._transitionTo, this._transitionFrom);
 
         this._transitionCurrent = 0;
         this._transitionDuration = duration;
@@ -215,20 +147,32 @@ export default class WebglStuff extends EventEmitter {
             bgTween(cur, from.background.b, to.background.b, dur)
         ), 1);
 
-        this.floats.material.opacity = tween(cur, from.floatsOpacity, to.floatsOpacity, dur)
+        this.floats.material.opacity = tween(cur, from.floatsOpacity, to.floatsOpacity, dur);
+        this.emit(WebglStuff.ON_TRANSITION_PROGRESS);
     }
 
-    stopTransition() {
+    _clearTransition() {
         this._transitionFrom = null;
         this._transitionTo = null;
         this._transitionCurrent = null;
         this._transitionDuration = null;
-        this._transitionRes();
+    }
+
+    endTransition() {
+        this._clearTransition();
+        this._transitionRes && this._transitionRes();
+        this.emit(WebglStuff.ON_TRANSITION_END);
+    }
+
+    stopTransition() {
+        this._clearTransition();
+        this._transitionRej && this._transitionRej();
+        this.emit(WebglStuff.ON_TRANSITION_STOP);
     }
 
     update(step) {
         if (this._transitionTo && this._transitionCurrent >= this._transitionDuration) {
-            this.stopTransition();
+            this.endTransition();
         }
         if (this._transitionFrom && this._transitionTo) {
             this._onTransitionUpdate(step);
@@ -236,5 +180,13 @@ export default class WebglStuff extends EventEmitter {
     }
 }
 
+WebglStuff.ON_TRANSITION_START = 'onTransitionStart';
+WebglStuff.ON_TRANSITION_PROGRESS = 'onTransitionProgress';
+WebglStuff.ON_TRANSITION_STOP = 'onTransitionStop';
+WebglStuff.ON_TRANSITION_END = 'onTransitionEnd';
+WebglStuff.ON_BEFORE_UPDATE = 'onBeforeUpdate';
+WebglStuff.ON_UPDATE = 'onUpdate';
+WebglStuff.ON_AFTER_UPDATE = 'onAfterUpdate';
+
 WebglStuff.presets = presets;
-WebglStuff.initial = initial;
+WebglStuff.initial = constants.initial;
