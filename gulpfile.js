@@ -11,7 +11,7 @@ const lib = require('./webpack/webpack-lib.config');
 const min = require('./webpack/webpack-lib-min.config');
 const plainLib = require('./webpack/webpack-plain-lib.config');
 const plainMin = require('./webpack/webpack-plain-lib-min.config');
-const docs = require('./webpack/webpack-docs.config');
+const demo = require('./webpack/webpack-demo.config');
 
 
 gulp.task('clean', function () {
@@ -35,8 +35,8 @@ gulp.task('plain-min', function (done) {
     runWebpack(plainMin, done);
 });
 
-gulp.task('docs', function (done) {
-    runWebpack(docs, done);
+gulp.task('demo', function (done) {
+    runWebpack(demo, done);
 });
 
 gulp.task('build-full', function (done) {
@@ -48,7 +48,7 @@ gulp.task('build-plain', function (done) {
 });
 
 gulp.task('build', function (done) {
-    sequence('clean', ['build-full', 'build-plain', 'docs'], done);
+    sequence('clean', ['build-full', 'build-plain', 'demo'], done);
 });
 
 // common function to run webpack

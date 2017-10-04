@@ -7,10 +7,10 @@ const merge = require('webpack-merge');
 const base = require('./webpack-base.config');
 
 module.exports = merge({}, base, {
-    name: 'docs',
-    entry: path.resolve(__dirname, '../docs/index.js'),
+    name: 'demo',
+    entry: path.resolve(__dirname, '../demo/index.js'),
     output: {
-        path: path.resolve(__dirname, '../dist/docs'),
+        path: path.resolve(__dirname, '../dist/demo'),
         filename: 'index.js'
     }
 });
