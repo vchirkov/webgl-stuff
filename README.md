@@ -1,4 +1,4 @@
-# Webgl stuff  [**(demo)**](https://vchirkov.github.io/webgl-stuff/)
+# Webgl stuff  <a href="https://vchirkov.github.io/webgl-stuff/">(demo)</a>
 
 Circular set of points, that can change it's behaviour dynamically.   
 
