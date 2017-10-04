@@ -58,6 +58,10 @@ gulp.task('build', function (done) {
     sequence('clean', ['build-full', 'build-plain', 'demo'], done);
 });
 
+gulp.task('travis', function (done) {
+    sequence('build', 'bump', done);
+});
+
 
 // common function to run webpack
 function runWebpack(config, done) {
