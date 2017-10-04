@@ -1,12 +1,13 @@
-# Webgl stuff
-Circular set of points, that can change it's behaviour dynamically.
+# Webgl stuff  [**(demo)**](https://vchirkov.github.io/webgl-stuff/)
+
+Circular set of points, that can change it's behaviour dynamically.   
+
 * WebglStuff [source](./src/index.js)  
 
 Whole thing consists of:
 * Floating points [source](./src/circularPoints/circularPoints.js)
 * Highlight [source](./src/lightRing/lightRing.js)
 * Noise background [source](./src/floats/floats.js)
-
 
 ## Installation
 ```
