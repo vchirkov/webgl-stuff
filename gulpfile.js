@@ -6,7 +6,6 @@ const gutil = require('gulp-util');
 const gclean = require('gulp-clean');
 const webpack = require('webpack');
 const sequence = require('run-sequence');
-const bump = require('gulp-bump');
 
 const lib = require('./webpack/webpack-lib.config');
 const min = require('./webpack/webpack-lib-min.config');
@@ -18,12 +17,6 @@ const demo = require('./webpack/webpack-demo.config');
 gulp.task('clean', function () {
     return gulp.src('./dist', {read: false})
         .pipe(gclean());
-});
-
-gulp.task('bump', function () {
-    gulp.src('./package.json')
-        .pipe(bump({type: 'patch'}))
-        .pipe(gulp.dest('./'));
 });
 
 gulp.task('lib', function (done) {
@@ -57,11 +50,6 @@ gulp.task('build-plain', function (done) {
 gulp.task('build', function (done) {
     sequence('clean', ['build-full', 'build-plain', 'demo'], done);
 });
-
-gulp.task('travis', function (done) {
-    sequence('build', 'bump', done);
-});
-
 
 // common function to run webpack
 function runWebpack(config, done) {

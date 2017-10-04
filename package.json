@@ -1,6 +1,6 @@
 {
   "name": "webgl-stuff",
-  "version": "1.0.0",
+  "version": "0.0.0-development",
   "description": "Circular set of points, that can change it's behaviour dynamically.",
   "keywords": [
     "webgl",
@@ -30,7 +30,8 @@
     "url": "https://github.com/vchirkov/webgl-stuff.git"
   },
   "scripts": {
-    "build": "gulp build"
+    "build": "gulp build",
+    "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
   "dependencies": {
     "lodash": "^4.17.4",
@@ -45,7 +46,6 @@
     "base64-image-loader": "^1.2.0",
     "copy-webpack-plugin": "^4.0.1",
     "gulp": "^3.9.1",
-    "gulp-bump": "^2.8.0",
     "gulp-clean": "^0.3.2",
     "gulp-util": "^3.0.8",
     "image-webpack-loader": "^3.3.1",
@@ -54,7 +54,8 @@
     "text-loader": "0.0.1",
     "tween-functions": "^1.2.0",
     "webpack": "^2.5.1",
-    "webpack-merge": "^4.1.0"
+    "webpack-merge": "^4.1.0",
+    "semantic-release": "^8.0.3"
   },
   "bundleDependencies": [
     "lodash",
