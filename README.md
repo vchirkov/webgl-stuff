@@ -2,8 +2,7 @@
 
 Circular set of points, that can change it's behaviour dynamically.   
 
-![This is how it looks like, but in static](https://user-images.githubusercontent.com/6738725/31457461-810893a8-aec5-11e7-8b49-8b72b18d8a6a.jpg)]
-
+![Just trust me, it looks good](https://user-images.githubusercontent.com/6738725/31457461-810893a8-aec5-11e7-8b49-8b72b18d8a6a.jpg "This is how it looks like (but in static)")
 * WebglStuff [source](./src/index.js)  
 
 Whole thing consists of:
