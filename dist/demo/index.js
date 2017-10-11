@@ -61826,17 +61826,21 @@ var WebglStuff = function (_EventEmitter) {
 
             var duration = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
 
-            return new Promise(function (res, rej) {
-                _this2._transitionRes && _this2._transitionRes();
+            if (!duration) {
+                return Promise.resolve(this.set(preset));
+            } else {
+                return new Promise(function (res, rej) {
+                    _this2._transitionRes && _this2._transitionRes();
 
-                _this2._transitionRes = res;
-                _this2._transitionRej = rej;
+                    _this2._transitionRes = res;
+                    _this2._transitionRej = rej;
 
-                _this2._beginTransition(preset, duration);
-                _this2._onTransitionUpdate(0);
+                    _this2._beginTransition(preset, duration);
+                    _this2._onTransitionUpdate(0);
 
-                _this2.emit(WebglStuff.ON_TRANSITION_START);
-            });
+                    _this2.emit(WebglStuff.ON_TRANSITION_START);
+                });
+            }
         }
     }, {
         key: 'set',

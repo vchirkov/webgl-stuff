@@ -81,17 +81,21 @@ export default class WebglStuff extends EventEmitter {
     }
 
     transitTo(preset, duration = 0) {
-        return new Promise((res, rej) => {
-            this._transitionRes && this._transitionRes();
+        if (!duration) {
+            return Promise.resolve(this.set(preset));
+        } else {
+            return new Promise((res, rej) => {
+                this._transitionRes && this._transitionRes();
 
-            this._transitionRes = res;
-            this._transitionRej = rej;
+                this._transitionRes = res;
+                this._transitionRej = rej;
 
-            this._beginTransition(preset, duration);
-            this._onTransitionUpdate(0);
+                this._beginTransition(preset, duration);
+                this._onTransitionUpdate(0);
 
-            this.emit(WebglStuff.ON_TRANSITION_START);
-        });
+                this.emit(WebglStuff.ON_TRANSITION_START);
+            });
+        }
     }
 
     set(preset) {
