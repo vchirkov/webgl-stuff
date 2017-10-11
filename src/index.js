@@ -1,7 +1,7 @@
 /**
  * Created by vchirkov on 6/23/2017.
  */
-import {extend, each, defaults} from 'lodash';
+import {extend, each, defaults, isUndefined} from 'lodash';
 import {EventEmitter} from 'events';
 import {Color} from 'three';
 import {easeOutCubic as tween, linear as bgTween} from 'tween-functions';
@@ -48,8 +48,8 @@ export default class WebglStuff extends EventEmitter {
         this.sceneSet = new SceneSet(el, this.initial.background);
 
         this.highCircle = new HighlightedCirclePoints(this.initial.circles, this.initial.visible, this.initial.r, this.initial.space, this.initial.points, {
-            pointsColor: this.initial.pointsColor,
-            ringColor: this.initial.ringColor,
+            pointsColor: new Color(this.initial.pointsColor),
+            ringColor: new Color(this.initial.ringColor),
             opacity: this.initial.opacity,
             impact: this.initial.impact,
             stabilityStart: this.initial.stabilityStart,
@@ -80,7 +80,7 @@ export default class WebglStuff extends EventEmitter {
         });
     }
 
-    transitTo(preset, duration) {
+    transitTo(preset, duration = 0) {
         return new Promise((res, rej) => {
             this._transitionRes && this._transitionRes();
 
@@ -88,9 +88,24 @@ export default class WebglStuff extends EventEmitter {
             this._transitionRej = rej;
 
             this._beginTransition(preset, duration);
+            this._onTransitionUpdate(0);
 
             this.emit(WebglStuff.ON_TRANSITION_START);
         });
+    }
+
+    set(preset) {
+        !isUndefined(preset.visible) && this.highCircle.circlesVisible(preset.visible | 0, preset.opacityStep || 1);
+        !isUndefined(preset.pointsColor) && this.highCircle.pointsColor(new Color(preset.pointsColor));
+        !isUndefined(preset.ringColor) && this.highCircle.ringColor(new Color(preset.ringColor));
+        !isUndefined(preset.opacity) && this.highCircle.ring.opacity(preset.opacity);
+        !isUndefined(preset.impact) && this.highCircle.impact(preset.impact);
+        !isUndefined(preset.stabilityStart) && this.highCircle.stabilityStart(preset.stabilityStart);
+        !isUndefined(preset.stabilityEnd) && this.highCircle.stabilityEnd(preset.stabilityEnd);
+        !isUndefined(preset.rotation) && this.highCircle.rotation(preset.rotation);
+        !isUndefined(preset.perlin) && this.highCircle.perlin(preset.perlin);
+        !isUndefined(preset.background) && this.sceneSet.renderer.setClearColor(new Color(preset.background));
+        !isUndefined(preset.floatsOpacity) && (this.floats.material.opacity = preset.floatsOpacity);
     }
 
     _beginTransition(preset, duration) {
@@ -109,6 +124,17 @@ export default class WebglStuff extends EventEmitter {
         };
 
         this._transitionTo = defaults({}, preset, this._transitionTo, this._transitionFrom);
+        if (!(this._transitionTo.pointsColor instanceof Color)) {
+            this._transitionTo.pointsColor = new Color(this._transitionTo.pointsColor);
+        }
+
+        if (!(this._transitionTo.ringColor instanceof Color)) {
+            this._transitionTo.ringColor = new Color(this._transitionTo.ringColor);
+        }
+
+        if (!(this._transitionTo.background instanceof Color)) {
+            this._transitionTo.background = new Color(this._transitionTo.background);
+        }
 
         this._transitionCurrent = 0;
         this._transitionDuration = duration;
@@ -123,31 +149,33 @@ export default class WebglStuff extends EventEmitter {
         let from = this._transitionFrom;
         let to = this._transitionTo;
 
-        this.highCircle.circlesVisible(tween(cur, from.visible, to.visible, dur) | 0, to.opacityStep);
-        this.highCircle.pointsColor(new Color(
-            tween(cur, from.pointsColor.r, to.pointsColor.r, dur),
-            tween(cur, from.pointsColor.g, to.pointsColor.g, dur),
-            tween(cur, from.pointsColor.b, to.pointsColor.b, dur)
-        ));
+        this.set({
+            visible: tween(cur, from.visible, to.visible, dur),
+            opacityStep: to.opacityStep,
+            pointsColor: new Color(
+                tween(cur, from.pointsColor.r, to.pointsColor.r, dur),
+                tween(cur, from.pointsColor.g, to.pointsColor.g, dur),
+                tween(cur, from.pointsColor.b, to.pointsColor.b, dur)
+            ),
+            ringColor: new Color(
+                tween(cur, from.ringColor.r, to.ringColor.r, dur),
+                tween(cur, from.ringColor.g, to.ringColor.g, dur),
+                tween(cur, from.ringColor.b, to.ringColor.b, dur)
+            ),
+            opacity: tween(cur, from.opacity, to.opacity, dur),
+            impact: tween(cur, from.impact, to.impact, dur),
+            stabilityStart: tween(cur, from.stabilityStart, to.stabilityStart, dur),
+            stabilityEnd: tween(cur, from.stabilityEnd, to.stabilityEnd, dur),
+            rotation: tween(cur, from.rotation, to.rotation, dur),
+            // perlin: tween(cur, from.perlin, to.perlin, dur),
+            background: new Color(
+                bgTween(cur, from.background.r, to.background.r, dur),
+                bgTween(cur, from.background.g, to.background.g, dur),
+                bgTween(cur, from.background.b, to.background.b, dur)
+            ),
+            floatsOpacity: tween(cur, from.floatsOpacity, to.floatsOpacity, dur)
+        });
 
-        this.highCircle.ringColor(new Color(
-            tween(cur, from.ringColor.r, to.ringColor.r, dur),
-            tween(cur, from.ringColor.g, to.ringColor.g, dur),
-            tween(cur, from.ringColor.b, to.ringColor.b, dur)
-        ));
-
-        this.highCircle.ring.opacity(tween(cur, from.opacity, to.opacity, dur));
-        this.highCircle.impact(tween(cur, from.impact, to.impact, dur));
-        this.highCircle.stability(tween(cur, from.stabilityStart, to.stabilityStart, dur), tween(cur, from.stabilityEnd, to.stabilityEnd, dur));
-        this.highCircle.rotation(tween(cur, from.rotation, to.rotation, dur));
-        // this.highCircle.perlin(tween(cur, from.perlin, to.perlin, dur));
-        this.sceneSet.renderer.setClearColor(new Color(
-            bgTween(cur, from.background.r, to.background.r, dur),
-            bgTween(cur, from.background.g, to.background.g, dur),
-            bgTween(cur, from.background.b, to.background.b, dur)
-        ), 1);
-
-        this.floats.material.opacity = tween(cur, from.floatsOpacity, to.floatsOpacity, dur);
         this.emit(WebglStuff.ON_TRANSITION_PROGRESS);
     }
 
@@ -172,6 +200,7 @@ export default class WebglStuff extends EventEmitter {
 
     update(step) {
         if (this._transitionTo && this._transitionCurrent >= this._transitionDuration) {
+            this.set(this._transitionTo);
             this.endTransition();
         }
         if (this._transitionFrom && this._transitionTo) {

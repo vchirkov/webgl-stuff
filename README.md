@@ -13,8 +13,6 @@ Whole thing consists of:
 ```
 npm install webgl-stuff --save
 ```
-[**webgl-stuff.js** + source files]()  
-[**webgl-stuff.min.js**]()
 
 ## Usage
 ES6 import:

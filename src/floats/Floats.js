@@ -3,13 +3,14 @@
  */
 import {PlaneGeometry, Mesh} from 'three';
 import FloatsMaterial from './FloatsMaterial';
+import {Color} from 'three';
 
 export default class Floats {
     constructor({impact, speed, color, opacity}) {
         this.opts = {
             impact: impact || 1,
             speed: speed || 0.0001,
-            color,
+            color: new Color(color),
             opacity
         };
 

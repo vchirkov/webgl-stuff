@@ -139,7 +139,7 @@ export default class HighLightedCirclePoints {
 
     circlesVisible(circlesVisible, opacityStep) {
         if (!isUndefined(circlesVisible)) {
-            this._circlesVisible = circlesVisible;
+            this._circlesVisible = circlesVisible | 0;
             each(this.circles, (circle, i) => {
                 if (i < this._circlesVisible) {
                     if (circle.opacity() < 1) {
