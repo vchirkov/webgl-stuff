@@ -61325,7 +61325,7 @@ var neutral2 = exports.neutral2 = {
     stabilityEnd: 0.95,
     rotation: 0.0005,
     perlin: 0.00025,
-    background: 0x4B4BC8,
+    background: 0x1a1a7f,
     floatsOpacity: 0.6
 };
 

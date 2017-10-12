@@ -1,8 +1,8 @@
-# Webgl stuff  <a href="https://vchirkov.github.io/webgl-stuff/" target="_blank">(demo)</a>
+# Webgl stuff  <a href="https://vchirkov.github.io/webgl-stuff/demo" target="_blank">(demo)</a>
 
 Circular set of points, that can change it's behaviour dynamically.   
 
-<a href="https://vchirkov.github.io/webgl-stuff/" 
+<a href="https://vchirkov.github.io/webgl-stuff/demo" 
    target="_blank">
     <img src="https://user-images.githubusercontent.com/6738725/31457461-810893a8-aec5-11e7-8b49-8b72b18d8a6a.jpg" 
          alt="IMAGE ALT TEXT HERE" 

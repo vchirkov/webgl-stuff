@@ -1,0 +1,66 @@
+html, body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+}
+
+#container {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    overflow: hidden;
+}
+
+.info {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    padding: 15px;
+    background-color: rgba(0, 0, 0, 0.1);
+    opacity: 0.6;
+}
+
+.info:hover {
+    opacity: 1;
+}
+
+.info .title,
+.info a {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.info .title {
+    font-size: 30px;
+    font-weight: 600;
+    cursor: default;
+}
+
+.info .title a {
+    font-size: 11px;
+    font-weight: 100;
+}
+
+.github:after,
+.linkedin:after {
+    display: inline-block;
+    visibility: hidden;
+    content: "";
+    height: 14px;
+    background: url('external-link.svg') no-repeat center;
+    background-size: 100% 100%;
+}
+
+.github:hover:after,
+.linkedin:hover:after {
+    visibility: visible;
+}
+
+.linkedin:after {
+    width: 6px;
+}
+
+.github:after {
+    width: 8px;
+}
