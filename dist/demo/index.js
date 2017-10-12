@@ -61161,6 +61161,11 @@ new _Demo2.default(document.getElementById('container')); /**
                                                            * Created by vlad.chirkov on 30.5.17.
                                                            */
 
+
+var greetings = '%cHi Mate!\nNice to meet you here,\nbut better check out the sources on Github :)\n%chttps://github.com/vchirkov/webgl-stuff/ ';
+
+console.log(greetings, 'font-size: 16px; color: #bada55;', 'color: #000000; font-size: 16px');
+
 /***/ }),
 /* 6 */
 /***/ (function(module, exports, __webpack_require__) {
