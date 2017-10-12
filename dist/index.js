@@ -61085,7 +61085,7 @@ var HighLightedCirclePoints = function () {
             var _this2 = this;
 
             if (!(0, _lodash.isUndefined)(_circlesVisible)) {
-                this._circlesVisible = _circlesVisible;
+                this._circlesVisible = _circlesVisible | 0;
                 (0, _lodash.each)(this.circles, function (circle, i) {
                     if (i < _this2._circlesVisible) {
                         if (circle.opacity() < 1) {
@@ -61150,7 +61150,7 @@ var Floats = function () {
         this.opts = {
             impact: impact || 1,
             speed: speed || 0.0001,
-            color: color,
+            color: new _three.Color(color),
             opacity: opacity
         };
 
@@ -61282,10 +61282,9 @@ exports.default = SceneSet;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.positive2 = exports.positive1 = exports.negative2 = exports.negative1 = exports.neutral2 = exports.neutral1 = exports.initial = undefined;
-
-var _three = __webpack_require__(0);
-
+/**
+ * Created by vlad.chirkov on 10/3/17.
+ */
 var initial = exports.initial = {
     x: 0,
     y: 0,
@@ -61297,97 +61296,96 @@ var initial = exports.initial = {
     space: 1,
     points: 100,
     diffusion: 0.5,
-    floatsColor: new _three.Color(0x000000)
-}; /**
-    * Created by vlad.chirkov on 10/3/17.
-    */
+    floatsColor: 0x000000
+};
+
 var neutral1 = exports.neutral1 = {
     visible: 10,
     opacityStep: 0.125,
-    pointsColor: new _three.Color(1, 1, 1),
-    ringColor: new _three.Color(1, 1, 1),
+    pointsColor: 0xffffff,
+    ringColor: 0xffffff,
     opacity: 0.1,
     impact: 0.04,
     stabilityStart: 1.05,
     stabilityEnd: 0.95,
     rotation: 0.0005,
     perlin: 0.00025,
-    background: new _three.Color(0.295, 0.295, 0.78),
+    background: 0x4B4BC8,
     floatsOpacity: 0.6
 };
 
 var neutral2 = exports.neutral2 = {
     visible: 25,
     opacityStep: 0.125,
-    pointsColor: new _three.Color(1, 1, 1),
-    ringColor: new _three.Color(1, 1, 1),
+    pointsColor: 0xffffff,
+    ringColor: 0xffffff,
     opacity: 0,
     impact: 0.04,
     stabilityStart: 1.05,
     stabilityEnd: 0.95,
     rotation: 0.0005,
     perlin: 0.00025,
-    background: new _three.Color(0.295, 0.295, 0.78),
+    background: 0x4B4BC8,
     floatsOpacity: 0.6
 };
 
 var negative1 = exports.negative1 = {
     visible: 40,
     opacityStep: 0.125,
-    pointsColor: new _three.Color(1, 1, 0),
-    ringColor: new _three.Color(1, 1, 0),
+    pointsColor: 0xffff00,
+    ringColor: 0xffff00,
     opacity: 0.3,
     impact: 0.07,
     stabilityStart: 1.25,
     stabilityEnd: 0.85,
     rotation: 0.001,
     perlin: 0.0005,
-    background: new _three.Color(1, 0, 0),
+    background: 0xff0000,
     floatsOpacity: 1.1
 };
 
 var negative2 = exports.negative2 = {
     visible: 40,
     opacityStep: 0.125,
-    pointsColor: new _three.Color(1, 1, 0),
-    ringColor: new _three.Color(1, 1, 0),
+    pointsColor: 0xffff00,
+    ringColor: 0xffff00,
     opacity: 0.4,
     impact: 0.08,
     stabilityStart: 1.15,
     stabilityEnd: 1.15,
     rotation: 0.001,
     perlin: 0.0005,
-    background: new _three.Color(1, 0, 0),
+    background: 0xff0000,
     floatsOpacity: 1.1
 };
 
 var positive1 = exports.positive1 = {
     visible: 30,
     opacityStep: 0.125,
-    pointsColor: new _three.Color(1, 1, 1),
-    ringColor: new _three.Color(1, 1, 1),
+    pointsColor: 0xffffff,
+    ringColor: 0xffffff,
     opacity: 0,
     impact: 0.001,
     stabilityStart: 1.25,
     stabilityEnd: 1.25,
     rotation: 0.0001,
     perlin: 0.00005,
-    background: new _three.Color(0.14, 0.9, 0.372),
+    background: 0x24E65F,
     floatsOpacity: 0.5
 };
 
 var positive2 = exports.positive2 = {
     visible: 25,
     opacityStep: 0.125,
-    pointsColor: new _three.Color(1, 1, 1),
-    ringColor: new _three.Color(1, 1, 1),
+    pointsColor: 0xffffff,
+    ringColor: 0xffffff,
     opacity: 0,
     impact: 0.0001,
     stabilityStart: 1.25,
     stabilityEnd: 1.25,
     rotation: 0.0001,
     perlin: 0.00005,
-    background: new _three.Color(0.14, 0.9, 0.372),
+    background: 0x24E65F,
     floatsOpacity: 0.7
 };
 
@@ -62347,8 +62345,8 @@ var WebglStuff = function (_EventEmitter) {
         _this.sceneSet = new _SceneSet2.default(el, _this.initial.background);
 
         _this.highCircle = new _HighlightedCirclePoints2.default(_this.initial.circles, _this.initial.visible, _this.initial.r, _this.initial.space, _this.initial.points, {
-            pointsColor: _this.initial.pointsColor,
-            ringColor: _this.initial.ringColor,
+            pointsColor: new _three.Color(_this.initial.pointsColor),
+            ringColor: new _three.Color(_this.initial.ringColor),
             opacity: _this.initial.opacity,
             impact: _this.initial.impact,
             stabilityStart: _this.initial.stabilityStart,
@@ -62384,19 +62382,41 @@ var WebglStuff = function (_EventEmitter) {
 
     _createClass(WebglStuff, [{
         key: 'transitTo',
-        value: function transitTo(preset, duration) {
+        value: function transitTo(preset) {
             var _this2 = this;
 
-            return new Promise(function (res, rej) {
-                _this2._transitionRes && _this2._transitionRes();
+            var duration = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
 
-                _this2._transitionRes = res;
-                _this2._transitionRej = rej;
+            if (!duration) {
+                return Promise.resolve(this.set(preset));
+            } else {
+                return new Promise(function (res, rej) {
+                    _this2._transitionRes && _this2._transitionRes();
 
-                _this2._beginTransition(preset, duration);
+                    _this2._transitionRes = res;
+                    _this2._transitionRej = rej;
 
-                _this2.emit(WebglStuff.ON_TRANSITION_START);
-            });
+                    _this2._beginTransition(preset, duration);
+                    _this2._onTransitionUpdate(0);
+
+                    _this2.emit(WebglStuff.ON_TRANSITION_START);
+                });
+            }
+        }
+    }, {
+        key: 'set',
+        value: function set(preset) {
+            !(0, _lodash.isUndefined)(preset.visible) && this.highCircle.circlesVisible(preset.visible | 0, preset.opacityStep || 1);
+            !(0, _lodash.isUndefined)(preset.pointsColor) && this.highCircle.pointsColor(new _three.Color(preset.pointsColor));
+            !(0, _lodash.isUndefined)(preset.ringColor) && this.highCircle.ringColor(new _three.Color(preset.ringColor));
+            !(0, _lodash.isUndefined)(preset.opacity) && this.highCircle.ring.opacity(preset.opacity);
+            !(0, _lodash.isUndefined)(preset.impact) && this.highCircle.impact(preset.impact);
+            !(0, _lodash.isUndefined)(preset.stabilityStart) && this.highCircle.stabilityStart(preset.stabilityStart);
+            !(0, _lodash.isUndefined)(preset.stabilityEnd) && this.highCircle.stabilityEnd(preset.stabilityEnd);
+            !(0, _lodash.isUndefined)(preset.rotation) && this.highCircle.rotation(preset.rotation);
+            !(0, _lodash.isUndefined)(preset.perlin) && this.highCircle.perlin(preset.perlin);
+            !(0, _lodash.isUndefined)(preset.background) && this.sceneSet.renderer.setClearColor(new _three.Color(preset.background));
+            !(0, _lodash.isUndefined)(preset.floatsOpacity) && (this.floats.material.opacity = preset.floatsOpacity);
         }
     }, {
         key: '_beginTransition',
@@ -62416,6 +62436,17 @@ var WebglStuff = function (_EventEmitter) {
             };
 
             this._transitionTo = (0, _lodash.defaults)({}, preset, this._transitionTo, this._transitionFrom);
+            if (!(this._transitionTo.pointsColor instanceof _three.Color)) {
+                this._transitionTo.pointsColor = new _three.Color(this._transitionTo.pointsColor);
+            }
+
+            if (!(this._transitionTo.ringColor instanceof _three.Color)) {
+                this._transitionTo.ringColor = new _three.Color(this._transitionTo.ringColor);
+            }
+
+            if (!(this._transitionTo.background instanceof _three.Color)) {
+                this._transitionTo.background = new _three.Color(this._transitionTo.background);
+            }
 
             this._transitionCurrent = 0;
             this._transitionDuration = duration;
@@ -62431,19 +62462,21 @@ var WebglStuff = function (_EventEmitter) {
             var from = this._transitionFrom;
             var to = this._transitionTo;
 
-            this.highCircle.circlesVisible((0, _tweenFunctions.easeOutCubic)(cur, from.visible, to.visible, dur) | 0, to.opacityStep);
-            this.highCircle.pointsColor(new _three.Color((0, _tweenFunctions.easeOutCubic)(cur, from.pointsColor.r, to.pointsColor.r, dur), (0, _tweenFunctions.easeOutCubic)(cur, from.pointsColor.g, to.pointsColor.g, dur), (0, _tweenFunctions.easeOutCubic)(cur, from.pointsColor.b, to.pointsColor.b, dur)));
+            this.set({
+                visible: (0, _tweenFunctions.easeOutCubic)(cur, from.visible, to.visible, dur),
+                opacityStep: to.opacityStep,
+                pointsColor: new _three.Color((0, _tweenFunctions.easeOutCubic)(cur, from.pointsColor.r, to.pointsColor.r, dur), (0, _tweenFunctions.easeOutCubic)(cur, from.pointsColor.g, to.pointsColor.g, dur), (0, _tweenFunctions.easeOutCubic)(cur, from.pointsColor.b, to.pointsColor.b, dur)),
+                ringColor: new _three.Color((0, _tweenFunctions.easeOutCubic)(cur, from.ringColor.r, to.ringColor.r, dur), (0, _tweenFunctions.easeOutCubic)(cur, from.ringColor.g, to.ringColor.g, dur), (0, _tweenFunctions.easeOutCubic)(cur, from.ringColor.b, to.ringColor.b, dur)),
+                opacity: (0, _tweenFunctions.easeOutCubic)(cur, from.opacity, to.opacity, dur),
+                impact: (0, _tweenFunctions.easeOutCubic)(cur, from.impact, to.impact, dur),
+                stabilityStart: (0, _tweenFunctions.easeOutCubic)(cur, from.stabilityStart, to.stabilityStart, dur),
+                stabilityEnd: (0, _tweenFunctions.easeOutCubic)(cur, from.stabilityEnd, to.stabilityEnd, dur),
+                rotation: (0, _tweenFunctions.easeOutCubic)(cur, from.rotation, to.rotation, dur),
+                // perlin: tween(cur, from.perlin, to.perlin, dur),
+                background: new _three.Color((0, _tweenFunctions.linear)(cur, from.background.r, to.background.r, dur), (0, _tweenFunctions.linear)(cur, from.background.g, to.background.g, dur), (0, _tweenFunctions.linear)(cur, from.background.b, to.background.b, dur)),
+                floatsOpacity: (0, _tweenFunctions.easeOutCubic)(cur, from.floatsOpacity, to.floatsOpacity, dur)
+            });
 
-            this.highCircle.ringColor(new _three.Color((0, _tweenFunctions.easeOutCubic)(cur, from.ringColor.r, to.ringColor.r, dur), (0, _tweenFunctions.easeOutCubic)(cur, from.ringColor.g, to.ringColor.g, dur), (0, _tweenFunctions.easeOutCubic)(cur, from.ringColor.b, to.ringColor.b, dur)));
-
-            this.highCircle.ring.opacity((0, _tweenFunctions.easeOutCubic)(cur, from.opacity, to.opacity, dur));
-            this.highCircle.impact((0, _tweenFunctions.easeOutCubic)(cur, from.impact, to.impact, dur));
-            this.highCircle.stability((0, _tweenFunctions.easeOutCubic)(cur, from.stabilityStart, to.stabilityStart, dur), (0, _tweenFunctions.easeOutCubic)(cur, from.stabilityEnd, to.stabilityEnd, dur));
-            this.highCircle.rotation((0, _tweenFunctions.easeOutCubic)(cur, from.rotation, to.rotation, dur));
-            // this.highCircle.perlin(tween(cur, from.perlin, to.perlin, dur));
-            this.sceneSet.renderer.setClearColor(new _three.Color((0, _tweenFunctions.linear)(cur, from.background.r, to.background.r, dur), (0, _tweenFunctions.linear)(cur, from.background.g, to.background.g, dur), (0, _tweenFunctions.linear)(cur, from.background.b, to.background.b, dur)), 1);
-
-            this.floats.material.opacity = (0, _tweenFunctions.easeOutCubic)(cur, from.floatsOpacity, to.floatsOpacity, dur);
             this.emit(WebglStuff.ON_TRANSITION_PROGRESS);
         }
     }, {
@@ -62472,6 +62505,7 @@ var WebglStuff = function (_EventEmitter) {
         key: 'update',
         value: function update(step) {
             if (this._transitionTo && this._transitionCurrent >= this._transitionDuration) {
+                this.set(this._transitionTo);
                 this.endTransition();
             }
             if (this._transitionFrom && this._transitionTo) {
