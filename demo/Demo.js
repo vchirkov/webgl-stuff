@@ -7,6 +7,9 @@ import dat from 'dat.gui/build/dat.gui';
 import WebglStuff from '../src';
 
 import {clone, extend, each} from 'lodash';
+import clipboard from 'clipboard-js';
+import Noty from 'noty';
+import 'noty/lib/noty.css';
 
 const KEYS = [
     65, // 'a'
@@ -45,6 +48,7 @@ export  default class Demo {
         this.initGuiCircles().open();
         this.initGuiHighlight();
         this.initGuiBackground();
+        this.initClipboard();
     }
 
     initGuiCircles() {
@@ -110,7 +114,7 @@ export  default class Demo {
             'neutral': () => this.transit(WebglStuff.presets.progress.normal, true),
             'positive': () => this.transit(WebglStuff.presets.progress.good, true),
             'negative': () => this.transit(WebglStuff.presets.progress.bad, true),
-            'more_negative': () => this.transit(WebglStuff.presets.end.bad, true)
+            'more negative': () => this.transit(WebglStuff.presets.end.bad, true)
         };
 
 
@@ -118,8 +122,39 @@ export  default class Demo {
         presetButtons.add(presetActions, 'neutral');
         presetButtons.add(presetActions, 'positive');
         presetButtons.add(presetActions, 'negative');
-        presetButtons.add(presetActions, 'more_negative');
+        presetButtons.add(presetActions, 'more negative');
         return presetButtons;
+    }
+
+    initClipboard() {
+        let clipboardAction = {
+            'copy preset': () => {
+                try {
+                    clipboard.copy(JSON.stringify(this.preset, null, 4));
+                    new Noty({
+                        type: 'success',
+                        text: 'Yay, copied :)',
+                        layout: 'bottomRight',
+                        progressBar: false,
+                        killer: true,
+                        timeout: 1000,
+                        animation: {
+                            close: null
+                        }
+                    }).show();
+                } catch (e) {
+                    new Noty({
+                        type: 'error',
+                        text: 'Huh, couldn\'t copy :(',
+                        layout: 'bottomRight',
+                        killer: true,
+                        timeout: 1000
+                    }).show()
+                }
+            }
+        };
+        this.gui.add(clipboardAction, 'copy preset');
+        return this.gui;
     }
 
     transit(preset, update = false) {

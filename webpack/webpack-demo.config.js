@@ -9,6 +9,14 @@ const base = require('./webpack-base.config');
 module.exports = merge({}, base, {
     name: 'demo',
     entry: path.resolve(__dirname, '../demo/index.js'),
+    module: {
+        rules: [
+            {
+                test: /\.css$/,
+                use: ['style-loader', 'css-loader']
+            }
+        ]
+    },
     output: {
         path: path.resolve(__dirname, '../dist/demo'),
         filename: 'index.js'

@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 4);
+/******/ 	return __webpack_require__(__webpack_require__.s = 5);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -60839,7 +60839,7 @@ function CanvasRenderer() {
   }
 }.call(this));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(26), __webpack_require__(27)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3), __webpack_require__(34)(module)))
 
 /***/ }),
 /* 2 */
@@ -60884,6 +60884,33 @@ exports.default = InlineTextureLoader;
 
 /***/ }),
 /* 3 */
+/***/ (function(module, exports) {
+
+var g;
+
+// This works in non-strict mode
+g = (function() {
+	return this;
+})();
+
+try {
+	// This works if eval is allowed (see CSP)
+	g = g || Function("return this")() || (1,eval)("this");
+} catch(e) {
+	// This works if the window reference is available
+	if(typeof window === "object")
+		g = window;
+}
+
+// g can still be undefined, but nothing to do about it...
+// We return undefined, instead of nothing here, so it's
+// easier to handle this case. if(!global) { ...}
+
+module.exports = g;
+
+
+/***/ }),
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -60898,23 +60925,33 @@ var _createClass = function () { function defineProperties(target, props) { for 
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       */
 
 
-var _threeTrackballcontrols = __webpack_require__(23);
+var _threeTrackballcontrols = __webpack_require__(31);
 
 var _threeTrackballcontrols2 = _interopRequireDefault(_threeTrackballcontrols);
 
-var _stats = __webpack_require__(19);
+var _stats = __webpack_require__(24);
 
 var _stats2 = _interopRequireDefault(_stats);
 
-var _dat = __webpack_require__(18);
+var _dat = __webpack_require__(22);
 
 var _dat2 = _interopRequireDefault(_dat);
 
-var _src = __webpack_require__(11);
+var _src = __webpack_require__(12);
 
 var _src2 = _interopRequireDefault(_src);
 
 var _lodash = __webpack_require__(1);
+
+var _clipboardJs = __webpack_require__(19);
+
+var _clipboardJs2 = _interopRequireDefault(_clipboardJs);
+
+var _noty = __webpack_require__(23);
+
+var _noty2 = _interopRequireDefault(_noty);
+
+__webpack_require__(25);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -60960,6 +60997,7 @@ var Demo = function () {
             this.initGuiCircles().open();
             this.initGuiHighlight();
             this.initGuiBackground();
+            this.initClipboard();
         }
     }, {
         key: 'initGuiCircles',
@@ -61006,7 +61044,7 @@ var Demo = function () {
                 'negative': function negative() {
                     return _this.transit(_src2.default.presets.progress.bad, true);
                 },
-                'more_negative': function more_negative() {
+                'more negative': function moreNegative() {
                     return _this.transit(_src2.default.presets.end.bad, true);
                 }
             };
@@ -61015,8 +61053,42 @@ var Demo = function () {
             presetButtons.add(presetActions, 'neutral');
             presetButtons.add(presetActions, 'positive');
             presetButtons.add(presetActions, 'negative');
-            presetButtons.add(presetActions, 'more_negative');
+            presetButtons.add(presetActions, 'more negative');
             return presetButtons;
+        }
+    }, {
+        key: 'initClipboard',
+        value: function initClipboard() {
+            var _this2 = this;
+
+            var clipboardAction = {
+                'copy preset': function copyPreset() {
+                    try {
+                        _clipboardJs2.default.copy(JSON.stringify(_this2.preset, null, 4));
+                        new _noty2.default({
+                            type: 'success',
+                            text: 'Yay, copied :)',
+                            layout: 'bottomRight',
+                            progressBar: false,
+                            killer: true,
+                            timeout: 1000,
+                            animation: {
+                                close: null
+                            }
+                        }).show();
+                    } catch (e) {
+                        new _noty2.default({
+                            type: 'error',
+                            text: 'Huh, couldn\'t copy :(',
+                            layout: 'bottomRight',
+                            killer: true,
+                            timeout: 1000
+                        }).show();
+                    }
+                }
+            };
+            this.gui.add(clipboardAction, 'copy preset');
+            return this.gui;
         }
     }, {
         key: 'transit',
@@ -61053,16 +61125,16 @@ var Demo = function () {
     }, {
         key: 'bindUpdate',
         value: function bindUpdate() {
-            var _this2 = this;
+            var _this3 = this;
 
             this.wgs.on(_src2.default.ON_BEFORE_UPDATE, function () {
-                return _this2.stats.begin();
+                return _this3.stats.begin();
             });
             this.wgs.on(_src2.default.ON_UPDATE, function () {
-                return _this2.controls.update();
+                return _this3.controls.update();
             });
             this.wgs.on(_src2.default.ON_AFTER_UPDATE, function () {
-                return _this2.stats.end();
+                return _this3.stats.end();
             });
         }
     }]);
@@ -61073,13 +61145,13 @@ var Demo = function () {
 exports.default = Demo;
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _Demo = __webpack_require__(3);
+var _Demo = __webpack_require__(4);
 
 var _Demo2 = _interopRequireDefault(_Demo);
 
@@ -61090,7 +61162,7 @@ new _Demo2.default(document.getElementById('container')); /**
                                                            */
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -61107,11 +61179,11 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _lodash = __webpack_require__(1);
 
-var _CircularPoints = __webpack_require__(6);
+var _CircularPoints = __webpack_require__(7);
 
 var _CircularPoints2 = _interopRequireDefault(_CircularPoints);
 
-var _LightRing = __webpack_require__(12);
+var _LightRing = __webpack_require__(13);
 
 var _LightRing2 = _interopRequireDefault(_LightRing);
 
@@ -61320,7 +61392,7 @@ var HighLightedCirclePoints = function () {
 exports.default = HighLightedCirclePoints;
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -61337,11 +61409,11 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _three = __webpack_require__(0);
 
-var _CircularPointsMaterial = __webpack_require__(8);
+var _CircularPointsMaterial = __webpack_require__(9);
 
 var _CircularPointsMaterial2 = _interopRequireDefault(_CircularPointsMaterial);
 
-var _CircularPointsGeometry = __webpack_require__(7);
+var _CircularPointsGeometry = __webpack_require__(8);
 
 var _CircularPointsGeometry2 = _interopRequireDefault(_CircularPointsGeometry);
 
@@ -61349,7 +61421,7 @@ var _InlineTextureLoader = __webpack_require__(2);
 
 var _InlineTextureLoader2 = _interopRequireDefault(_InlineTextureLoader);
 
-var _glow = __webpack_require__(16);
+var _glow = __webpack_require__(17);
 
 var _glow2 = _interopRequireDefault(_glow);
 
@@ -61434,7 +61506,7 @@ var CircularPoints = function () {
 exports.default = CircularPoints;
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -61481,7 +61553,7 @@ var CircularPointsGeometry = function (_Geometry) {
 exports.default = CircularPointsGeometry;
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -61495,7 +61567,7 @@ var _lodash = __webpack_require__(1);
 
 var _three = __webpack_require__(0);
 
-var _noisePointsVert = __webpack_require__(20);
+var _noisePointsVert = __webpack_require__(28);
 
 var _noisePointsVert2 = _interopRequireDefault(_noisePointsVert);
 
@@ -61554,7 +61626,7 @@ var CircularPointsMaterial = function (_PointsMaterial) {
 exports.default = CircularPointsMaterial;
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -61571,7 +61643,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _three = __webpack_require__(0);
 
-var _FloatsMaterial = __webpack_require__(10);
+var _FloatsMaterial = __webpack_require__(11);
 
 var _FloatsMaterial2 = _interopRequireDefault(_FloatsMaterial);
 
@@ -61627,7 +61699,7 @@ var Floats = function () {
 exports.default = Floats;
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -61639,11 +61711,11 @@ Object.defineProperty(exports, "__esModule", {
 
 var _three = __webpack_require__(0);
 
-var _noiseBackgroundVert = __webpack_require__(22);
+var _noiseBackgroundVert = __webpack_require__(30);
 
 var _noiseBackgroundVert2 = _interopRequireDefault(_noiseBackgroundVert);
 
-var _noiseBackgroundFrag = __webpack_require__(21);
+var _noiseBackgroundFrag = __webpack_require__(29);
 
 var _noiseBackgroundFrag2 = _interopRequireDefault(_noiseBackgroundFrag);
 
@@ -61690,7 +61762,7 @@ var FloatsMaterial = function (_MeshBasicMaterial) {
 exports.default = FloatsMaterial;
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -61704,25 +61776,25 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _lodash = __webpack_require__(1);
 
-var _events = __webpack_require__(28);
+var _events = __webpack_require__(35);
 
 var _three = __webpack_require__(0);
 
-var _tweenFunctions = __webpack_require__(25);
+var _tweenFunctions = __webpack_require__(33);
 
-var _SceneSet = __webpack_require__(14);
+var _SceneSet = __webpack_require__(15);
 
 var _SceneSet2 = _interopRequireDefault(_SceneSet);
 
-var _HighlightedCirclePoints = __webpack_require__(5);
+var _HighlightedCirclePoints = __webpack_require__(6);
 
 var _HighlightedCirclePoints2 = _interopRequireDefault(_HighlightedCirclePoints);
 
-var _Floats = __webpack_require__(9);
+var _Floats = __webpack_require__(10);
 
 var _Floats2 = _interopRequireDefault(_Floats);
 
-var _constants = __webpack_require__(15);
+var _constants = __webpack_require__(16);
 
 var constants = _interopRequireWildcard(_constants);
 
@@ -61971,7 +62043,7 @@ WebglStuff.presets = presets;
 WebglStuff.initial = constants.initial;
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -61988,7 +62060,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _three = __webpack_require__(0);
 
-var _RadialRingGeometry = __webpack_require__(13);
+var _RadialRingGeometry = __webpack_require__(14);
 
 var _RadialRingGeometry2 = _interopRequireDefault(_RadialRingGeometry);
 
@@ -61996,7 +62068,7 @@ var _InlineTextureLoader = __webpack_require__(2);
 
 var _InlineTextureLoader2 = _interopRequireDefault(_InlineTextureLoader);
 
-var _gradient = __webpack_require__(17);
+var _gradient = __webpack_require__(18);
 
 var _gradient2 = _interopRequireDefault(_gradient);
 
@@ -62080,7 +62152,7 @@ var LightRing = function () {
 exports.default = LightRing;
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -62236,7 +62308,7 @@ RadialRingBufferGeometry.prototype.constructor = RadialRingBufferGeometry;
 exports.default = RadialRingGeometry;
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -62323,7 +62395,7 @@ var SceneSet = function () {
 exports.default = SceneSet;
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -62440,19 +62512,299 @@ var positive2 = exports.positive2 = {
 };
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAANJJREFUeNq8U+0OgyAMpIhGt/d/gO0Zt6CoMJpck4rgH5ORXPiy1+tRKaVk7gxrbg5XIYzqjrDnec8QuSTrkoBAMqizPmPDtyvOYksBE3QIGpSqHcF8P7cUWECCJ6wJCjjQ42ytKZDsY8YDGJFpg+xQqDq8gsgSIiZ4ZbyRaMDcKzMPBHvxClERy/7UNKQayQGc+QlMCOL6PxnfjAVenEyMwKIMndXzeagMrUZKqgwPMgcDDUjCVQniR6fqtkWCCMJUI9ABtmIs6Q5sEfz/b/wJMAD/oUlpbWvt9wAAAABJRU5ErkJggg=="
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/png;base64,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"
 
 /***/ }),
-/* 18 */
+/* 19 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function(setImmediate) {//  Import support https://stackoverflow.com/questions/13673346/supporting-both-commonjs-and-amd
+(function(name, definition) {
+    if (true) { module.exports = definition(); }
+    else if (typeof define === "function" && typeof define.amd === "object") { define(definition); }
+    else { this[name] = definition(); }
+}("clipboard", function() {
+  if (typeof document === 'undefined' || !document.addEventListener) {
+    return null;
+  }
+
+  var clipboard = {};
+
+  clipboard.copy = (function() {
+    var _intercept = false;
+    var _data = null; // Map from data type (e.g. "text/html") to value.
+    var _bogusSelection = false;
+
+    function cleanup() {
+      _intercept = false;
+      _data = null;
+      if (_bogusSelection) {
+        window.getSelection().removeAllRanges();
+      }
+      _bogusSelection = false;
+    }
+
+    document.addEventListener("copy", function(e) {
+      if (_intercept) {
+        for (var key in _data) {
+          e.clipboardData.setData(key, _data[key]);
+        }
+        e.preventDefault();
+      }
+    });
+
+    // Workaround for Safari: https://bugs.webkit.org/show_bug.cgi?id=156529
+    function bogusSelect() {
+      var sel = document.getSelection();
+      // If "nothing" is selected...
+      if (!document.queryCommandEnabled("copy") && sel.isCollapsed) {
+        // ... temporarily select the entire body.
+        //
+        // We select the entire body because:
+        // - it's guaranteed to exist,
+        // - it works (unlike, say, document.head, or phantom element that is
+        //   not inserted into the DOM),
+        // - it doesn't seem to flicker (due to the synchronous copy event), and
+        // - it avoids modifying the DOM (can trigger mutation observers).
+        //
+        // Because we can't do proper feature detection (we already checked
+        // document.queryCommandEnabled("copy") , which actually gives a false
+        // negative for Blink when nothing is selected) and UA sniffing is not
+        // reliable (a lot of UA strings contain "Safari"), this will also
+        // happen for some browsers other than Safari. :-()
+        var range = document.createRange();
+        range.selectNodeContents(document.body);
+        sel.removeAllRanges();
+        sel.addRange(range);
+        _bogusSelection = true;
+      }
+    };
+
+    return function(data) {
+      return new Promise(function(resolve, reject) {
+        _intercept = true;
+        if (typeof data === "string") {
+          _data = {"text/plain": data};
+        } else if (data instanceof Node) {
+          _data = {"text/html": new XMLSerializer().serializeToString(data)};
+        } else if (data instanceof Object){
+          _data = data;
+        } else {
+          reject("Invalid data type. Must be string, DOM node, or an object mapping MIME types to strings.")
+        }
+
+        function triggerCopy(tryBogusSelect) {
+          try {
+            if (document.execCommand("copy")) {
+              // document.execCommand is synchronous: http://www.w3.org/TR/2015/WD-clipboard-apis-20150421/#integration-with-rich-text-editing-apis
+              // So we can call resolve() back here.
+              cleanup();
+              resolve();
+            }
+            else {
+              if (!tryBogusSelect) {
+                bogusSelect();
+                triggerCopy(true);
+              } else {
+                cleanup();
+                throw new Error("Unable to copy. Perhaps it's not available in your browser?");
+              }
+            }
+          } catch (e) {
+            cleanup();
+            reject(e);
+          }
+        }
+        triggerCopy(false);
+
+      });
+    };
+  })();
+
+  clipboard.paste = (function() {
+    var _intercept = false;
+    var _resolve;
+    var _dataType;
+
+    document.addEventListener("paste", function(e) {
+      if (_intercept) {
+        _intercept = false;
+        e.preventDefault();
+        var resolve = _resolve;
+        _resolve = null;
+        resolve(e.clipboardData.getData(_dataType));
+      }
+    });
+
+    return function(dataType) {
+      return new Promise(function(resolve, reject) {
+        _intercept = true;
+        _resolve = resolve;
+        _dataType = dataType || "text/plain";
+        try {
+          if (!document.execCommand("paste")) {
+            _intercept = false;
+            reject(new Error("Unable to paste. Pasting only works in Internet Explorer at the moment."));
+          }
+        } catch (e) {
+          _intercept = false;
+          reject(new Error(e));
+        }
+      });
+    };
+  })();
+
+  // Handle IE behaviour.
+  if (typeof ClipboardEvent === "undefined" &&
+      typeof window.clipboardData !== "undefined" &&
+      typeof window.clipboardData.setData !== "undefined") {
+
+    /*! promise-polyfill 2.0.1 */
+    (function(a){function b(a,b){return function(){a.apply(b,arguments)}}function c(a){if("object"!=typeof this)throw new TypeError("Promises must be constructed via new");if("function"!=typeof a)throw new TypeError("not a function");this._state=null,this._value=null,this._deferreds=[],i(a,b(e,this),b(f,this))}function d(a){var b=this;return null===this._state?void this._deferreds.push(a):void j(function(){var c=b._state?a.onFulfilled:a.onRejected;if(null===c)return void(b._state?a.resolve:a.reject)(b._value);var d;try{d=c(b._value)}catch(e){return void a.reject(e)}a.resolve(d)})}function e(a){try{if(a===this)throw new TypeError("A promise cannot be resolved with itself.");if(a&&("object"==typeof a||"function"==typeof a)){var c=a.then;if("function"==typeof c)return void i(b(c,a),b(e,this),b(f,this))}this._state=!0,this._value=a,g.call(this)}catch(d){f.call(this,d)}}function f(a){this._state=!1,this._value=a,g.call(this)}function g(){for(var a=0,b=this._deferreds.length;b>a;a++)d.call(this,this._deferreds[a]);this._deferreds=null}function h(a,b,c,d){this.onFulfilled="function"==typeof a?a:null,this.onRejected="function"==typeof b?b:null,this.resolve=c,this.reject=d}function i(a,b,c){var d=!1;try{a(function(a){d||(d=!0,b(a))},function(a){d||(d=!0,c(a))})}catch(e){if(d)return;d=!0,c(e)}}var j=c.immediateFn||"function"==typeof setImmediate&&setImmediate||function(a){setTimeout(a,1)},k=Array.isArray||function(a){return"[object Array]"===Object.prototype.toString.call(a)};c.prototype["catch"]=function(a){return this.then(null,a)},c.prototype.then=function(a,b){var e=this;return new c(function(c,f){d.call(e,new h(a,b,c,f))})},c.all=function(){var a=Array.prototype.slice.call(1===arguments.length&&k(arguments[0])?arguments[0]:arguments);return new c(function(b,c){function d(f,g){try{if(g&&("object"==typeof g||"function"==typeof g)){var h=g.then;if("function"==typeof h)return void h.call(g,function(a){d(f,a)},c)}a[f]=g,0===--e&&b(a)}catch(i){c(i)}}if(0===a.length)return b([]);for(var e=a.length,f=0;f<a.length;f++)d(f,a[f])})},c.resolve=function(a){return a&&"object"==typeof a&&a.constructor===c?a:new c(function(b){b(a)})},c.reject=function(a){return new c(function(b,c){c(a)})},c.race=function(a){return new c(function(b,c){for(var d=0,e=a.length;e>d;d++)a[d].then(b,c)})},"undefined"!=typeof module&&module.exports?module.exports=c:a.Promise||(a.Promise=c)})(this);
+
+    clipboard.copy = function(data) {
+      return new Promise(function(resolve, reject) {
+        // IE supports string and URL types: https://msdn.microsoft.com/en-us/library/ms536744(v=vs.85).aspx
+        // We only support the string type for now.
+        if (typeof data !== "string" && !("text/plain" in data)) {
+          throw new Error("You must provide a text/plain type.");
+        }
+
+        var strData = (typeof data === "string" ? data : data["text/plain"]);
+        var copySucceeded = window.clipboardData.setData("Text", strData);
+        if (copySucceeded) {
+          resolve();
+        } else {
+          reject(new Error("Copying was rejected."));
+        }
+      });
+    };
+
+    clipboard.paste = function() {
+      return new Promise(function(resolve, reject) {
+        var strData = window.clipboardData.getData("Text");
+        if (strData) {
+          resolve(strData);
+        } else {
+          // The user rejected the paste request.
+          reject(new Error("Pasting was rejected."));
+        }
+      });
+    };
+  }
+
+  return clipboard;
+}));
+
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(38).setImmediate))
+
+/***/ }),
+/* 20 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(21)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, ".noty_layout_mixin, #noty_layout__top, #noty_layout__topLeft, #noty_layout__topCenter, #noty_layout__topRight, #noty_layout__bottom, #noty_layout__bottomLeft, #noty_layout__bottomCenter, #noty_layout__bottomRight, #noty_layout__center, #noty_layout__centerLeft, #noty_layout__centerRight {\n  position: fixed;\n  margin: 0;\n  padding: 0;\n  z-index: 9999999;\n  -webkit-transform: translateZ(0) scale(1, 1);\n          transform: translateZ(0) scale(1, 1);\n  -webkit-backface-visibility: hidden;\n          backface-visibility: hidden;\n  -webkit-font-smoothing: subpixel-antialiased;\n  filter: blur(0);\n  -webkit-filter: blur(0);\n  max-width: 90%; }\n\n#noty_layout__top {\n  top: 0;\n  left: 5%;\n  width: 90%; }\n\n#noty_layout__topLeft {\n  top: 20px;\n  left: 20px;\n  width: 325px; }\n\n#noty_layout__topCenter {\n  top: 5%;\n  left: 50%;\n  width: 325px;\n  -webkit-transform: translate(-webkit-calc(-50% - .5px)) translateZ(0) scale(1, 1);\n          transform: translate(calc(-50% - .5px)) translateZ(0) scale(1, 1); }\n\n#noty_layout__topRight {\n  top: 20px;\n  right: 20px;\n  width: 325px; }\n\n#noty_layout__bottom {\n  bottom: 0;\n  left: 5%;\n  width: 90%; }\n\n#noty_layout__bottomLeft {\n  bottom: 20px;\n  left: 20px;\n  width: 325px; }\n\n#noty_layout__bottomCenter {\n  bottom: 5%;\n  left: 50%;\n  width: 325px;\n  -webkit-transform: translate(-webkit-calc(-50% - .5px)) translateZ(0) scale(1, 1);\n          transform: translate(calc(-50% - .5px)) translateZ(0) scale(1, 1); }\n\n#noty_layout__bottomRight {\n  bottom: 20px;\n  right: 20px;\n  width: 325px; }\n\n#noty_layout__center {\n  top: 50%;\n  left: 50%;\n  width: 325px;\n  -webkit-transform: translate(-webkit-calc(-50% - .5px), -webkit-calc(-50% - .5px)) translateZ(0) scale(1, 1);\n          transform: translate(calc(-50% - .5px), calc(-50% - .5px)) translateZ(0) scale(1, 1); }\n\n#noty_layout__centerLeft {\n  top: 50%;\n  left: 20px;\n  width: 325px;\n  -webkit-transform: translate(0, -webkit-calc(-50% - .5px)) translateZ(0) scale(1, 1);\n          transform: translate(0, calc(-50% - .5px)) translateZ(0) scale(1, 1); }\n\n#noty_layout__centerRight {\n  top: 50%;\n  right: 20px;\n  width: 325px;\n  -webkit-transform: translate(0, -webkit-calc(-50% - .5px)) translateZ(0) scale(1, 1);\n          transform: translate(0, calc(-50% - .5px)) translateZ(0) scale(1, 1); }\n\n.noty_progressbar {\n  display: none; }\n\n.noty_has_timeout.noty_has_progressbar .noty_progressbar {\n  display: block;\n  position: absolute;\n  left: 0;\n  bottom: 0;\n  height: 3px;\n  width: 100%;\n  background-color: #646464;\n  opacity: 0.2;\n  filter: alpha(opacity=10); }\n\n.noty_bar {\n  -webkit-backface-visibility: hidden;\n  -webkit-transform: translate(0, 0) translateZ(0) scale(1, 1);\n  -ms-transform: translate(0, 0) scale(1, 1);\n      transform: translate(0, 0) scale(1, 1);\n  -webkit-font-smoothing: subpixel-antialiased;\n  overflow: hidden; }\n\n.noty_effects_open {\n  opacity: 0;\n  -webkit-transform: translate(50%);\n      -ms-transform: translate(50%);\n          transform: translate(50%);\n  -webkit-animation: noty_anim_in 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);\n          animation: noty_anim_in 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);\n  -webkit-animation-fill-mode: forwards;\n          animation-fill-mode: forwards; }\n\n.noty_effects_close {\n  -webkit-animation: noty_anim_out 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);\n          animation: noty_anim_out 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);\n  -webkit-animation-fill-mode: forwards;\n          animation-fill-mode: forwards; }\n\n.noty_fix_effects_height {\n  -webkit-animation: noty_anim_height 75ms ease-out;\n          animation: noty_anim_height 75ms ease-out; }\n\n.noty_close_with_click {\n  cursor: pointer; }\n\n.noty_close_button {\n  position: absolute;\n  top: 2px;\n  right: 2px;\n  font-weight: bold;\n  width: 20px;\n  height: 20px;\n  text-align: center;\n  line-height: 20px;\n  background-color: rgba(0, 0, 0, 0.05);\n  border-radius: 2px;\n  cursor: pointer;\n  -webkit-transition: all .2s ease-out;\n  transition: all .2s ease-out; }\n\n.noty_close_button:hover {\n  background-color: rgba(0, 0, 0, 0.1); }\n\n.noty_modal {\n  position: fixed;\n  width: 100%;\n  height: 100%;\n  background-color: #000;\n  z-index: 10000;\n  opacity: .3;\n  left: 0;\n  top: 0; }\n\n.noty_modal.noty_modal_open {\n  opacity: 0;\n  -webkit-animation: noty_modal_in .3s ease-out;\n          animation: noty_modal_in .3s ease-out; }\n\n.noty_modal.noty_modal_close {\n  -webkit-animation: noty_modal_out .3s ease-out;\n          animation: noty_modal_out .3s ease-out;\n  -webkit-animation-fill-mode: forwards;\n          animation-fill-mode: forwards; }\n\n@-webkit-keyframes noty_modal_in {\n  100% {\n    opacity: .3; } }\n\n@keyframes noty_modal_in {\n  100% {\n    opacity: .3; } }\n\n@-webkit-keyframes noty_modal_out {\n  100% {\n    opacity: 0; } }\n\n@keyframes noty_modal_out {\n  100% {\n    opacity: 0; } }\n\n@keyframes noty_modal_out {\n  100% {\n    opacity: 0; } }\n\n@-webkit-keyframes noty_anim_in {\n  100% {\n    -webkit-transform: translate(0);\n            transform: translate(0);\n    opacity: 1; } }\n\n@keyframes noty_anim_in {\n  100% {\n    -webkit-transform: translate(0);\n            transform: translate(0);\n    opacity: 1; } }\n\n@-webkit-keyframes noty_anim_out {\n  100% {\n    -webkit-transform: translate(50%);\n            transform: translate(50%);\n    opacity: 0; } }\n\n@keyframes noty_anim_out {\n  100% {\n    -webkit-transform: translate(50%);\n            transform: translate(50%);\n    opacity: 0; } }\n\n@-webkit-keyframes noty_anim_height {\n  100% {\n    height: 0; } }\n\n@keyframes noty_anim_height {\n  100% {\n    height: 0; } }\n\n.noty_theme__relax.noty_bar {\n  margin: 4px 0;\n  overflow: hidden;\n  border-radius: 2px;\n  position: relative; }\n  .noty_theme__relax.noty_bar .noty_body {\n    padding: 10px; }\n  .noty_theme__relax.noty_bar .noty_buttons {\n    border-top: 1px solid #e7e7e7;\n    padding: 5px 10px; }\n\n.noty_theme__relax.noty_type__alert,\n.noty_theme__relax.noty_type__notification {\n  background-color: #fff;\n  border: 1px solid #dedede;\n  color: #444; }\n\n.noty_theme__relax.noty_type__warning {\n  background-color: #FFEAA8;\n  border: 1px solid #FFC237;\n  color: #826200; }\n  .noty_theme__relax.noty_type__warning .noty_buttons {\n    border-color: #dfaa30; }\n\n.noty_theme__relax.noty_type__error {\n  background-color: #FF8181;\n  border: 1px solid #e25353;\n  color: #FFF; }\n  .noty_theme__relax.noty_type__error .noty_buttons {\n    border-color: darkred; }\n\n.noty_theme__relax.noty_type__info,\n.noty_theme__relax.noty_type__information {\n  background-color: #78C5E7;\n  border: 1px solid #3badd6;\n  color: #FFF; }\n  .noty_theme__relax.noty_type__info .noty_buttons,\n  .noty_theme__relax.noty_type__information .noty_buttons {\n    border-color: #0B90C4; }\n\n.noty_theme__relax.noty_type__success {\n  background-color: #BCF5BC;\n  border: 1px solid #7cdd77;\n  color: darkgreen; }\n  .noty_theme__relax.noty_type__success .noty_buttons {\n    border-color: #50C24E; }\n\n.noty_theme__metroui.noty_bar {\n  margin: 4px 0;\n  overflow: hidden;\n  position: relative;\n  box-shadow: rgba(0, 0, 0, 0.298039) 0 0 5px 0; }\n  .noty_theme__metroui.noty_bar .noty_progressbar {\n    position: absolute;\n    left: 0;\n    bottom: 0;\n    height: 3px;\n    width: 100%;\n    background-color: #000;\n    opacity: 0.2;\n    filter: alpha(opacity=20); }\n  .noty_theme__metroui.noty_bar .noty_body {\n    padding: 1.25em;\n    font-size: 14px; }\n  .noty_theme__metroui.noty_bar .noty_buttons {\n    padding: 0 10px .5em 10px; }\n\n.noty_theme__metroui.noty_type__alert,\n.noty_theme__metroui.noty_type__notification {\n  background-color: #fff;\n  color: #1d1d1d; }\n\n.noty_theme__metroui.noty_type__warning {\n  background-color: #FA6800;\n  color: #fff; }\n\n.noty_theme__metroui.noty_type__error {\n  background-color: #CE352C;\n  color: #FFF; }\n\n.noty_theme__metroui.noty_type__info,\n.noty_theme__metroui.noty_type__information {\n  background-color: #1BA1E2;\n  color: #FFF; }\n\n.noty_theme__metroui.noty_type__success {\n  background-color: #60A917;\n  color: #fff; }\n\n.noty_theme__mint.noty_bar {\n  margin: 4px 0;\n  overflow: hidden;\n  border-radius: 2px;\n  position: relative; }\n  .noty_theme__mint.noty_bar .noty_body {\n    padding: 10px;\n    font-size: 14px; }\n  .noty_theme__mint.noty_bar .noty_buttons {\n    padding: 10px; }\n\n.noty_theme__mint.noty_type__alert,\n.noty_theme__mint.noty_type__notification {\n  background-color: #fff;\n  border-bottom: 1px solid #D1D1D1;\n  color: #2F2F2F; }\n\n.noty_theme__mint.noty_type__warning {\n  background-color: #FFAE42;\n  border-bottom: 1px solid #E89F3C;\n  color: #fff; }\n\n.noty_theme__mint.noty_type__error {\n  background-color: #DE636F;\n  border-bottom: 1px solid #CA5A65;\n  color: #fff; }\n\n.noty_theme__mint.noty_type__info,\n.noty_theme__mint.noty_type__information {\n  background-color: #7F7EFF;\n  border-bottom: 1px solid #7473E8;\n  color: #fff; }\n\n.noty_theme__mint.noty_type__success {\n  background-color: #AFC765;\n  border-bottom: 1px solid #A0B55C;\n  color: #fff; }\n\n.noty_theme__sunset.noty_bar {\n  margin: 4px 0;\n  overflow: hidden;\n  border-radius: 2px;\n  position: relative; }\n  .noty_theme__sunset.noty_bar .noty_body {\n    padding: 10px;\n    font-size: 14px;\n    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1); }\n  .noty_theme__sunset.noty_bar .noty_buttons {\n    padding: 10px; }\n\n.noty_theme__sunset.noty_type__alert,\n.noty_theme__sunset.noty_type__notification {\n  background-color: #073B4C;\n  color: #fff; }\n  .noty_theme__sunset.noty_type__alert .noty_progressbar,\n  .noty_theme__sunset.noty_type__notification .noty_progressbar {\n    background-color: #fff; }\n\n.noty_theme__sunset.noty_type__warning {\n  background-color: #FFD166;\n  color: #fff; }\n\n.noty_theme__sunset.noty_type__error {\n  background-color: #EF476F;\n  color: #fff; }\n  .noty_theme__sunset.noty_type__error .noty_progressbar {\n    opacity: .4; }\n\n.noty_theme__sunset.noty_type__info,\n.noty_theme__sunset.noty_type__information {\n  background-color: #118AB2;\n  color: #fff; }\n  .noty_theme__sunset.noty_type__info .noty_progressbar,\n  .noty_theme__sunset.noty_type__information .noty_progressbar {\n    opacity: .6; }\n\n.noty_theme__sunset.noty_type__success {\n  background-color: #06D6A0;\n  color: #fff; }\n\n.noty_theme__bootstrap-v3.noty_bar {\n  margin: 4px 0;\n  overflow: hidden;\n  position: relative;\n  border: 1px solid transparent;\n  border-radius: 4px; }\n  .noty_theme__bootstrap-v3.noty_bar .noty_body {\n    padding: 15px; }\n  .noty_theme__bootstrap-v3.noty_bar .noty_buttons {\n    padding: 10px; }\n  .noty_theme__bootstrap-v3.noty_bar .noty_close_button {\n    font-size: 21px;\n    font-weight: 700;\n    line-height: 1;\n    color: #000;\n    text-shadow: 0 1px 0 #fff;\n    filter: alpha(opacity=20);\n    opacity: .2;\n    background: transparent; }\n  .noty_theme__bootstrap-v3.noty_bar .noty_close_button:hover {\n    background: transparent;\n    text-decoration: none;\n    cursor: pointer;\n    filter: alpha(opacity=50);\n    opacity: .5; }\n\n.noty_theme__bootstrap-v3.noty_type__alert,\n.noty_theme__bootstrap-v3.noty_type__notification {\n  background-color: #fff;\n  color: inherit; }\n\n.noty_theme__bootstrap-v3.noty_type__warning {\n  background-color: #fcf8e3;\n  color: #8a6d3b;\n  border-color: #faebcc; }\n\n.noty_theme__bootstrap-v3.noty_type__error {\n  background-color: #f2dede;\n  color: #a94442;\n  border-color: #ebccd1; }\n\n.noty_theme__bootstrap-v3.noty_type__info,\n.noty_theme__bootstrap-v3.noty_type__information {\n  background-color: #d9edf7;\n  color: #31708f;\n  border-color: #bce8f1; }\n\n.noty_theme__bootstrap-v3.noty_type__success {\n  background-color: #dff0d8;\n  color: #3c763d;\n  border-color: #d6e9c6; }\n\n.noty_theme__bootstrap-v4.noty_bar {\n  margin: 4px 0;\n  overflow: hidden;\n  position: relative;\n  border: 1px solid transparent;\n  border-radius: .25rem; }\n  .noty_theme__bootstrap-v4.noty_bar .noty_body {\n    padding: .75rem 1.25rem; }\n  .noty_theme__bootstrap-v4.noty_bar .noty_buttons {\n    padding: 10px; }\n  .noty_theme__bootstrap-v4.noty_bar .noty_close_button {\n    font-size: 1.5rem;\n    font-weight: 700;\n    line-height: 1;\n    color: #000;\n    text-shadow: 0 1px 0 #fff;\n    filter: alpha(opacity=20);\n    opacity: .5;\n    background: transparent; }\n  .noty_theme__bootstrap-v4.noty_bar .noty_close_button:hover {\n    background: transparent;\n    text-decoration: none;\n    cursor: pointer;\n    filter: alpha(opacity=50);\n    opacity: .75; }\n\n.noty_theme__bootstrap-v4.noty_type__alert,\n.noty_theme__bootstrap-v4.noty_type__notification {\n  background-color: #fff;\n  color: inherit; }\n\n.noty_theme__bootstrap-v4.noty_type__warning {\n  background-color: #fcf8e3;\n  color: #8a6d3b;\n  border-color: #faebcc; }\n\n.noty_theme__bootstrap-v4.noty_type__error {\n  background-color: #f2dede;\n  color: #a94442;\n  border-color: #ebccd1; }\n\n.noty_theme__bootstrap-v4.noty_type__info,\n.noty_theme__bootstrap-v4.noty_type__information {\n  background-color: #d9edf7;\n  color: #31708f;\n  border-color: #bce8f1; }\n\n.noty_theme__bootstrap-v4.noty_type__success {\n  background-color: #dff0d8;\n  color: #3c763d;\n  border-color: #d6e9c6; }\n\n.noty_theme__semanticui.noty_bar {\n  margin: 4px 0;\n  overflow: hidden;\n  position: relative;\n  border: 1px solid transparent;\n  font-size: 1em;\n  border-radius: .28571429rem;\n  box-shadow: 0 0 0 1px rgba(34, 36, 38, 0.22) inset, 0 0 0 0 transparent; }\n  .noty_theme__semanticui.noty_bar .noty_body {\n    padding: 1em 1.5em;\n    line-height: 1.4285em; }\n  .noty_theme__semanticui.noty_bar .noty_buttons {\n    padding: 10px; }\n\n.noty_theme__semanticui.noty_type__alert,\n.noty_theme__semanticui.noty_type__notification {\n  background-color: #f8f8f9;\n  color: rgba(0, 0, 0, 0.87); }\n\n.noty_theme__semanticui.noty_type__warning {\n  background-color: #fffaf3;\n  color: #573a08;\n  box-shadow: 0 0 0 1px #c9ba9b inset, 0 0 0 0 transparent; }\n\n.noty_theme__semanticui.noty_type__error {\n  background-color: #fff6f6;\n  color: #9f3a38;\n  box-shadow: 0 0 0 1px #e0b4b4 inset, 0 0 0 0 transparent; }\n\n.noty_theme__semanticui.noty_type__info,\n.noty_theme__semanticui.noty_type__information {\n  background-color: #f8ffff;\n  color: #276f86;\n  box-shadow: 0 0 0 1px #a9d5de inset, 0 0 0 0 transparent; }\n\n.noty_theme__semanticui.noty_type__success {\n  background-color: #fcfff5;\n  color: #2c662d;\n  box-shadow: 0 0 0 1px #a3c293 inset, 0 0 0 0 transparent; }\n\n.noty_theme__nest.noty_bar {\n  margin: 0 0 15px 0;\n  overflow: hidden;\n  border-radius: 2px;\n  position: relative;\n  box-shadow: rgba(0, 0, 0, 0.098039) 5px 4px 10px 0; }\n  .noty_theme__nest.noty_bar .noty_body {\n    padding: 10px;\n    font-size: 14px;\n    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1); }\n  .noty_theme__nest.noty_bar .noty_buttons {\n    padding: 10px; }\n\n.noty_layout .noty_theme__nest.noty_bar {\n  z-index: 5; }\n\n.noty_layout .noty_theme__nest.noty_bar:nth-child(2) {\n  position: absolute;\n  top: 0;\n  margin-top: 4px;\n  margin-right: -4px;\n  margin-left: 4px;\n  z-index: 4;\n  width: 100%; }\n\n.noty_layout .noty_theme__nest.noty_bar:nth-child(3) {\n  position: absolute;\n  top: 0;\n  margin-top: 8px;\n  margin-right: -8px;\n  margin-left: 8px;\n  z-index: 3;\n  width: 100%; }\n\n.noty_layout .noty_theme__nest.noty_bar:nth-child(4) {\n  position: absolute;\n  top: 0;\n  margin-top: 12px;\n  margin-right: -12px;\n  margin-left: 12px;\n  z-index: 2;\n  width: 100%; }\n\n.noty_layout .noty_theme__nest.noty_bar:nth-child(5) {\n  position: absolute;\n  top: 0;\n  margin-top: 16px;\n  margin-right: -16px;\n  margin-left: 16px;\n  z-index: 1;\n  width: 100%; }\n\n.noty_layout .noty_theme__nest.noty_bar:nth-child(n+6) {\n  position: absolute;\n  top: 0;\n  margin-top: 20px;\n  margin-right: -20px;\n  margin-left: 20px;\n  z-index: -1;\n  width: 100%; }\n\n#noty_layout__bottomLeft .noty_theme__nest.noty_bar:nth-child(2),\n#noty_layout__topLeft .noty_theme__nest.noty_bar:nth-child(2) {\n  margin-top: 4px;\n  margin-left: -4px;\n  margin-right: 4px; }\n\n#noty_layout__bottomLeft .noty_theme__nest.noty_bar:nth-child(3),\n#noty_layout__topLeft .noty_theme__nest.noty_bar:nth-child(3) {\n  margin-top: 8px;\n  margin-left: -8px;\n  margin-right: 8px; }\n\n#noty_layout__bottomLeft .noty_theme__nest.noty_bar:nth-child(4),\n#noty_layout__topLeft .noty_theme__nest.noty_bar:nth-child(4) {\n  margin-top: 12px;\n  margin-left: -12px;\n  margin-right: 12px; }\n\n#noty_layout__bottomLeft .noty_theme__nest.noty_bar:nth-child(5),\n#noty_layout__topLeft .noty_theme__nest.noty_bar:nth-child(5) {\n  margin-top: 16px;\n  margin-left: -16px;\n  margin-right: 16px; }\n\n#noty_layout__bottomLeft .noty_theme__nest.noty_bar:nth-child(n+6),\n#noty_layout__topLeft .noty_theme__nest.noty_bar:nth-child(n+6) {\n  margin-top: 20px;\n  margin-left: -20px;\n  margin-right: 20px; }\n\n.noty_theme__nest.noty_type__alert,\n.noty_theme__nest.noty_type__notification {\n  background-color: #073B4C;\n  color: #fff; }\n  .noty_theme__nest.noty_type__alert .noty_progressbar,\n  .noty_theme__nest.noty_type__notification .noty_progressbar {\n    background-color: #fff; }\n\n.noty_theme__nest.noty_type__warning {\n  background-color: #FFD166;\n  color: #fff; }\n\n.noty_theme__nest.noty_type__error {\n  background-color: #EF476F;\n  color: #fff; }\n  .noty_theme__nest.noty_type__error .noty_progressbar {\n    opacity: .4; }\n\n.noty_theme__nest.noty_type__info,\n.noty_theme__nest.noty_type__information {\n  background-color: #118AB2;\n  color: #fff; }\n  .noty_theme__nest.noty_type__info .noty_progressbar,\n  .noty_theme__nest.noty_type__information .noty_progressbar {\n    opacity: .6; }\n\n.noty_theme__nest.noty_type__success {\n  background-color: #06D6A0;\n  color: #fff; }", ""]);
+
+// exports
+
+
+/***/ }),
+/* 21 */
+/***/ (function(module, exports) {
+
+/*
+	MIT License http://www.opensource.org/licenses/mit-license.php
+	Author Tobias Koppers @sokra
+*/
+// css base code, injected by the css-loader
+module.exports = function(useSourceMap) {
+	var list = [];
+
+	// return the list of modules as css string
+	list.toString = function toString() {
+		return this.map(function (item) {
+			var content = cssWithMappingToString(item, useSourceMap);
+			if(item[2]) {
+				return "@media " + item[2] + "{" + content + "}";
+			} else {
+				return content;
+			}
+		}).join("");
+	};
+
+	// import a list of modules into the list
+	list.i = function(modules, mediaQuery) {
+		if(typeof modules === "string")
+			modules = [[null, modules, ""]];
+		var alreadyImportedModules = {};
+		for(var i = 0; i < this.length; i++) {
+			var id = this[i][0];
+			if(typeof id === "number")
+				alreadyImportedModules[id] = true;
+		}
+		for(i = 0; i < modules.length; i++) {
+			var item = modules[i];
+			// skip already imported module
+			// this implementation is not 100% perfect for weird media query combinations
+			//  when a module is imported multiple times with different media queries.
+			//  I hope this will never occur (Hey this way we have smaller bundles)
+			if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
+				if(mediaQuery && !item[2]) {
+					item[2] = mediaQuery;
+				} else if(mediaQuery) {
+					item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
+				}
+				list.push(item);
+			}
+		}
+	};
+	return list;
+};
+
+function cssWithMappingToString(item, useSourceMap) {
+	var content = item[1] || '';
+	var cssMapping = item[3];
+	if (!cssMapping) {
+		return content;
+	}
+
+	if (useSourceMap && typeof btoa === 'function') {
+		var sourceMapping = toComment(cssMapping);
+		var sourceURLs = cssMapping.sources.map(function (source) {
+			return '/*# sourceURL=' + cssMapping.sourceRoot + source + ' */'
+		});
+
+		return [content].concat(sourceURLs).concat([sourceMapping]).join('\n');
+	}
+
+	return [content].join('\n');
+}
+
+// Adapted from convert-source-map (MIT)
+function toComment(sourceMap) {
+	// eslint-disable-next-line no-undef
+	var base64 = btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap))));
+	var data = 'sourceMappingURL=data:application/json;charset=utf-8;base64,' + base64;
+
+	return '/*# ' + data + ' */';
+}
+
+
+/***/ }),
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -66839,7 +67191,3085 @@ return /******/ (function(modules) { // webpackBootstrap
 //# sourceMappingURL=dat.gui.js.map
 
 /***/ }),
-/* 19 */
+/* 23 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* 
+  @package NOTY - Dependency-free notification library 
+  @version version: 3.1.3 
+  @contributors https://github.com/needim/noty/graphs/contributors 
+  @documentation Examples and Documentation - http://needim.github.com/noty 
+  @license Licensed under the MIT licenses: http://www.opensource.org/licenses/mit-license.php 
+*/
+
+(function webpackUniversalModuleDefinition(root, factory) {
+	if(true)
+		module.exports = factory();
+	else if(typeof define === 'function' && define.amd)
+		define("Noty", [], factory);
+	else if(typeof exports === 'object')
+		exports["Noty"] = factory();
+	else
+		root["Noty"] = factory();
+})(this, function() {
+return /******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId]) {
+/******/ 			return installedModules[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.l = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// identity function for calling harmony imports with the correct context
+/******/ 	__webpack_require__.i = function(value) { return value; };
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, {
+/******/ 				configurable: false,
+/******/ 				enumerable: true,
+/******/ 				get: getter
+/******/ 			});
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(__webpack_require__.s = 6);
+/******/ })
+/************************************************************************/
+/******/ ([
+/* 0 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.css = exports.deepExtend = exports.animationEndEvents = undefined;
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+exports.inArray = inArray;
+exports.stopPropagation = stopPropagation;
+exports.generateID = generateID;
+exports.outerHeight = outerHeight;
+exports.addListener = addListener;
+exports.hasClass = hasClass;
+exports.addClass = addClass;
+exports.removeClass = removeClass;
+exports.remove = remove;
+exports.classList = classList;
+exports.visibilityChangeFlow = visibilityChangeFlow;
+exports.createAudioElements = createAudioElements;
+
+var _api = __webpack_require__(1);
+
+var API = _interopRequireWildcard(_api);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+var animationEndEvents = exports.animationEndEvents = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
+
+function inArray(needle, haystack, argStrict) {
+  var key = void 0;
+  var strict = !!argStrict;
+
+  if (strict) {
+    for (key in haystack) {
+      if (haystack.hasOwnProperty(key) && haystack[key] === needle) {
+        return true;
+      }
+    }
+  } else {
+    for (key in haystack) {
+      if (haystack.hasOwnProperty(key) && haystack[key] === needle) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+function stopPropagation(evt) {
+  evt = evt || window.event;
+
+  if (typeof evt.stopPropagation !== 'undefined') {
+    evt.stopPropagation();
+  } else {
+    evt.cancelBubble = true;
+  }
+}
+
+var deepExtend = exports.deepExtend = function deepExtend(out) {
+  out = out || {};
+
+  for (var i = 1; i < arguments.length; i++) {
+    var obj = arguments[i];
+
+    if (!obj) continue;
+
+    for (var key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        if (Array.isArray(obj[key])) {
+          out[key] = obj[key];
+        } else if (_typeof(obj[key]) === 'object' && obj[key] !== null) {
+          out[key] = deepExtend(out[key], obj[key]);
+        } else {
+          out[key] = obj[key];
+        }
+      }
+    }
+  }
+
+  return out;
+};
+
+function generateID() {
+  var prefix = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+
+  var id = 'noty_' + prefix + '_';
+
+  id += 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+    var r = Math.random() * 16 | 0;
+    var v = c === 'x' ? r : r & 0x3 | 0x8;
+    return v.toString(16);
+  });
+
+  return id;
+}
+
+function outerHeight(el) {
+  var height = el.offsetHeight;
+  var style = window.getComputedStyle(el);
+
+  height += parseInt(style.marginTop) + parseInt(style.marginBottom);
+  return height;
+}
+
+var css = exports.css = function () {
+  var cssPrefixes = ['Webkit', 'O', 'Moz', 'ms'];
+  var cssProps = {};
+
+  function camelCase(string) {
+    return string.replace(/^-ms-/, 'ms-').replace(/-([\da-z])/gi, function (match, letter) {
+      return letter.toUpperCase();
+    });
+  }
+
+  function getVendorProp(name) {
+    var style = document.body.style;
+    if (name in style) return name;
+
+    var i = cssPrefixes.length;
+    var capName = name.charAt(0).toUpperCase() + name.slice(1);
+    var vendorName = void 0;
+
+    while (i--) {
+      vendorName = cssPrefixes[i] + capName;
+      if (vendorName in style) return vendorName;
+    }
+
+    return name;
+  }
+
+  function getStyleProp(name) {
+    name = camelCase(name);
+    return cssProps[name] || (cssProps[name] = getVendorProp(name));
+  }
+
+  function applyCss(element, prop, value) {
+    prop = getStyleProp(prop);
+    element.style[prop] = value;
+  }
+
+  return function (element, properties) {
+    var args = arguments;
+    var prop = void 0;
+    var value = void 0;
+
+    if (args.length === 2) {
+      for (prop in properties) {
+        if (properties.hasOwnProperty(prop)) {
+          value = properties[prop];
+          if (value !== undefined && properties.hasOwnProperty(prop)) {
+            applyCss(element, prop, value);
+          }
+        }
+      }
+    } else {
+      applyCss(element, args[1], args[2]);
+    }
+  };
+}();
+
+function addListener(el, events, cb) {
+  var useCapture = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
+
+  events = events.split(' ');
+  for (var i = 0; i < events.length; i++) {
+    if (document.addEventListener) {
+      el.addEventListener(events[i], cb, useCapture);
+    } else if (document.attachEvent) {
+      el.attachEvent('on' + events[i], cb);
+    }
+  }
+}
+
+function hasClass(element, name) {
+  var list = typeof element === 'string' ? element : classList(element);
+  return list.indexOf(' ' + name + ' ') >= 0;
+}
+
+function addClass(element, name) {
+  var oldList = classList(element);
+  var newList = oldList + name;
+
+  if (hasClass(oldList, name)) return;
+
+  // Trim the opening space.
+  element.className = newList.substring(1);
+}
+
+function removeClass(element, name) {
+  var oldList = classList(element);
+  var newList = void 0;
+
+  if (!hasClass(element, name)) return;
+
+  // Replace the class name.
+  newList = oldList.replace(' ' + name + ' ', ' ');
+
+  // Trim the opening and closing spaces.
+  element.className = newList.substring(1, newList.length - 1);
+}
+
+function remove(element) {
+  if (element.parentNode) {
+    element.parentNode.removeChild(element);
+  }
+}
+
+function classList(element) {
+  return (' ' + (element && element.className || '') + ' ').replace(/\s+/gi, ' ');
+}
+
+function visibilityChangeFlow() {
+  var hidden = void 0;
+  var visibilityChange = void 0;
+  if (typeof document.hidden !== 'undefined') {
+    // Opera 12.10 and Firefox 18 and later support
+    hidden = 'hidden';
+    visibilityChange = 'visibilitychange';
+  } else if (typeof document.msHidden !== 'undefined') {
+    hidden = 'msHidden';
+    visibilityChange = 'msvisibilitychange';
+  } else if (typeof document.webkitHidden !== 'undefined') {
+    hidden = 'webkitHidden';
+    visibilityChange = 'webkitvisibilitychange';
+  }
+
+  function onVisibilityChange() {
+    API.PageHidden = document[hidden];
+    handleVisibilityChange();
+  }
+
+  function onBlur() {
+    API.PageHidden = true;
+    handleVisibilityChange();
+  }
+
+  function onFocus() {
+    API.PageHidden = false;
+    handleVisibilityChange();
+  }
+
+  function handleVisibilityChange() {
+    if (API.PageHidden) stopAll();else resumeAll();
+  }
+
+  function stopAll() {
+    setTimeout(function () {
+      Object.keys(API.Store).forEach(function (id) {
+        if (API.Store.hasOwnProperty(id)) {
+          if (API.Store[id].options.visibilityControl) {
+            API.Store[id].stop();
+          }
+        }
+      });
+    }, 100);
+  }
+
+  function resumeAll() {
+    setTimeout(function () {
+      Object.keys(API.Store).forEach(function (id) {
+        if (API.Store.hasOwnProperty(id)) {
+          if (API.Store[id].options.visibilityControl) {
+            API.Store[id].resume();
+          }
+        }
+      });
+      API.queueRenderAll();
+    }, 100);
+  }
+
+  addListener(document, visibilityChange, onVisibilityChange);
+  addListener(window, 'blur', onBlur);
+  addListener(window, 'focus', onFocus);
+}
+
+function createAudioElements(ref) {
+  if (ref.hasSound) {
+    var audioElement = document.createElement('audio');
+
+    ref.options.sounds.sources.forEach(function (s) {
+      var source = document.createElement('source');
+      source.src = s;
+      source.type = 'audio/' + getExtension(s);
+      audioElement.appendChild(source);
+    });
+
+    if (ref.barDom) {
+      ref.barDom.appendChild(audioElement);
+    } else {
+      document.querySelector('body').appendChild(audioElement);
+    }
+
+    audioElement.volume = ref.options.sounds.volume;
+
+    if (!ref.soundPlayed) {
+      audioElement.play();
+      ref.soundPlayed = true;
+    }
+
+    audioElement.onended = function () {
+      remove(audioElement);
+    };
+  }
+}
+
+function getExtension(fileName) {
+  return fileName.match(/\.([^.]+)$/)[1];
+}
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Defaults = exports.Store = exports.Queues = exports.DefaultMaxVisible = exports.docTitle = exports.DocModalCount = exports.PageHidden = undefined;
+exports.getQueueCounts = getQueueCounts;
+exports.addToQueue = addToQueue;
+exports.removeFromQueue = removeFromQueue;
+exports.queueRender = queueRender;
+exports.queueRenderAll = queueRenderAll;
+exports.ghostFix = ghostFix;
+exports.build = build;
+exports.hasButtons = hasButtons;
+exports.handleModal = handleModal;
+exports.handleModalClose = handleModalClose;
+exports.queueClose = queueClose;
+exports.dequeueClose = dequeueClose;
+exports.fire = fire;
+exports.openFlow = openFlow;
+exports.closeFlow = closeFlow;
+
+var _utils = __webpack_require__(0);
+
+var Utils = _interopRequireWildcard(_utils);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+var PageHidden = exports.PageHidden = false;
+var DocModalCount = exports.DocModalCount = 0;
+
+var DocTitleProps = {
+  originalTitle: null,
+  count: 0,
+  changed: false,
+  timer: -1
+};
+
+var docTitle = exports.docTitle = {
+  increment: function increment() {
+    DocTitleProps.count++;
+
+    docTitle._update();
+  },
+
+  decrement: function decrement() {
+    DocTitleProps.count--;
+
+    if (DocTitleProps.count <= 0) {
+      docTitle._clear();
+      return;
+    }
+
+    docTitle._update();
+  },
+
+  _update: function _update() {
+    var title = document.title;
+
+    if (!DocTitleProps.changed) {
+      DocTitleProps.originalTitle = title;
+      document.title = '(' + DocTitleProps.count + ') ' + title;
+      DocTitleProps.changed = true;
+    } else {
+      document.title = '(' + DocTitleProps.count + ') ' + DocTitleProps.originalTitle;
+    }
+  },
+
+  _clear: function _clear() {
+    if (DocTitleProps.changed) {
+      DocTitleProps.count = 0;
+      document.title = DocTitleProps.originalTitle;
+      DocTitleProps.changed = false;
+    }
+  }
+};
+
+var DefaultMaxVisible = exports.DefaultMaxVisible = 5;
+
+var Queues = exports.Queues = {
+  global: {
+    maxVisible: DefaultMaxVisible,
+    queue: []
+  }
+};
+
+var Store = exports.Store = {};
+
+var Defaults = exports.Defaults = {
+  type: 'alert',
+  layout: 'topRight',
+  theme: 'mint',
+  text: '',
+  timeout: false,
+  progressBar: true,
+  closeWith: ['click'],
+  animation: {
+    open: 'noty_effects_open',
+    close: 'noty_effects_close'
+  },
+  id: false,
+  force: false,
+  killer: false,
+  queue: 'global',
+  container: false,
+  buttons: [],
+  callbacks: {
+    beforeShow: null,
+    onShow: null,
+    afterShow: null,
+    onClose: null,
+    afterClose: null,
+    onClick: null,
+    onHover: null,
+    onTemplate: null
+  },
+  sounds: {
+    sources: [],
+    volume: 1,
+    conditions: []
+  },
+  titleCount: {
+    conditions: []
+  },
+  modal: false,
+  visibilityControl: false
+
+  /**
+   * @param {string} queueName
+   * @return {object}
+   */
+};function getQueueCounts() {
+  var queueName = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'global';
+
+  var count = 0;
+  var max = DefaultMaxVisible;
+
+  if (Queues.hasOwnProperty(queueName)) {
+    max = Queues[queueName].maxVisible;
+    Object.keys(Store).forEach(function (i) {
+      if (Store[i].options.queue === queueName && !Store[i].closed) count++;
+    });
+  }
+
+  return {
+    current: count,
+    maxVisible: max
+  };
+}
+
+/**
+ * @param {Noty} ref
+ * @return {void}
+ */
+function addToQueue(ref) {
+  if (!Queues.hasOwnProperty(ref.options.queue)) {
+    Queues[ref.options.queue] = { maxVisible: DefaultMaxVisible, queue: [] };
+  }
+
+  Queues[ref.options.queue].queue.push(ref);
+}
+
+/**
+ * @param {Noty} ref
+ * @return {void}
+ */
+function removeFromQueue(ref) {
+  if (Queues.hasOwnProperty(ref.options.queue)) {
+    var queue = [];
+    Object.keys(Queues[ref.options.queue].queue).forEach(function (i) {
+      if (Queues[ref.options.queue].queue[i].id !== ref.id) {
+        queue.push(Queues[ref.options.queue].queue[i]);
+      }
+    });
+    Queues[ref.options.queue].queue = queue;
+  }
+}
+
+/**
+ * @param {string} queueName
+ * @return {void}
+ */
+function queueRender() {
+  var queueName = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'global';
+
+  if (Queues.hasOwnProperty(queueName)) {
+    var noty = Queues[queueName].queue.shift();
+
+    if (noty) noty.show();
+  }
+}
+
+/**
+ * @return {void}
+ */
+function queueRenderAll() {
+  Object.keys(Queues).forEach(function (queueName) {
+    queueRender(queueName);
+  });
+}
+
+/**
+ * @param {Noty} ref
+ * @return {void}
+ */
+function ghostFix(ref) {
+  var ghostID = Utils.generateID('ghost');
+  var ghost = document.createElement('div');
+  ghost.setAttribute('id', ghostID);
+  Utils.css(ghost, {
+    height: Utils.outerHeight(ref.barDom) + 'px'
+  });
+
+  ref.barDom.insertAdjacentHTML('afterend', ghost.outerHTML);
+
+  Utils.remove(ref.barDom);
+  ghost = document.getElementById(ghostID);
+  Utils.addClass(ghost, 'noty_fix_effects_height');
+  Utils.addListener(ghost, Utils.animationEndEvents, function () {
+    Utils.remove(ghost);
+  });
+}
+
+/**
+ * @param {Noty} ref
+ * @return {void}
+ */
+function build(ref) {
+  findOrCreateContainer(ref);
+
+  var markup = '<div class="noty_body">' + ref.options.text + '</div>' + buildButtons(ref) + '<div class="noty_progressbar"></div>';
+
+  ref.barDom = document.createElement('div');
+  ref.barDom.setAttribute('id', ref.id);
+  Utils.addClass(ref.barDom, 'noty_bar noty_type__' + ref.options.type + ' noty_theme__' + ref.options.theme);
+
+  ref.barDom.innerHTML = markup;
+
+  fire(ref, 'onTemplate');
+}
+
+/**
+ * @param {Noty} ref
+ * @return {boolean}
+ */
+function hasButtons(ref) {
+  return !!(ref.options.buttons && Object.keys(ref.options.buttons).length);
+}
+
+/**
+ * @param {Noty} ref
+ * @return {string}
+ */
+function buildButtons(ref) {
+  if (hasButtons(ref)) {
+    var buttons = document.createElement('div');
+    Utils.addClass(buttons, 'noty_buttons');
+
+    Object.keys(ref.options.buttons).forEach(function (key) {
+      buttons.appendChild(ref.options.buttons[key].dom);
+    });
+
+    ref.options.buttons.forEach(function (btn) {
+      buttons.appendChild(btn.dom);
+    });
+    return buttons.outerHTML;
+  }
+  return '';
+}
+
+/**
+ * @param {Noty} ref
+ * @return {void}
+ */
+function handleModal(ref) {
+  if (ref.options.modal) {
+    if (DocModalCount === 0) {
+      createModal(ref);
+    }
+
+    exports.DocModalCount = DocModalCount += 1;
+  }
+}
+
+/**
+ * @param {Noty} ref
+ * @return {void}
+ */
+function handleModalClose(ref) {
+  if (ref.options.modal && DocModalCount > 0) {
+    exports.DocModalCount = DocModalCount -= 1;
+
+    if (DocModalCount <= 0) {
+      var modal = document.querySelector('.noty_modal');
+
+      if (modal) {
+        Utils.removeClass(modal, 'noty_modal_open');
+        Utils.addClass(modal, 'noty_modal_close');
+        Utils.addListener(modal, Utils.animationEndEvents, function () {
+          Utils.remove(modal);
+        });
+      }
+    }
+  }
+}
+
+/**
+ * @return {void}
+ */
+function createModal() {
+  var body = document.querySelector('body');
+  var modal = document.createElement('div');
+  Utils.addClass(modal, 'noty_modal');
+  body.insertBefore(modal, body.firstChild);
+  Utils.addClass(modal, 'noty_modal_open');
+
+  Utils.addListener(modal, Utils.animationEndEvents, function () {
+    Utils.removeClass(modal, 'noty_modal_open');
+  });
+}
+
+/**
+ * @param {Noty} ref
+ * @return {void}
+ */
+function findOrCreateContainer(ref) {
+  if (ref.options.container) {
+    ref.layoutDom = document.querySelector(ref.options.container);
+    return;
+  }
+
+  var layoutID = 'noty_layout__' + ref.options.layout;
+  ref.layoutDom = document.querySelector('div#' + layoutID);
+
+  if (!ref.layoutDom) {
+    ref.layoutDom = document.createElement('div');
+    ref.layoutDom.setAttribute('id', layoutID);
+    Utils.addClass(ref.layoutDom, 'noty_layout');
+    document.querySelector('body').appendChild(ref.layoutDom);
+  }
+}
+
+/**
+ * @param {Noty} ref
+ * @return {void}
+ */
+function queueClose(ref) {
+  if (ref.options.timeout) {
+    if (ref.options.progressBar && ref.progressDom) {
+      Utils.css(ref.progressDom, {
+        transition: 'width ' + ref.options.timeout + 'ms linear',
+        width: '0%'
+      });
+    }
+
+    clearTimeout(ref.closeTimer);
+
+    ref.closeTimer = setTimeout(function () {
+      ref.close();
+    }, ref.options.timeout);
+  }
+}
+
+/**
+ * @param {Noty} ref
+ * @return {void}
+ */
+function dequeueClose(ref) {
+  if (ref.options.timeout && ref.closeTimer) {
+    clearTimeout(ref.closeTimer);
+    ref.closeTimer = -1;
+
+    if (ref.options.progressBar && ref.progressDom) {
+      Utils.css(ref.progressDom, {
+        transition: 'width 0ms linear',
+        width: '100%'
+      });
+    }
+  }
+}
+
+/**
+ * @param {Noty} ref
+ * @param {string} eventName
+ * @return {void}
+ */
+function fire(ref, eventName) {
+  if (ref.listeners.hasOwnProperty(eventName)) {
+    ref.listeners[eventName].forEach(function (cb) {
+      if (typeof cb === 'function') {
+        cb.apply(ref);
+      }
+    });
+  }
+}
+
+/**
+ * @param {Noty} ref
+ * @return {void}
+ */
+function openFlow(ref) {
+  fire(ref, 'afterShow');
+  queueClose(ref);
+
+  Utils.addListener(ref.barDom, 'mouseenter', function () {
+    dequeueClose(ref);
+  });
+
+  Utils.addListener(ref.barDom, 'mouseleave', function () {
+    queueClose(ref);
+  });
+}
+
+/**
+ * @param {Noty} ref
+ * @return {void}
+ */
+function closeFlow(ref) {
+  delete Store[ref.id];
+  ref.closing = false;
+  fire(ref, 'afterClose');
+
+  Utils.remove(ref.barDom);
+
+  if (ref.layoutDom.querySelectorAll('.noty_bar').length === 0 && !ref.options.container) {
+    Utils.remove(ref.layoutDom);
+  }
+
+  if (Utils.inArray('docVisible', ref.options.titleCount.conditions) || Utils.inArray('docHidden', ref.options.titleCount.conditions)) {
+    docTitle.decrement();
+  }
+
+  queueRender(ref.options.queue);
+}
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.NotyButton = undefined;
+
+var _utils = __webpack_require__(0);
+
+var Utils = _interopRequireWildcard(_utils);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var NotyButton = exports.NotyButton = function NotyButton(html, classes, cb) {
+  var _this = this;
+
+  var attributes = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
+
+  _classCallCheck(this, NotyButton);
+
+  this.dom = document.createElement('button');
+  this.dom.innerHTML = html;
+  this.id = attributes.id = attributes.id || Utils.generateID('button');
+  this.cb = cb;
+  Object.keys(attributes).forEach(function (propertyName) {
+    _this.dom.setAttribute(propertyName, attributes[propertyName]);
+  });
+  Utils.addClass(this.dom, classes || 'noty_btn');
+
+  return this;
+};
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Push = exports.Push = function () {
+  function Push() {
+    var workerPath = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '/service-worker.js';
+
+    _classCallCheck(this, Push);
+
+    this.subData = {};
+    this.workerPath = workerPath;
+    this.listeners = {
+      onPermissionGranted: [],
+      onPermissionDenied: [],
+      onSubscriptionSuccess: [],
+      onSubscriptionCancel: [],
+      onWorkerError: [],
+      onWorkerSuccess: [],
+      onWorkerNotSupported: []
+    };
+    return this;
+  }
+
+  /**
+   * @param {string} eventName
+   * @param {function} cb
+   * @return {Push}
+   */
+
+
+  _createClass(Push, [{
+    key: 'on',
+    value: function on(eventName) {
+      var cb = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : function () {};
+
+      if (typeof cb === 'function' && this.listeners.hasOwnProperty(eventName)) {
+        this.listeners[eventName].push(cb);
+      }
+
+      return this;
+    }
+  }, {
+    key: 'fire',
+    value: function fire(eventName) {
+      var _this = this;
+
+      var params = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
+
+      if (this.listeners.hasOwnProperty(eventName)) {
+        this.listeners[eventName].forEach(function (cb) {
+          if (typeof cb === 'function') {
+            cb.apply(_this, params);
+          }
+        });
+      }
+    }
+  }, {
+    key: 'create',
+    value: function create() {
+      console.log('NOT IMPLEMENTED YET');
+    }
+
+    /**
+     * @return {boolean}
+     */
+
+  }, {
+    key: 'isSupported',
+    value: function isSupported() {
+      var result = false;
+
+      try {
+        result = window.Notification || window.webkitNotifications || navigator.mozNotification || window.external && window.external.msIsSiteMode() !== undefined;
+      } catch (e) {}
+
+      return result;
+    }
+
+    /**
+     * @return {string}
+     */
+
+  }, {
+    key: 'getPermissionStatus',
+    value: function getPermissionStatus() {
+      var perm = 'default';
+
+      if (window.Notification && window.Notification.permissionLevel) {
+        perm = window.Notification.permissionLevel;
+      } else if (window.webkitNotifications && window.webkitNotifications.checkPermission) {
+        switch (window.webkitNotifications.checkPermission()) {
+          case 1:
+            perm = 'default';
+            break;
+          case 0:
+            perm = 'granted';
+            break;
+          default:
+            perm = 'denied';
+        }
+      } else if (window.Notification && window.Notification.permission) {
+        perm = window.Notification.permission;
+      } else if (navigator.mozNotification) {
+        perm = 'granted';
+      } else if (window.external && window.external.msIsSiteMode() !== undefined) {
+        perm = window.external.msIsSiteMode() ? 'granted' : 'default';
+      }
+
+      return perm.toString().toLowerCase();
+    }
+
+    /**
+     * @return {string}
+     */
+
+  }, {
+    key: 'getEndpoint',
+    value: function getEndpoint(subscription) {
+      var endpoint = subscription.endpoint;
+      var subscriptionId = subscription.subscriptionId;
+
+      // fix for Chrome < 45
+      if (subscriptionId && endpoint.indexOf(subscriptionId) === -1) {
+        endpoint += '/' + subscriptionId;
+      }
+
+      return endpoint;
+    }
+
+    /**
+     * @return {boolean}
+     */
+
+  }, {
+    key: 'isSWRegistered',
+    value: function isSWRegistered() {
+      try {
+        return navigator.serviceWorker.controller.state === 'activated';
+      } catch (e) {
+        return false;
+      }
+    }
+
+    /**
+     * @return {void}
+     */
+
+  }, {
+    key: 'unregisterWorker',
+    value: function unregisterWorker() {
+      var self = this;
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.getRegistrations().then(function (registrations) {
+          var _iteratorNormalCompletion = true;
+          var _didIteratorError = false;
+          var _iteratorError = undefined;
+
+          try {
+            for (var _iterator = registrations[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+              var registration = _step.value;
+
+              registration.unregister();
+              self.fire('onSubscriptionCancel');
+            }
+          } catch (err) {
+            _didIteratorError = true;
+            _iteratorError = err;
+          } finally {
+            try {
+              if (!_iteratorNormalCompletion && _iterator.return) {
+                _iterator.return();
+              }
+            } finally {
+              if (_didIteratorError) {
+                throw _iteratorError;
+              }
+            }
+          }
+        });
+      }
+    }
+
+    /**
+     * @return {void}
+     */
+
+  }, {
+    key: 'requestSubscription',
+    value: function requestSubscription() {
+      var _this2 = this;
+
+      var userVisibleOnly = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
+
+      var self = this;
+      var current = this.getPermissionStatus();
+      var cb = function cb(result) {
+        if (result === 'granted') {
+          _this2.fire('onPermissionGranted');
+
+          if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register(_this2.workerPath).then(function () {
+              navigator.serviceWorker.ready.then(function (serviceWorkerRegistration) {
+                self.fire('onWorkerSuccess');
+                serviceWorkerRegistration.pushManager.subscribe({
+                  userVisibleOnly: userVisibleOnly
+                }).then(function (subscription) {
+                  var key = subscription.getKey('p256dh');
+                  var token = subscription.getKey('auth');
+
+                  self.subData = {
+                    endpoint: self.getEndpoint(subscription),
+                    p256dh: key ? window.btoa(String.fromCharCode.apply(null, new Uint8Array(key))) : null,
+                    auth: token ? window.btoa(String.fromCharCode.apply(null, new Uint8Array(token))) : null
+                  };
+
+                  self.fire('onSubscriptionSuccess', [self.subData]);
+                }).catch(function (err) {
+                  self.fire('onWorkerError', [err]);
+                });
+              });
+            });
+          } else {
+            self.fire('onWorkerNotSupported');
+          }
+        } else if (result === 'denied') {
+          _this2.fire('onPermissionDenied');
+          _this2.unregisterWorker();
+        }
+      };
+
+      if (current === 'default') {
+        if (window.Notification && window.Notification.requestPermission) {
+          window.Notification.requestPermission(cb);
+        } else if (window.webkitNotifications && window.webkitNotifications.checkPermission) {
+          window.webkitNotifications.requestPermission(cb);
+        }
+      } else {
+        cb(current);
+      }
+    }
+  }]);
+
+  return Push;
+}();
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function(process, global) {var require;/*!
+ * @overview es6-promise - a tiny implementation of Promises/A+.
+ * @copyright Copyright (c) 2014 Yehuda Katz, Tom Dale, Stefan Penner and contributors (Conversion to ES6 API by Jake Archibald)
+ * @license   Licensed under MIT license
+ *            See https://raw.githubusercontent.com/stefanpenner/es6-promise/master/LICENSE
+ * @version   4.1.0
+ */
+
+(function (global, factory) {
+     true ? module.exports = factory() :
+    typeof define === 'function' && define.amd ? define(factory) :
+    (global.ES6Promise = factory());
+}(this, (function () { 'use strict';
+
+function objectOrFunction(x) {
+  return typeof x === 'function' || typeof x === 'object' && x !== null;
+}
+
+function isFunction(x) {
+  return typeof x === 'function';
+}
+
+var _isArray = undefined;
+if (!Array.isArray) {
+  _isArray = function (x) {
+    return Object.prototype.toString.call(x) === '[object Array]';
+  };
+} else {
+  _isArray = Array.isArray;
+}
+
+var isArray = _isArray;
+
+var len = 0;
+var vertxNext = undefined;
+var customSchedulerFn = undefined;
+
+var asap = function asap(callback, arg) {
+  queue[len] = callback;
+  queue[len + 1] = arg;
+  len += 2;
+  if (len === 2) {
+    // If len is 2, that means that we need to schedule an async flush.
+    // If additional callbacks are queued before the queue is flushed, they
+    // will be processed by this flush that we are scheduling.
+    if (customSchedulerFn) {
+      customSchedulerFn(flush);
+    } else {
+      scheduleFlush();
+    }
+  }
+};
+
+function setScheduler(scheduleFn) {
+  customSchedulerFn = scheduleFn;
+}
+
+function setAsap(asapFn) {
+  asap = asapFn;
+}
+
+var browserWindow = typeof window !== 'undefined' ? window : undefined;
+var browserGlobal = browserWindow || {};
+var BrowserMutationObserver = browserGlobal.MutationObserver || browserGlobal.WebKitMutationObserver;
+var isNode = typeof self === 'undefined' && typeof process !== 'undefined' && ({}).toString.call(process) === '[object process]';
+
+// test for web worker but not in IE10
+var isWorker = typeof Uint8ClampedArray !== 'undefined' && typeof importScripts !== 'undefined' && typeof MessageChannel !== 'undefined';
+
+// node
+function useNextTick() {
+  // node version 0.10.x displays a deprecation warning when nextTick is used recursively
+  // see https://github.com/cujojs/when/issues/410 for details
+  return function () {
+    return process.nextTick(flush);
+  };
+}
+
+// vertx
+function useVertxTimer() {
+  if (typeof vertxNext !== 'undefined') {
+    return function () {
+      vertxNext(flush);
+    };
+  }
+
+  return useSetTimeout();
+}
+
+function useMutationObserver() {
+  var iterations = 0;
+  var observer = new BrowserMutationObserver(flush);
+  var node = document.createTextNode('');
+  observer.observe(node, { characterData: true });
+
+  return function () {
+    node.data = iterations = ++iterations % 2;
+  };
+}
+
+// web worker
+function useMessageChannel() {
+  var channel = new MessageChannel();
+  channel.port1.onmessage = flush;
+  return function () {
+    return channel.port2.postMessage(0);
+  };
+}
+
+function useSetTimeout() {
+  // Store setTimeout reference so es6-promise will be unaffected by
+  // other code modifying setTimeout (like sinon.useFakeTimers())
+  var globalSetTimeout = setTimeout;
+  return function () {
+    return globalSetTimeout(flush, 1);
+  };
+}
+
+var queue = new Array(1000);
+function flush() {
+  for (var i = 0; i < len; i += 2) {
+    var callback = queue[i];
+    var arg = queue[i + 1];
+
+    callback(arg);
+
+    queue[i] = undefined;
+    queue[i + 1] = undefined;
+  }
+
+  len = 0;
+}
+
+function attemptVertx() {
+  try {
+    var r = require;
+    var vertx = __webpack_require__(9);
+    vertxNext = vertx.runOnLoop || vertx.runOnContext;
+    return useVertxTimer();
+  } catch (e) {
+    return useSetTimeout();
+  }
+}
+
+var scheduleFlush = undefined;
+// Decide what async method to use to triggering processing of queued callbacks:
+if (isNode) {
+  scheduleFlush = useNextTick();
+} else if (BrowserMutationObserver) {
+  scheduleFlush = useMutationObserver();
+} else if (isWorker) {
+  scheduleFlush = useMessageChannel();
+} else if (browserWindow === undefined && "function" === 'function') {
+  scheduleFlush = attemptVertx();
+} else {
+  scheduleFlush = useSetTimeout();
+}
+
+function then(onFulfillment, onRejection) {
+  var _arguments = arguments;
+
+  var parent = this;
+
+  var child = new this.constructor(noop);
+
+  if (child[PROMISE_ID] === undefined) {
+    makePromise(child);
+  }
+
+  var _state = parent._state;
+
+  if (_state) {
+    (function () {
+      var callback = _arguments[_state - 1];
+      asap(function () {
+        return invokeCallback(_state, child, callback, parent._result);
+      });
+    })();
+  } else {
+    subscribe(parent, child, onFulfillment, onRejection);
+  }
+
+  return child;
+}
+
+/**
+  `Promise.resolve` returns a promise that will become resolved with the
+  passed `value`. It is shorthand for the following:
+
+  ```javascript
+  let promise = new Promise(function(resolve, reject){
+    resolve(1);
+  });
+
+  promise.then(function(value){
+    // value === 1
+  });
+  ```
+
+  Instead of writing the above, your code now simply becomes the following:
+
+  ```javascript
+  let promise = Promise.resolve(1);
+
+  promise.then(function(value){
+    // value === 1
+  });
+  ```
+
+  @method resolve
+  @static
+  @param {Any} value value that the returned promise will be resolved with
+  Useful for tooling.
+  @return {Promise} a promise that will become fulfilled with the given
+  `value`
+*/
+function resolve(object) {
+  /*jshint validthis:true */
+  var Constructor = this;
+
+  if (object && typeof object === 'object' && object.constructor === Constructor) {
+    return object;
+  }
+
+  var promise = new Constructor(noop);
+  _resolve(promise, object);
+  return promise;
+}
+
+var PROMISE_ID = Math.random().toString(36).substring(16);
+
+function noop() {}
+
+var PENDING = void 0;
+var FULFILLED = 1;
+var REJECTED = 2;
+
+var GET_THEN_ERROR = new ErrorObject();
+
+function selfFulfillment() {
+  return new TypeError("You cannot resolve a promise with itself");
+}
+
+function cannotReturnOwn() {
+  return new TypeError('A promises callback cannot return that same promise.');
+}
+
+function getThen(promise) {
+  try {
+    return promise.then;
+  } catch (error) {
+    GET_THEN_ERROR.error = error;
+    return GET_THEN_ERROR;
+  }
+}
+
+function tryThen(then, value, fulfillmentHandler, rejectionHandler) {
+  try {
+    then.call(value, fulfillmentHandler, rejectionHandler);
+  } catch (e) {
+    return e;
+  }
+}
+
+function handleForeignThenable(promise, thenable, then) {
+  asap(function (promise) {
+    var sealed = false;
+    var error = tryThen(then, thenable, function (value) {
+      if (sealed) {
+        return;
+      }
+      sealed = true;
+      if (thenable !== value) {
+        _resolve(promise, value);
+      } else {
+        fulfill(promise, value);
+      }
+    }, function (reason) {
+      if (sealed) {
+        return;
+      }
+      sealed = true;
+
+      _reject(promise, reason);
+    }, 'Settle: ' + (promise._label || ' unknown promise'));
+
+    if (!sealed && error) {
+      sealed = true;
+      _reject(promise, error);
+    }
+  }, promise);
+}
+
+function handleOwnThenable(promise, thenable) {
+  if (thenable._state === FULFILLED) {
+    fulfill(promise, thenable._result);
+  } else if (thenable._state === REJECTED) {
+    _reject(promise, thenable._result);
+  } else {
+    subscribe(thenable, undefined, function (value) {
+      return _resolve(promise, value);
+    }, function (reason) {
+      return _reject(promise, reason);
+    });
+  }
+}
+
+function handleMaybeThenable(promise, maybeThenable, then$$) {
+  if (maybeThenable.constructor === promise.constructor && then$$ === then && maybeThenable.constructor.resolve === resolve) {
+    handleOwnThenable(promise, maybeThenable);
+  } else {
+    if (then$$ === GET_THEN_ERROR) {
+      _reject(promise, GET_THEN_ERROR.error);
+      GET_THEN_ERROR.error = null;
+    } else if (then$$ === undefined) {
+      fulfill(promise, maybeThenable);
+    } else if (isFunction(then$$)) {
+      handleForeignThenable(promise, maybeThenable, then$$);
+    } else {
+      fulfill(promise, maybeThenable);
+    }
+  }
+}
+
+function _resolve(promise, value) {
+  if (promise === value) {
+    _reject(promise, selfFulfillment());
+  } else if (objectOrFunction(value)) {
+    handleMaybeThenable(promise, value, getThen(value));
+  } else {
+    fulfill(promise, value);
+  }
+}
+
+function publishRejection(promise) {
+  if (promise._onerror) {
+    promise._onerror(promise._result);
+  }
+
+  publish(promise);
+}
+
+function fulfill(promise, value) {
+  if (promise._state !== PENDING) {
+    return;
+  }
+
+  promise._result = value;
+  promise._state = FULFILLED;
+
+  if (promise._subscribers.length !== 0) {
+    asap(publish, promise);
+  }
+}
+
+function _reject(promise, reason) {
+  if (promise._state !== PENDING) {
+    return;
+  }
+  promise._state = REJECTED;
+  promise._result = reason;
+
+  asap(publishRejection, promise);
+}
+
+function subscribe(parent, child, onFulfillment, onRejection) {
+  var _subscribers = parent._subscribers;
+  var length = _subscribers.length;
+
+  parent._onerror = null;
+
+  _subscribers[length] = child;
+  _subscribers[length + FULFILLED] = onFulfillment;
+  _subscribers[length + REJECTED] = onRejection;
+
+  if (length === 0 && parent._state) {
+    asap(publish, parent);
+  }
+}
+
+function publish(promise) {
+  var subscribers = promise._subscribers;
+  var settled = promise._state;
+
+  if (subscribers.length === 0) {
+    return;
+  }
+
+  var child = undefined,
+      callback = undefined,
+      detail = promise._result;
+
+  for (var i = 0; i < subscribers.length; i += 3) {
+    child = subscribers[i];
+    callback = subscribers[i + settled];
+
+    if (child) {
+      invokeCallback(settled, child, callback, detail);
+    } else {
+      callback(detail);
+    }
+  }
+
+  promise._subscribers.length = 0;
+}
+
+function ErrorObject() {
+  this.error = null;
+}
+
+var TRY_CATCH_ERROR = new ErrorObject();
+
+function tryCatch(callback, detail) {
+  try {
+    return callback(detail);
+  } catch (e) {
+    TRY_CATCH_ERROR.error = e;
+    return TRY_CATCH_ERROR;
+  }
+}
+
+function invokeCallback(settled, promise, callback, detail) {
+  var hasCallback = isFunction(callback),
+      value = undefined,
+      error = undefined,
+      succeeded = undefined,
+      failed = undefined;
+
+  if (hasCallback) {
+    value = tryCatch(callback, detail);
+
+    if (value === TRY_CATCH_ERROR) {
+      failed = true;
+      error = value.error;
+      value.error = null;
+    } else {
+      succeeded = true;
+    }
+
+    if (promise === value) {
+      _reject(promise, cannotReturnOwn());
+      return;
+    }
+  } else {
+    value = detail;
+    succeeded = true;
+  }
+
+  if (promise._state !== PENDING) {
+    // noop
+  } else if (hasCallback && succeeded) {
+      _resolve(promise, value);
+    } else if (failed) {
+      _reject(promise, error);
+    } else if (settled === FULFILLED) {
+      fulfill(promise, value);
+    } else if (settled === REJECTED) {
+      _reject(promise, value);
+    }
+}
+
+function initializePromise(promise, resolver) {
+  try {
+    resolver(function resolvePromise(value) {
+      _resolve(promise, value);
+    }, function rejectPromise(reason) {
+      _reject(promise, reason);
+    });
+  } catch (e) {
+    _reject(promise, e);
+  }
+}
+
+var id = 0;
+function nextId() {
+  return id++;
+}
+
+function makePromise(promise) {
+  promise[PROMISE_ID] = id++;
+  promise._state = undefined;
+  promise._result = undefined;
+  promise._subscribers = [];
+}
+
+function Enumerator(Constructor, input) {
+  this._instanceConstructor = Constructor;
+  this.promise = new Constructor(noop);
+
+  if (!this.promise[PROMISE_ID]) {
+    makePromise(this.promise);
+  }
+
+  if (isArray(input)) {
+    this._input = input;
+    this.length = input.length;
+    this._remaining = input.length;
+
+    this._result = new Array(this.length);
+
+    if (this.length === 0) {
+      fulfill(this.promise, this._result);
+    } else {
+      this.length = this.length || 0;
+      this._enumerate();
+      if (this._remaining === 0) {
+        fulfill(this.promise, this._result);
+      }
+    }
+  } else {
+    _reject(this.promise, validationError());
+  }
+}
+
+function validationError() {
+  return new Error('Array Methods must be provided an Array');
+};
+
+Enumerator.prototype._enumerate = function () {
+  var length = this.length;
+  var _input = this._input;
+
+  for (var i = 0; this._state === PENDING && i < length; i++) {
+    this._eachEntry(_input[i], i);
+  }
+};
+
+Enumerator.prototype._eachEntry = function (entry, i) {
+  var c = this._instanceConstructor;
+  var resolve$$ = c.resolve;
+
+  if (resolve$$ === resolve) {
+    var _then = getThen(entry);
+
+    if (_then === then && entry._state !== PENDING) {
+      this._settledAt(entry._state, i, entry._result);
+    } else if (typeof _then !== 'function') {
+      this._remaining--;
+      this._result[i] = entry;
+    } else if (c === Promise) {
+      var promise = new c(noop);
+      handleMaybeThenable(promise, entry, _then);
+      this._willSettleAt(promise, i);
+    } else {
+      this._willSettleAt(new c(function (resolve$$) {
+        return resolve$$(entry);
+      }), i);
+    }
+  } else {
+    this._willSettleAt(resolve$$(entry), i);
+  }
+};
+
+Enumerator.prototype._settledAt = function (state, i, value) {
+  var promise = this.promise;
+
+  if (promise._state === PENDING) {
+    this._remaining--;
+
+    if (state === REJECTED) {
+      _reject(promise, value);
+    } else {
+      this._result[i] = value;
+    }
+  }
+
+  if (this._remaining === 0) {
+    fulfill(promise, this._result);
+  }
+};
+
+Enumerator.prototype._willSettleAt = function (promise, i) {
+  var enumerator = this;
+
+  subscribe(promise, undefined, function (value) {
+    return enumerator._settledAt(FULFILLED, i, value);
+  }, function (reason) {
+    return enumerator._settledAt(REJECTED, i, reason);
+  });
+};
+
+/**
+  `Promise.all` accepts an array of promises, and returns a new promise which
+  is fulfilled with an array of fulfillment values for the passed promises, or
+  rejected with the reason of the first passed promise to be rejected. It casts all
+  elements of the passed iterable to promises as it runs this algorithm.
+
+  Example:
+
+  ```javascript
+  let promise1 = resolve(1);
+  let promise2 = resolve(2);
+  let promise3 = resolve(3);
+  let promises = [ promise1, promise2, promise3 ];
+
+  Promise.all(promises).then(function(array){
+    // The array here would be [ 1, 2, 3 ];
+  });
+  ```
+
+  If any of the `promises` given to `all` are rejected, the first promise
+  that is rejected will be given as an argument to the returned promises's
+  rejection handler. For example:
+
+  Example:
+
+  ```javascript
+  let promise1 = resolve(1);
+  let promise2 = reject(new Error("2"));
+  let promise3 = reject(new Error("3"));
+  let promises = [ promise1, promise2, promise3 ];
+
+  Promise.all(promises).then(function(array){
+    // Code here never runs because there are rejected promises!
+  }, function(error) {
+    // error.message === "2"
+  });
+  ```
+
+  @method all
+  @static
+  @param {Array} entries array of promises
+  @param {String} label optional string for labeling the promise.
+  Useful for tooling.
+  @return {Promise} promise that is fulfilled when all `promises` have been
+  fulfilled, or rejected if any of them become rejected.
+  @static
+*/
+function all(entries) {
+  return new Enumerator(this, entries).promise;
+}
+
+/**
+  `Promise.race` returns a new promise which is settled in the same way as the
+  first passed promise to settle.
+
+  Example:
+
+  ```javascript
+  let promise1 = new Promise(function(resolve, reject){
+    setTimeout(function(){
+      resolve('promise 1');
+    }, 200);
+  });
+
+  let promise2 = new Promise(function(resolve, reject){
+    setTimeout(function(){
+      resolve('promise 2');
+    }, 100);
+  });
+
+  Promise.race([promise1, promise2]).then(function(result){
+    // result === 'promise 2' because it was resolved before promise1
+    // was resolved.
+  });
+  ```
+
+  `Promise.race` is deterministic in that only the state of the first
+  settled promise matters. For example, even if other promises given to the
+  `promises` array argument are resolved, but the first settled promise has
+  become rejected before the other promises became fulfilled, the returned
+  promise will become rejected:
+
+  ```javascript
+  let promise1 = new Promise(function(resolve, reject){
+    setTimeout(function(){
+      resolve('promise 1');
+    }, 200);
+  });
+
+  let promise2 = new Promise(function(resolve, reject){
+    setTimeout(function(){
+      reject(new Error('promise 2'));
+    }, 100);
+  });
+
+  Promise.race([promise1, promise2]).then(function(result){
+    // Code here never runs
+  }, function(reason){
+    // reason.message === 'promise 2' because promise 2 became rejected before
+    // promise 1 became fulfilled
+  });
+  ```
+
+  An example real-world use case is implementing timeouts:
+
+  ```javascript
+  Promise.race([ajax('foo.json'), timeout(5000)])
+  ```
+
+  @method race
+  @static
+  @param {Array} promises array of promises to observe
+  Useful for tooling.
+  @return {Promise} a promise which settles in the same way as the first passed
+  promise to settle.
+*/
+function race(entries) {
+  /*jshint validthis:true */
+  var Constructor = this;
+
+  if (!isArray(entries)) {
+    return new Constructor(function (_, reject) {
+      return reject(new TypeError('You must pass an array to race.'));
+    });
+  } else {
+    return new Constructor(function (resolve, reject) {
+      var length = entries.length;
+      for (var i = 0; i < length; i++) {
+        Constructor.resolve(entries[i]).then(resolve, reject);
+      }
+    });
+  }
+}
+
+/**
+  `Promise.reject` returns a promise rejected with the passed `reason`.
+  It is shorthand for the following:
+
+  ```javascript
+  let promise = new Promise(function(resolve, reject){
+    reject(new Error('WHOOPS'));
+  });
+
+  promise.then(function(value){
+    // Code here doesn't run because the promise is rejected!
+  }, function(reason){
+    // reason.message === 'WHOOPS'
+  });
+  ```
+
+  Instead of writing the above, your code now simply becomes the following:
+
+  ```javascript
+  let promise = Promise.reject(new Error('WHOOPS'));
+
+  promise.then(function(value){
+    // Code here doesn't run because the promise is rejected!
+  }, function(reason){
+    // reason.message === 'WHOOPS'
+  });
+  ```
+
+  @method reject
+  @static
+  @param {Any} reason value that the returned promise will be rejected with.
+  Useful for tooling.
+  @return {Promise} a promise rejected with the given `reason`.
+*/
+function reject(reason) {
+  /*jshint validthis:true */
+  var Constructor = this;
+  var promise = new Constructor(noop);
+  _reject(promise, reason);
+  return promise;
+}
+
+function needsResolver() {
+  throw new TypeError('You must pass a resolver function as the first argument to the promise constructor');
+}
+
+function needsNew() {
+  throw new TypeError("Failed to construct 'Promise': Please use the 'new' operator, this object constructor cannot be called as a function.");
+}
+
+/**
+  Promise objects represent the eventual result of an asynchronous operation. The
+  primary way of interacting with a promise is through its `then` method, which
+  registers callbacks to receive either a promise's eventual value or the reason
+  why the promise cannot be fulfilled.
+
+  Terminology
+  -----------
+
+  - `promise` is an object or function with a `then` method whose behavior conforms to this specification.
+  - `thenable` is an object or function that defines a `then` method.
+  - `value` is any legal JavaScript value (including undefined, a thenable, or a promise).
+  - `exception` is a value that is thrown using the throw statement.
+  - `reason` is a value that indicates why a promise was rejected.
+  - `settled` the final resting state of a promise, fulfilled or rejected.
+
+  A promise can be in one of three states: pending, fulfilled, or rejected.
+
+  Promises that are fulfilled have a fulfillment value and are in the fulfilled
+  state.  Promises that are rejected have a rejection reason and are in the
+  rejected state.  A fulfillment value is never a thenable.
+
+  Promises can also be said to *resolve* a value.  If this value is also a
+  promise, then the original promise's settled state will match the value's
+  settled state.  So a promise that *resolves* a promise that rejects will
+  itself reject, and a promise that *resolves* a promise that fulfills will
+  itself fulfill.
+
+
+  Basic Usage:
+  ------------
+
+  ```js
+  let promise = new Promise(function(resolve, reject) {
+    // on success
+    resolve(value);
+
+    // on failure
+    reject(reason);
+  });
+
+  promise.then(function(value) {
+    // on fulfillment
+  }, function(reason) {
+    // on rejection
+  });
+  ```
+
+  Advanced Usage:
+  ---------------
+
+  Promises shine when abstracting away asynchronous interactions such as
+  `XMLHttpRequest`s.
+
+  ```js
+  function getJSON(url) {
+    return new Promise(function(resolve, reject){
+      let xhr = new XMLHttpRequest();
+
+      xhr.open('GET', url);
+      xhr.onreadystatechange = handler;
+      xhr.responseType = 'json';
+      xhr.setRequestHeader('Accept', 'application/json');
+      xhr.send();
+
+      function handler() {
+        if (this.readyState === this.DONE) {
+          if (this.status === 200) {
+            resolve(this.response);
+          } else {
+            reject(new Error('getJSON: `' + url + '` failed with status: [' + this.status + ']'));
+          }
+        }
+      };
+    });
+  }
+
+  getJSON('/posts.json').then(function(json) {
+    // on fulfillment
+  }, function(reason) {
+    // on rejection
+  });
+  ```
+
+  Unlike callbacks, promises are great composable primitives.
+
+  ```js
+  Promise.all([
+    getJSON('/posts'),
+    getJSON('/comments')
+  ]).then(function(values){
+    values[0] // => postsJSON
+    values[1] // => commentsJSON
+
+    return values;
+  });
+  ```
+
+  @class Promise
+  @param {function} resolver
+  Useful for tooling.
+  @constructor
+*/
+function Promise(resolver) {
+  this[PROMISE_ID] = nextId();
+  this._result = this._state = undefined;
+  this._subscribers = [];
+
+  if (noop !== resolver) {
+    typeof resolver !== 'function' && needsResolver();
+    this instanceof Promise ? initializePromise(this, resolver) : needsNew();
+  }
+}
+
+Promise.all = all;
+Promise.race = race;
+Promise.resolve = resolve;
+Promise.reject = reject;
+Promise._setScheduler = setScheduler;
+Promise._setAsap = setAsap;
+Promise._asap = asap;
+
+Promise.prototype = {
+  constructor: Promise,
+
+  /**
+    The primary way of interacting with a promise is through its `then` method,
+    which registers callbacks to receive either a promise's eventual value or the
+    reason why the promise cannot be fulfilled.
+  
+    ```js
+    findUser().then(function(user){
+      // user is available
+    }, function(reason){
+      // user is unavailable, and you are given the reason why
+    });
+    ```
+  
+    Chaining
+    --------
+  
+    The return value of `then` is itself a promise.  This second, 'downstream'
+    promise is resolved with the return value of the first promise's fulfillment
+    or rejection handler, or rejected if the handler throws an exception.
+  
+    ```js
+    findUser().then(function (user) {
+      return user.name;
+    }, function (reason) {
+      return 'default name';
+    }).then(function (userName) {
+      // If `findUser` fulfilled, `userName` will be the user's name, otherwise it
+      // will be `'default name'`
+    });
+  
+    findUser().then(function (user) {
+      throw new Error('Found user, but still unhappy');
+    }, function (reason) {
+      throw new Error('`findUser` rejected and we're unhappy');
+    }).then(function (value) {
+      // never reached
+    }, function (reason) {
+      // if `findUser` fulfilled, `reason` will be 'Found user, but still unhappy'.
+      // If `findUser` rejected, `reason` will be '`findUser` rejected and we're unhappy'.
+    });
+    ```
+    If the downstream promise does not specify a rejection handler, rejection reasons will be propagated further downstream.
+  
+    ```js
+    findUser().then(function (user) {
+      throw new PedagogicalException('Upstream error');
+    }).then(function (value) {
+      // never reached
+    }).then(function (value) {
+      // never reached
+    }, function (reason) {
+      // The `PedgagocialException` is propagated all the way down to here
+    });
+    ```
+  
+    Assimilation
+    ------------
+  
+    Sometimes the value you want to propagate to a downstream promise can only be
+    retrieved asynchronously. This can be achieved by returning a promise in the
+    fulfillment or rejection handler. The downstream promise will then be pending
+    until the returned promise is settled. This is called *assimilation*.
+  
+    ```js
+    findUser().then(function (user) {
+      return findCommentsByAuthor(user);
+    }).then(function (comments) {
+      // The user's comments are now available
+    });
+    ```
+  
+    If the assimliated promise rejects, then the downstream promise will also reject.
+  
+    ```js
+    findUser().then(function (user) {
+      return findCommentsByAuthor(user);
+    }).then(function (comments) {
+      // If `findCommentsByAuthor` fulfills, we'll have the value here
+    }, function (reason) {
+      // If `findCommentsByAuthor` rejects, we'll have the reason here
+    });
+    ```
+  
+    Simple Example
+    --------------
+  
+    Synchronous Example
+  
+    ```javascript
+    let result;
+  
+    try {
+      result = findResult();
+      // success
+    } catch(reason) {
+      // failure
+    }
+    ```
+  
+    Errback Example
+  
+    ```js
+    findResult(function(result, err){
+      if (err) {
+        // failure
+      } else {
+        // success
+      }
+    });
+    ```
+  
+    Promise Example;
+  
+    ```javascript
+    findResult().then(function(result){
+      // success
+    }, function(reason){
+      // failure
+    });
+    ```
+  
+    Advanced Example
+    --------------
+  
+    Synchronous Example
+  
+    ```javascript
+    let author, books;
+  
+    try {
+      author = findAuthor();
+      books  = findBooksByAuthor(author);
+      // success
+    } catch(reason) {
+      // failure
+    }
+    ```
+  
+    Errback Example
+  
+    ```js
+  
+    function foundBooks(books) {
+  
+    }
+  
+    function failure(reason) {
+  
+    }
+  
+    findAuthor(function(author, err){
+      if (err) {
+        failure(err);
+        // failure
+      } else {
+        try {
+          findBoooksByAuthor(author, function(books, err) {
+            if (err) {
+              failure(err);
+            } else {
+              try {
+                foundBooks(books);
+              } catch(reason) {
+                failure(reason);
+              }
+            }
+          });
+        } catch(error) {
+          failure(err);
+        }
+        // success
+      }
+    });
+    ```
+  
+    Promise Example;
+  
+    ```javascript
+    findAuthor().
+      then(findBooksByAuthor).
+      then(function(books){
+        // found books
+    }).catch(function(reason){
+      // something went wrong
+    });
+    ```
+  
+    @method then
+    @param {Function} onFulfilled
+    @param {Function} onRejected
+    Useful for tooling.
+    @return {Promise}
+  */
+  then: then,
+
+  /**
+    `catch` is simply sugar for `then(undefined, onRejection)` which makes it the same
+    as the catch block of a try/catch statement.
+  
+    ```js
+    function findAuthor(){
+      throw new Error('couldn't find that author');
+    }
+  
+    // synchronous
+    try {
+      findAuthor();
+    } catch(reason) {
+      // something went wrong
+    }
+  
+    // async with promises
+    findAuthor().catch(function(reason){
+      // something went wrong
+    });
+    ```
+  
+    @method catch
+    @param {Function} onRejection
+    Useful for tooling.
+    @return {Promise}
+  */
+  'catch': function _catch(onRejection) {
+    return this.then(null, onRejection);
+  }
+};
+
+function polyfill() {
+    var local = undefined;
+
+    if (typeof global !== 'undefined') {
+        local = global;
+    } else if (typeof self !== 'undefined') {
+        local = self;
+    } else {
+        try {
+            local = Function('return this')();
+        } catch (e) {
+            throw new Error('polyfill failed because global object is unavailable in this environment');
+        }
+    }
+
+    var P = local.Promise;
+
+    if (P) {
+        var promiseToString = null;
+        try {
+            promiseToString = Object.prototype.toString.call(P.resolve());
+        } catch (e) {
+            // silently ignored
+        }
+
+        if (promiseToString === '[object Promise]' && !P.cast) {
+            return;
+        }
+    }
+
+    local.Promise = Promise;
+}
+
+// Strange compat..
+Promise.polyfill = polyfill;
+Promise.Promise = Promise;
+
+return Promise;
+
+})));
+//# sourceMappingURL=es6-promise.map
+
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7), __webpack_require__(8)))
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /* global VERSION */
+
+__webpack_require__(5);
+
+var _es6Promise = __webpack_require__(4);
+
+var _es6Promise2 = _interopRequireDefault(_es6Promise);
+
+var _utils = __webpack_require__(0);
+
+var Utils = _interopRequireWildcard(_utils);
+
+var _api = __webpack_require__(1);
+
+var API = _interopRequireWildcard(_api);
+
+var _button = __webpack_require__(2);
+
+var _push = __webpack_require__(3);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Noty = function () {
+  /**
+   * @param {object} options
+   * @return {Noty}
+   */
+  function Noty() {
+    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+    _classCallCheck(this, Noty);
+
+    this.options = Utils.deepExtend({}, API.Defaults, options);
+    this.id = this.options.id || Utils.generateID('bar');
+    this.closeTimer = -1;
+    this.barDom = null;
+    this.layoutDom = null;
+    this.progressDom = null;
+    this.showing = false;
+    this.shown = false;
+    this.closed = false;
+    this.closing = false;
+    this.killable = this.options.timeout || this.options.closeWith.length > 0;
+    this.hasSound = this.options.sounds.sources.length > 0;
+    this.soundPlayed = false;
+    this.listeners = {
+      beforeShow: [],
+      onShow: [],
+      afterShow: [],
+      onClose: [],
+      afterClose: [],
+      onClick: [],
+      onHover: [],
+      onTemplate: []
+    };
+    this.promises = {
+      show: null,
+      close: null
+    };
+    this.on('beforeShow', this.options.callbacks.beforeShow);
+    this.on('onShow', this.options.callbacks.onShow);
+    this.on('afterShow', this.options.callbacks.afterShow);
+    this.on('onClose', this.options.callbacks.onClose);
+    this.on('afterClose', this.options.callbacks.afterClose);
+    this.on('onClick', this.options.callbacks.onClick);
+    this.on('onHover', this.options.callbacks.onHover);
+    this.on('onTemplate', this.options.callbacks.onTemplate);
+
+    return this;
+  }
+
+  /**
+   * @param {string} eventName
+   * @param {function} cb
+   * @return {Noty}
+   */
+
+
+  _createClass(Noty, [{
+    key: 'on',
+    value: function on(eventName) {
+      var cb = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : function () {};
+
+      if (typeof cb === 'function' && this.listeners.hasOwnProperty(eventName)) {
+        this.listeners[eventName].push(cb);
+      }
+
+      return this;
+    }
+
+    /**
+     * @return {Noty}
+     */
+
+  }, {
+    key: 'show',
+    value: function show() {
+      var _this = this;
+
+      if (this.options.killer === true) {
+        Noty.closeAll();
+      } else if (typeof this.options.killer === 'string') {
+        Noty.closeAll(this.options.killer);
+      }
+
+      var queueCounts = API.getQueueCounts(this.options.queue);
+
+      if (queueCounts.current >= queueCounts.maxVisible || API.PageHidden && this.options.visibilityControl) {
+        API.addToQueue(this);
+
+        if (API.PageHidden && this.hasSound && Utils.inArray('docHidden', this.options.sounds.conditions)) {
+          Utils.createAudioElements(this);
+        }
+
+        if (API.PageHidden && Utils.inArray('docHidden', this.options.titleCount.conditions)) {
+          API.docTitle.increment();
+        }
+
+        return this;
+      }
+
+      API.Store[this.id] = this;
+
+      API.fire(this, 'beforeShow');
+
+      this.showing = true;
+
+      if (this.closing) {
+        this.showing = false;
+        return this;
+      }
+
+      API.build(this);
+      API.handleModal(this);
+
+      if (this.options.force) {
+        this.layoutDom.insertBefore(this.barDom, this.layoutDom.firstChild);
+      } else {
+        this.layoutDom.appendChild(this.barDom);
+      }
+
+      if (this.hasSound && !this.soundPlayed && Utils.inArray('docVisible', this.options.sounds.conditions)) {
+        Utils.createAudioElements(this);
+      }
+
+      if (Utils.inArray('docVisible', this.options.titleCount.conditions)) {
+        API.docTitle.increment();
+      }
+
+      this.shown = true;
+      this.closed = false;
+
+      // bind button events if any
+      if (API.hasButtons(this)) {
+        Object.keys(this.options.buttons).forEach(function (key) {
+          var btn = _this.barDom.querySelector('#' + _this.options.buttons[key].id);
+          Utils.addListener(btn, 'click', function (e) {
+            Utils.stopPropagation(e);
+            _this.options.buttons[key].cb();
+          });
+        });
+      }
+
+      this.progressDom = this.barDom.querySelector('.noty_progressbar');
+
+      if (Utils.inArray('click', this.options.closeWith)) {
+        Utils.addClass(this.barDom, 'noty_close_with_click');
+        Utils.addListener(this.barDom, 'click', function (e) {
+          Utils.stopPropagation(e);
+          API.fire(_this, 'onClick');
+          _this.close();
+        }, false);
+      }
+
+      Utils.addListener(this.barDom, 'mouseenter', function () {
+        API.fire(_this, 'onHover');
+      }, false);
+
+      if (this.options.timeout) Utils.addClass(this.barDom, 'noty_has_timeout');
+      if (this.options.progressBar) {
+        Utils.addClass(this.barDom, 'noty_has_progressbar');
+      }
+
+      if (Utils.inArray('button', this.options.closeWith)) {
+        Utils.addClass(this.barDom, 'noty_close_with_button');
+
+        var closeButton = document.createElement('div');
+        Utils.addClass(closeButton, 'noty_close_button');
+        closeButton.innerHTML = '×';
+        this.barDom.appendChild(closeButton);
+
+        Utils.addListener(closeButton, 'click', function (e) {
+          Utils.stopPropagation(e);
+          _this.close();
+        }, false);
+      }
+
+      API.fire(this, 'onShow');
+
+      if (this.options.animation.open === null) {
+        this.promises.show = new _es6Promise2.default(function (resolve) {
+          resolve();
+        });
+      } else if (typeof this.options.animation.open === 'function') {
+        this.promises.show = new _es6Promise2.default(this.options.animation.open.bind(this));
+      } else {
+        Utils.addClass(this.barDom, this.options.animation.open);
+        this.promises.show = new _es6Promise2.default(function (resolve) {
+          Utils.addListener(_this.barDom, Utils.animationEndEvents, function () {
+            Utils.removeClass(_this.barDom, _this.options.animation.open);
+            resolve();
+          });
+        });
+      }
+
+      this.promises.show.then(function () {
+        var _t = _this;
+        setTimeout(function () {
+          API.openFlow(_t);
+        }, 100);
+      });
+
+      return this;
+    }
+
+    /**
+     * @return {Noty}
+     */
+
+  }, {
+    key: 'stop',
+    value: function stop() {
+      API.dequeueClose(this);
+      return this;
+    }
+
+    /**
+     * @return {Noty}
+     */
+
+  }, {
+    key: 'resume',
+    value: function resume() {
+      API.queueClose(this);
+      return this;
+    }
+
+    /**
+     * @param {int|boolean} ms
+     * @return {Noty}
+     */
+
+  }, {
+    key: 'setTimeout',
+    value: function (_setTimeout) {
+      function setTimeout(_x) {
+        return _setTimeout.apply(this, arguments);
+      }
+
+      setTimeout.toString = function () {
+        return _setTimeout.toString();
+      };
+
+      return setTimeout;
+    }(function (ms) {
+      this.stop();
+      this.options.timeout = ms;
+
+      if (this.barDom) {
+        if (this.options.timeout) {
+          Utils.addClass(this.barDom, 'noty_has_timeout');
+        } else {
+          Utils.removeClass(this.barDom, 'noty_has_timeout');
+        }
+
+        var _t = this;
+        setTimeout(function () {
+          // ugly fix for progressbar display bug
+          _t.resume();
+        }, 100);
+      }
+
+      return this;
+    })
+
+    /**
+     * @param {string} html
+     * @param {boolean} optionsOverride
+     * @return {Noty}
+     */
+
+  }, {
+    key: 'setText',
+    value: function setText(html) {
+      var optionsOverride = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+
+      if (this.barDom) {
+        this.barDom.querySelector('.noty_body').innerHTML = html;
+      }
+
+      if (optionsOverride) this.options.text = html;
+
+      return this;
+    }
+
+    /**
+     * @param {string} type
+     * @param {boolean} optionsOverride
+     * @return {Noty}
+     */
+
+  }, {
+    key: 'setType',
+    value: function setType(type) {
+      var _this2 = this;
+
+      var optionsOverride = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+
+      if (this.barDom) {
+        var classList = Utils.classList(this.barDom).split(' ');
+
+        classList.forEach(function (c) {
+          if (c.substring(0, 11) === 'noty_type__') {
+            Utils.removeClass(_this2.barDom, c);
+          }
+        });
+
+        Utils.addClass(this.barDom, 'noty_type__' + type);
+      }
+
+      if (optionsOverride) this.options.type = type;
+
+      return this;
+    }
+
+    /**
+     * @param {string} theme
+     * @param {boolean} optionsOverride
+     * @return {Noty}
+     */
+
+  }, {
+    key: 'setTheme',
+    value: function setTheme(theme) {
+      var _this3 = this;
+
+      var optionsOverride = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+
+      if (this.barDom) {
+        var classList = Utils.classList(this.barDom).split(' ');
+
+        classList.forEach(function (c) {
+          if (c.substring(0, 12) === 'noty_theme__') {
+            Utils.removeClass(_this3.barDom, c);
+          }
+        });
+
+        Utils.addClass(this.barDom, 'noty_theme__' + theme);
+      }
+
+      if (optionsOverride) this.options.theme = theme;
+
+      return this;
+    }
+
+    /**
+     * @return {Noty}
+     */
+
+  }, {
+    key: 'close',
+    value: function close() {
+      var _this4 = this;
+
+      if (this.closed) return this;
+
+      if (!this.shown) {
+        // it's in the queue
+        API.removeFromQueue(this);
+        return this;
+      }
+
+      API.fire(this, 'onClose');
+
+      this.closing = true;
+
+      if (this.options.animation.close === null) {
+        this.promises.close = new _es6Promise2.default(function (resolve) {
+          resolve();
+        });
+      } else if (typeof this.options.animation.close === 'function') {
+        this.promises.close = new _es6Promise2.default(this.options.animation.close.bind(this));
+      } else {
+        Utils.addClass(this.barDom, this.options.animation.close);
+        this.promises.close = new _es6Promise2.default(function (resolve) {
+          Utils.addListener(_this4.barDom, Utils.animationEndEvents, function () {
+            if (_this4.options.force) {
+              Utils.remove(_this4.barDom);
+            } else {
+              API.ghostFix(_this4);
+            }
+            resolve();
+          });
+        });
+      }
+
+      this.promises.close.then(function () {
+        API.closeFlow(_this4);
+        API.handleModalClose(_this4);
+      });
+
+      this.closed = true;
+
+      return this;
+    }
+
+    // API functions
+
+    /**
+     * @param {boolean|string} queueName
+     * @return {Noty}
+     */
+
+  }], [{
+    key: 'closeAll',
+    value: function closeAll() {
+      var queueName = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+
+      Object.keys(API.Store).forEach(function (id) {
+        if (queueName) {
+          if (API.Store[id].options.queue === queueName && API.Store[id].killable) {
+            API.Store[id].close();
+          }
+        } else if (API.Store[id].killable) {
+          API.Store[id].close();
+        }
+      });
+      return this;
+    }
+
+    /**
+     * @param {Object} obj
+     * @return {Noty}
+     */
+
+  }, {
+    key: 'overrideDefaults',
+    value: function overrideDefaults(obj) {
+      API.Defaults = Utils.deepExtend({}, API.Defaults, obj);
+      return this;
+    }
+
+    /**
+     * @param {int} amount
+     * @param {string} queueName
+     * @return {Noty}
+     */
+
+  }, {
+    key: 'setMaxVisible',
+    value: function setMaxVisible() {
+      var amount = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : API.DefaultMaxVisible;
+      var queueName = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'global';
+
+      if (!API.Queues.hasOwnProperty(queueName)) {
+        API.Queues[queueName] = { maxVisible: amount, queue: [] };
+      }
+
+      API.Queues[queueName].maxVisible = amount;
+      return this;
+    }
+
+    /**
+     * @param {string} innerHtml
+     * @param {String} classes
+     * @param {Function} cb
+     * @param {Object} attributes
+     * @return {NotyButton}
+     */
+
+  }, {
+    key: 'button',
+    value: function button(innerHtml) {
+      var classes = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+      var cb = arguments[2];
+      var attributes = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
+
+      return new _button.NotyButton(innerHtml, classes, cb, attributes);
+    }
+
+    /**
+     * @return {string}
+     */
+
+  }, {
+    key: 'version',
+    value: function version() {
+      return "3.1.3";
+    }
+
+    /**
+     * @param {String} workerPath
+     * @return {Push}
+     */
+
+  }, {
+    key: 'Push',
+    value: function Push(workerPath) {
+      return new _push.Push(workerPath);
+    }
+  }]);
+
+  return Noty;
+}();
+
+// Document visibility change controller
+
+
+exports.default = Noty;
+Utils.visibilityChangeFlow();
+module.exports = exports['default'];
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports) {
+
+// shim for using process in browser
+var process = module.exports = {};
+
+// cached from whatever global is present so that test runners that stub it
+// don't break things.  But we need to wrap it in a try catch in case it is
+// wrapped in strict mode code which doesn't define any globals.  It's inside a
+// function because try/catches deoptimize in certain engines.
+
+var cachedSetTimeout;
+var cachedClearTimeout;
+
+function defaultSetTimout() {
+    throw new Error('setTimeout has not been defined');
+}
+function defaultClearTimeout () {
+    throw new Error('clearTimeout has not been defined');
+}
+(function () {
+    try {
+        if (typeof setTimeout === 'function') {
+            cachedSetTimeout = setTimeout;
+        } else {
+            cachedSetTimeout = defaultSetTimout;
+        }
+    } catch (e) {
+        cachedSetTimeout = defaultSetTimout;
+    }
+    try {
+        if (typeof clearTimeout === 'function') {
+            cachedClearTimeout = clearTimeout;
+        } else {
+            cachedClearTimeout = defaultClearTimeout;
+        }
+    } catch (e) {
+        cachedClearTimeout = defaultClearTimeout;
+    }
+} ())
+function runTimeout(fun) {
+    if (cachedSetTimeout === setTimeout) {
+        //normal enviroments in sane situations
+        return setTimeout(fun, 0);
+    }
+    // if setTimeout wasn't available but was latter defined
+    if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
+        cachedSetTimeout = setTimeout;
+        return setTimeout(fun, 0);
+    }
+    try {
+        // when when somebody has screwed with setTimeout but no I.E. maddness
+        return cachedSetTimeout(fun, 0);
+    } catch(e){
+        try {
+            // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
+            return cachedSetTimeout.call(null, fun, 0);
+        } catch(e){
+            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
+            return cachedSetTimeout.call(this, fun, 0);
+        }
+    }
+
+
+}
+function runClearTimeout(marker) {
+    if (cachedClearTimeout === clearTimeout) {
+        //normal enviroments in sane situations
+        return clearTimeout(marker);
+    }
+    // if clearTimeout wasn't available but was latter defined
+    if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
+        cachedClearTimeout = clearTimeout;
+        return clearTimeout(marker);
+    }
+    try {
+        // when when somebody has screwed with setTimeout but no I.E. maddness
+        return cachedClearTimeout(marker);
+    } catch (e){
+        try {
+            // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
+            return cachedClearTimeout.call(null, marker);
+        } catch (e){
+            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
+            // Some versions of I.E. have different rules for clearTimeout vs setTimeout
+            return cachedClearTimeout.call(this, marker);
+        }
+    }
+
+
+
+}
+var queue = [];
+var draining = false;
+var currentQueue;
+var queueIndex = -1;
+
+function cleanUpNextTick() {
+    if (!draining || !currentQueue) {
+        return;
+    }
+    draining = false;
+    if (currentQueue.length) {
+        queue = currentQueue.concat(queue);
+    } else {
+        queueIndex = -1;
+    }
+    if (queue.length) {
+        drainQueue();
+    }
+}
+
+function drainQueue() {
+    if (draining) {
+        return;
+    }
+    var timeout = runTimeout(cleanUpNextTick);
+    draining = true;
+
+    var len = queue.length;
+    while(len) {
+        currentQueue = queue;
+        queue = [];
+        while (++queueIndex < len) {
+            if (currentQueue) {
+                currentQueue[queueIndex].run();
+            }
+        }
+        queueIndex = -1;
+        len = queue.length;
+    }
+    currentQueue = null;
+    draining = false;
+    runClearTimeout(timeout);
+}
+
+process.nextTick = function (fun) {
+    var args = new Array(arguments.length - 1);
+    if (arguments.length > 1) {
+        for (var i = 1; i < arguments.length; i++) {
+            args[i - 1] = arguments[i];
+        }
+    }
+    queue.push(new Item(fun, args));
+    if (queue.length === 1 && !draining) {
+        runTimeout(drainQueue);
+    }
+};
+
+// v8 likes predictible objects
+function Item(fun, array) {
+    this.fun = fun;
+    this.array = array;
+}
+Item.prototype.run = function () {
+    this.fun.apply(null, this.array);
+};
+process.title = 'browser';
+process.browser = true;
+process.env = {};
+process.argv = [];
+process.version = ''; // empty string to avoid regexp issues
+process.versions = {};
+
+function noop() {}
+
+process.on = noop;
+process.addListener = noop;
+process.once = noop;
+process.off = noop;
+process.removeListener = noop;
+process.removeAllListeners = noop;
+process.emit = noop;
+process.prependListener = noop;
+process.prependOnceListener = noop;
+
+process.listeners = function (name) { return [] }
+
+process.binding = function (name) {
+    throw new Error('process.binding is not supported');
+};
+
+process.cwd = function () { return '/' };
+process.chdir = function (dir) {
+    throw new Error('process.chdir is not supported');
+};
+process.umask = function() { return 0; };
+
+
+/***/ }),
+/* 8 */
+/***/ (function(module, exports) {
+
+var g;
+
+// This works in non-strict mode
+g = (function() {
+	return this;
+})();
+
+try {
+	// This works if eval is allowed (see CSP)
+	g = g || Function("return this")() || (1,eval)("this");
+} catch(e) {
+	// This works if the window reference is available
+	if(typeof window === "object")
+		g = window;
+}
+
+// g can still be undefined, but nothing to do about it...
+// We return undefined, instead of nothing here, so it's
+// easier to handle this case. if(!global) { ...}
+
+module.exports = g;
+
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports) {
+
+/* (ignored) */
+
+/***/ })
+/******/ ]);
+});
+//# sourceMappingURL=noty.js.map
+
+/***/ }),
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 (function (global, factory) {
@@ -67024,25 +70454,523 @@ return Stats;
 
 
 /***/ }),
-/* 20 */
+/* 25 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(20);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// Prepare cssTransformation
+var transform;
+
+var options = {"hmr":true}
+options.transform = transform
+// add the styles to the DOM
+var update = __webpack_require__(26)(content, options);
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../css-loader/index.js!./noty.css", function() {
+			var newContent = require("!!../../css-loader/index.js!./noty.css");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 26 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+	MIT License http://www.opensource.org/licenses/mit-license.php
+	Author Tobias Koppers @sokra
+*/
+
+var stylesInDom = {};
+
+var	memoize = function (fn) {
+	var memo;
+
+	return function () {
+		if (typeof memo === "undefined") memo = fn.apply(this, arguments);
+		return memo;
+	};
+};
+
+var isOldIE = memoize(function () {
+	// Test for IE <= 9 as proposed by Browserhacks
+	// @see http://browserhacks.com/#hack-e71d8692f65334173fee715c222cb805
+	// Tests for existence of standard globals is to allow style-loader
+	// to operate correctly into non-standard environments
+	// @see https://github.com/webpack-contrib/style-loader/issues/177
+	return window && document && document.all && !window.atob;
+});
+
+var getElement = (function (fn) {
+	var memo = {};
+
+	return function(selector) {
+		if (typeof memo[selector] === "undefined") {
+			var styleTarget = fn.call(this, selector);
+			// Special case to return head of iframe instead of iframe itself
+			if (styleTarget instanceof window.HTMLIFrameElement) {
+				try {
+					// This will throw an exception if access to iframe is blocked
+					// due to cross-origin restrictions
+					styleTarget = styleTarget.contentDocument.head;
+				} catch(e) {
+					styleTarget = null;
+				}
+			}
+			memo[selector] = styleTarget;
+		}
+		return memo[selector]
+	};
+})(function (target) {
+	return document.querySelector(target)
+});
+
+var singleton = null;
+var	singletonCounter = 0;
+var	stylesInsertedAtTop = [];
+
+var	fixUrls = __webpack_require__(27);
+
+module.exports = function(list, options) {
+	if (typeof DEBUG !== "undefined" && DEBUG) {
+		if (typeof document !== "object") throw new Error("The style-loader cannot be used in a non-browser environment");
+	}
+
+	options = options || {};
+
+	options.attrs = typeof options.attrs === "object" ? options.attrs : {};
+
+	// Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
+	// tags it will allow on a page
+	if (!options.singleton) options.singleton = isOldIE();
+
+	// By default, add <style> tags to the <head> element
+	if (!options.insertInto) options.insertInto = "head";
+
+	// By default, add <style> tags to the bottom of the target
+	if (!options.insertAt) options.insertAt = "bottom";
+
+	var styles = listToStyles(list, options);
+
+	addStylesToDom(styles, options);
+
+	return function update (newList) {
+		var mayRemove = [];
+
+		for (var i = 0; i < styles.length; i++) {
+			var item = styles[i];
+			var domStyle = stylesInDom[item.id];
+
+			domStyle.refs--;
+			mayRemove.push(domStyle);
+		}
+
+		if(newList) {
+			var newStyles = listToStyles(newList, options);
+			addStylesToDom(newStyles, options);
+		}
+
+		for (var i = 0; i < mayRemove.length; i++) {
+			var domStyle = mayRemove[i];
+
+			if(domStyle.refs === 0) {
+				for (var j = 0; j < domStyle.parts.length; j++) domStyle.parts[j]();
+
+				delete stylesInDom[domStyle.id];
+			}
+		}
+	};
+};
+
+function addStylesToDom (styles, options) {
+	for (var i = 0; i < styles.length; i++) {
+		var item = styles[i];
+		var domStyle = stylesInDom[item.id];
+
+		if(domStyle) {
+			domStyle.refs++;
+
+			for(var j = 0; j < domStyle.parts.length; j++) {
+				domStyle.parts[j](item.parts[j]);
+			}
+
+			for(; j < item.parts.length; j++) {
+				domStyle.parts.push(addStyle(item.parts[j], options));
+			}
+		} else {
+			var parts = [];
+
+			for(var j = 0; j < item.parts.length; j++) {
+				parts.push(addStyle(item.parts[j], options));
+			}
+
+			stylesInDom[item.id] = {id: item.id, refs: 1, parts: parts};
+		}
+	}
+}
+
+function listToStyles (list, options) {
+	var styles = [];
+	var newStyles = {};
+
+	for (var i = 0; i < list.length; i++) {
+		var item = list[i];
+		var id = options.base ? item[0] + options.base : item[0];
+		var css = item[1];
+		var media = item[2];
+		var sourceMap = item[3];
+		var part = {css: css, media: media, sourceMap: sourceMap};
+
+		if(!newStyles[id]) styles.push(newStyles[id] = {id: id, parts: [part]});
+		else newStyles[id].parts.push(part);
+	}
+
+	return styles;
+}
+
+function insertStyleElement (options, style) {
+	var target = getElement(options.insertInto)
+
+	if (!target) {
+		throw new Error("Couldn't find a style target. This probably means that the value for the 'insertInto' parameter is invalid.");
+	}
+
+	var lastStyleElementInsertedAtTop = stylesInsertedAtTop[stylesInsertedAtTop.length - 1];
+
+	if (options.insertAt === "top") {
+		if (!lastStyleElementInsertedAtTop) {
+			target.insertBefore(style, target.firstChild);
+		} else if (lastStyleElementInsertedAtTop.nextSibling) {
+			target.insertBefore(style, lastStyleElementInsertedAtTop.nextSibling);
+		} else {
+			target.appendChild(style);
+		}
+		stylesInsertedAtTop.push(style);
+	} else if (options.insertAt === "bottom") {
+		target.appendChild(style);
+	} else if (typeof options.insertAt === "object" && options.insertAt.before) {
+		var nextSibling = getElement(options.insertInto + " " + options.insertAt.before);
+		target.insertBefore(style, nextSibling);
+	} else {
+		throw new Error("[Style Loader]\n\n Invalid value for parameter 'insertAt' ('options.insertAt') found.\n Must be 'top', 'bottom', or Object.\n (https://github.com/webpack-contrib/style-loader#insertat)\n");
+	}
+}
+
+function removeStyleElement (style) {
+	if (style.parentNode === null) return false;
+	style.parentNode.removeChild(style);
+
+	var idx = stylesInsertedAtTop.indexOf(style);
+	if(idx >= 0) {
+		stylesInsertedAtTop.splice(idx, 1);
+	}
+}
+
+function createStyleElement (options) {
+	var style = document.createElement("style");
+
+	options.attrs.type = "text/css";
+
+	addAttrs(style, options.attrs);
+	insertStyleElement(options, style);
+
+	return style;
+}
+
+function createLinkElement (options) {
+	var link = document.createElement("link");
+
+	options.attrs.type = "text/css";
+	options.attrs.rel = "stylesheet";
+
+	addAttrs(link, options.attrs);
+	insertStyleElement(options, link);
+
+	return link;
+}
+
+function addAttrs (el, attrs) {
+	Object.keys(attrs).forEach(function (key) {
+		el.setAttribute(key, attrs[key]);
+	});
+}
+
+function addStyle (obj, options) {
+	var style, update, remove, result;
+
+	// If a transform function was defined, run it on the css
+	if (options.transform && obj.css) {
+	    result = options.transform(obj.css);
+
+	    if (result) {
+	    	// If transform returns a value, use that instead of the original css.
+	    	// This allows running runtime transformations on the css.
+	    	obj.css = result;
+	    } else {
+	    	// If the transform function returns a falsy value, don't add this css.
+	    	// This allows conditional loading of css
+	    	return function() {
+	    		// noop
+	    	};
+	    }
+	}
+
+	if (options.singleton) {
+		var styleIndex = singletonCounter++;
+
+		style = singleton || (singleton = createStyleElement(options));
+
+		update = applyToSingletonTag.bind(null, style, styleIndex, false);
+		remove = applyToSingletonTag.bind(null, style, styleIndex, true);
+
+	} else if (
+		obj.sourceMap &&
+		typeof URL === "function" &&
+		typeof URL.createObjectURL === "function" &&
+		typeof URL.revokeObjectURL === "function" &&
+		typeof Blob === "function" &&
+		typeof btoa === "function"
+	) {
+		style = createLinkElement(options);
+		update = updateLink.bind(null, style, options);
+		remove = function () {
+			removeStyleElement(style);
+
+			if(style.href) URL.revokeObjectURL(style.href);
+		};
+	} else {
+		style = createStyleElement(options);
+		update = applyToTag.bind(null, style);
+		remove = function () {
+			removeStyleElement(style);
+		};
+	}
+
+	update(obj);
+
+	return function updateStyle (newObj) {
+		if (newObj) {
+			if (
+				newObj.css === obj.css &&
+				newObj.media === obj.media &&
+				newObj.sourceMap === obj.sourceMap
+			) {
+				return;
+			}
+
+			update(obj = newObj);
+		} else {
+			remove();
+		}
+	};
+}
+
+var replaceText = (function () {
+	var textStore = [];
+
+	return function (index, replacement) {
+		textStore[index] = replacement;
+
+		return textStore.filter(Boolean).join('\n');
+	};
+})();
+
+function applyToSingletonTag (style, index, remove, obj) {
+	var css = remove ? "" : obj.css;
+
+	if (style.styleSheet) {
+		style.styleSheet.cssText = replaceText(index, css);
+	} else {
+		var cssNode = document.createTextNode(css);
+		var childNodes = style.childNodes;
+
+		if (childNodes[index]) style.removeChild(childNodes[index]);
+
+		if (childNodes.length) {
+			style.insertBefore(cssNode, childNodes[index]);
+		} else {
+			style.appendChild(cssNode);
+		}
+	}
+}
+
+function applyToTag (style, obj) {
+	var css = obj.css;
+	var media = obj.media;
+
+	if(media) {
+		style.setAttribute("media", media)
+	}
+
+	if(style.styleSheet) {
+		style.styleSheet.cssText = css;
+	} else {
+		while(style.firstChild) {
+			style.removeChild(style.firstChild);
+		}
+
+		style.appendChild(document.createTextNode(css));
+	}
+}
+
+function updateLink (link, options, obj) {
+	var css = obj.css;
+	var sourceMap = obj.sourceMap;
+
+	/*
+		If convertToAbsoluteUrls isn't defined, but sourcemaps are enabled
+		and there is no publicPath defined then lets turn convertToAbsoluteUrls
+		on by default.  Otherwise default to the convertToAbsoluteUrls option
+		directly
+	*/
+	var autoFixUrls = options.convertToAbsoluteUrls === undefined && sourceMap;
+
+	if (options.convertToAbsoluteUrls || autoFixUrls) {
+		css = fixUrls(css);
+	}
+
+	if (sourceMap) {
+		// http://stackoverflow.com/a/26603875
+		css += "\n/*# sourceMappingURL=data:application/json;base64," + btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))) + " */";
+	}
+
+	var blob = new Blob([css], { type: "text/css" });
+
+	var oldSrc = link.href;
+
+	link.href = URL.createObjectURL(blob);
+
+	if(oldSrc) URL.revokeObjectURL(oldSrc);
+}
+
+
+/***/ }),
+/* 27 */
+/***/ (function(module, exports) {
+
+
+/**
+ * When source maps are enabled, `style-loader` uses a link element with a data-uri to
+ * embed the css on the page. This breaks all relative urls because now they are relative to a
+ * bundle instead of the current page.
+ *
+ * One solution is to only use full urls, but that may be impossible.
+ *
+ * Instead, this function "fixes" the relative urls to be absolute according to the current page location.
+ *
+ * A rudimentary test suite is located at `test/fixUrls.js` and can be run via the `npm test` command.
+ *
+ */
+
+module.exports = function (css) {
+  // get current location
+  var location = typeof window !== "undefined" && window.location;
+
+  if (!location) {
+    throw new Error("fixUrls requires window.location");
+  }
+
+	// blank or null?
+	if (!css || typeof css !== "string") {
+	  return css;
+  }
+
+  var baseUrl = location.protocol + "//" + location.host;
+  var currentDir = baseUrl + location.pathname.replace(/\/[^\/]*$/, "/");
+
+	// convert each url(...)
+	/*
+	This regular expression is just a way to recursively match brackets within
+	a string.
+
+	 /url\s*\(  = Match on the word "url" with any whitespace after it and then a parens
+	   (  = Start a capturing group
+	     (?:  = Start a non-capturing group
+	         [^)(]  = Match anything that isn't a parentheses
+	         |  = OR
+	         \(  = Match a start parentheses
+	             (?:  = Start another non-capturing groups
+	                 [^)(]+  = Match anything that isn't a parentheses
+	                 |  = OR
+	                 \(  = Match a start parentheses
+	                     [^)(]*  = Match anything that isn't a parentheses
+	                 \)  = Match a end parentheses
+	             )  = End Group
+              *\) = Match anything and then a close parens
+          )  = Close non-capturing group
+          *  = Match anything
+       )  = Close capturing group
+	 \)  = Match a close parens
+
+	 /gi  = Get all matches, not the first.  Be case insensitive.
+	 */
+	var fixedCss = css.replace(/url\s*\(((?:[^)(]|\((?:[^)(]+|\([^)(]*\))*\))*)\)/gi, function(fullMatch, origUrl) {
+		// strip quotes (if they exist)
+		var unquotedOrigUrl = origUrl
+			.trim()
+			.replace(/^"(.*)"$/, function(o, $1){ return $1; })
+			.replace(/^'(.*)'$/, function(o, $1){ return $1; });
+
+		// already a full url? no change
+		if (/^(#|data:|http:\/\/|https:\/\/|file:\/\/\/)/i.test(unquotedOrigUrl)) {
+		  return fullMatch;
+		}
+
+		// convert the url to a full url
+		var newUrl;
+
+		if (unquotedOrigUrl.indexOf("//") === 0) {
+		  	//TODO: should we add protocol?
+			newUrl = unquotedOrigUrl;
+		} else if (unquotedOrigUrl.indexOf("/") === 0) {
+			// path should be relative to the base url
+			newUrl = baseUrl + unquotedOrigUrl; // already starts with '/'
+		} else {
+			// path should be relative to current directory
+			newUrl = currentDir + unquotedOrigUrl.replace(/^\.\//, ""); // Strip leading './'
+		}
+
+		// send back the fixed url(...)
+		return "url(" + JSON.stringify(newUrl) + ")";
+	});
+
+	// send back the fixed css
+	return fixedCss;
+};
+
+
+/***/ }),
+/* 28 */
 /***/ (function(module, exports) {
 
 module.exports = "uniform float size;\nuniform float scale;\nuniform float impact;\nuniform float stability;\nuniform float spin;\nuniform float rotation;\nuniform float perlin;\n\n//#include <common>\n#include <color_pars_vertex>\n\nvec3 mod289(vec3 x)\n{\n  return x - floor(x * (1.0 / 289.0)) * 289.0;\n}\n\nvec4 mod289(vec4 x)\n{\n  return x - floor(x * (1.0 / 289.0)) * 289.0;\n}\n\nvec4 permute(vec4 x)\n{\n  return mod289(((x*34.0)+1.0)*x);\n}\n\nvec4 taylorInvSqrt(vec4 r)\n{\n  return 1.79284291400159 - 0.85373472095314 * r;\n}\n\nvec3 fade(vec3 t) {\n  return t*t*t*(t*(t*6.0-15.0)+10.0);\n}\n\n// Classic Perlin noise\nfloat cnoise(vec3 P)\n{\n  vec3 Pi0 = floor(P); // Integer part for indexing\n  vec3 Pi1 = Pi0 + vec3(1.0); // Integer part + 1\n  Pi0 = mod289(Pi0);\n  Pi1 = mod289(Pi1);\n  vec3 Pf0 = fract(P); // Fractional part for interpolation\n  vec3 Pf1 = Pf0 - vec3(1.0); // Fractional part - 1.0\n  vec4 ix = vec4(Pi0.x, Pi1.x, Pi0.x, Pi1.x);\n  vec4 iy = vec4(Pi0.yy, Pi1.yy);\n  vec4 iz0 = Pi0.zzzz;\n  vec4 iz1 = Pi1.zzzz;\n\n  vec4 ixy = permute(permute(ix) + iy);\n  vec4 ixy0 = permute(ixy + iz0);\n  vec4 ixy1 = permute(ixy + iz1);\n\n  vec4 gx0 = ixy0 * (1.0 / 7.0);\n  vec4 gy0 = fract(floor(gx0) * (1.0 / 7.0)) - 0.5;\n  gx0 = fract(gx0);\n  vec4 gz0 = vec4(0.5) - abs(gx0) - abs(gy0);\n  vec4 sz0 = step(gz0, vec4(0.0));\n  gx0 -= sz0 * (step(0.0, gx0) - 0.5);\n  gy0 -= sz0 * (step(0.0, gy0) - 0.5);\n\n  vec4 gx1 = ixy1 * (1.0 / 7.0);\n  vec4 gy1 = fract(floor(gx1) * (1.0 / 7.0)) - 0.5;\n  gx1 = fract(gx1);\n  vec4 gz1 = vec4(0.5) - abs(gx1) - abs(gy1);\n  vec4 sz1 = step(gz1, vec4(0.0));\n  gx1 -= sz1 * (step(0.0, gx1) - 0.5);\n  gy1 -= sz1 * (step(0.0, gy1) - 0.5);\n\n  vec3 g000 = vec3(gx0.x,gy0.x,gz0.x);\n  vec3 g100 = vec3(gx0.y,gy0.y,gz0.y);\n  vec3 g010 = vec3(gx0.z,gy0.z,gz0.z);\n  vec3 g110 = vec3(gx0.w,gy0.w,gz0.w);\n  vec3 g001 = vec3(gx1.x,gy1.x,gz1.x);\n  vec3 g101 = vec3(gx1.y,gy1.y,gz1.y);\n  vec3 g011 = vec3(gx1.z,gy1.z,gz1.z);\n  vec3 g111 = vec3(gx1.w,gy1.w,gz1.w);\n\n  vec4 norm0 = taylorInvSqrt(vec4(dot(g000, g000), dot(g010, g010), dot(g100, g100), dot(g110, g110)));\n  g000 *= norm0.x;\n  g010 *= norm0.y;\n  g100 *= norm0.z;\n  g110 *= norm0.w;\n  vec4 norm1 = taylorInvSqrt(vec4(dot(g001, g001), dot(g011, g011), dot(g101, g101), dot(g111, g111)));\n  g001 *= norm1.x;\n  g011 *= norm1.y;\n  g101 *= norm1.z;\n  g111 *= norm1.w;\n\n  float n000 = dot(g000, Pf0);\n  float n100 = dot(g100, vec3(Pf1.x, Pf0.yz));\n  float n010 = dot(g010, vec3(Pf0.x, Pf1.y, Pf0.z));\n  float n110 = dot(g110, vec3(Pf1.xy, Pf0.z));\n  float n001 = dot(g001, vec3(Pf0.xy, Pf1.z));\n  float n101 = dot(g101, vec3(Pf1.x, Pf0.y, Pf1.z));\n  float n011 = dot(g011, vec3(Pf0.x, Pf1.yz));\n  float n111 = dot(g111, Pf1);\n\n  vec3 fade_xyz = fade(Pf0);\n  vec4 n_z = mix(vec4(n000, n100, n010, n110), vec4(n001, n101, n011, n111), fade_xyz.z);\n  vec2 n_yz = mix(n_z.xy, n_z.zw, fade_xyz.y);\n  float n_xyz = mix(n_yz.x, n_yz.y, fade_xyz.x);\n  return 2.2 * n_xyz;\n}\n\nvoid main() {\n\n\t#include <color_vertex>\n\t#include <begin_vertex>\n\n\tfloat s = sin(rotation * spin);\n    float c = cos(rotation * spin);\n\n    transformed.xy = vec2(transformed.x * c - transformed.y * s, transformed.y * c + transformed.x * s);\n\n\t#include <project_vertex>\n\n\t#ifdef USE_SIZEATTENUATION\n\t\tgl_PointSize = size * ( scale / - mvPosition.z );\n\t#else\n\t\tgl_PointSize = size;\n\t#endif\n\n\tfloat noise = cnoise(impact * transformed + vec3( perlin ));\n\n    transformed = stability * transformed + 2.0 * transformed * noise * (1.0 - stability);\n    gl_Position = projectionMatrix * modelViewMatrix * vec4( transformed, 1.0 );\n\n}\n"
 
 /***/ }),
-/* 21 */
+/* 29 */
 /***/ (function(module, exports) {
 
 module.exports = "//\n// Description : Array and textureless GLSL 3D simplex noise function.\n//      Author : Ian McEwan, Ashima Arts.\n//  Maintainer : ijm\n//     Lastmod : 20110409 (stegu)\n//     License : Copyright (C) 2011 Ashima Arts. All rights reserved.\n//               Distributed under the MIT License. See LICENSE file.\n//\n\nuniform float time;\nuniform float opacity;\nuniform vec3 color;\nvarying vec2 vUv;\n\nvec4 permute( vec4 x ) {\n\n\treturn mod( ( ( x * 34.0 ) + 1.0 ) * x, 289.0 );\n\n}\n\nvec4 taylorInvSqrt( vec4 r ) {\n\n\treturn 1.79284291400159 - 0.85373472095314 * r;\n\n}\n\nfloat snoise( vec3 v ) {\n\n\tconst vec2 C = vec2( 1.0 / 6.0, 1.0 / 3.0 );\n\tconst vec4 D = vec4( 0.0, 0.5, 1.0, 2.0 );\n\n\t// First corner\n\n\tvec3 i  = floor( v + dot( v, C.yyy ) );\n\tvec3 x0 = v - i + dot( i, C.xxx );\n\n\t// Other corners\n\n\tvec3 g = step( x0.yzx, x0.xyz );\n\tvec3 l = 1.0 - g;\n\tvec3 i1 = min( g.xyz, l.zxy );\n\tvec3 i2 = max( g.xyz, l.zxy );\n\n\tvec3 x1 = x0 - i1 + 1.0 * C.xxx;\n\tvec3 x2 = x0 - i2 + 2.0 * C.xxx;\n\tvec3 x3 = x0 - 1. + 3.0 * C.xxx;\n\n\t// Permutations\n\n\ti = mod( i, 289.0 );\n\tvec4 p = permute( permute( permute(\n\t\t\t i.z + vec4( 0.0, i1.z, i2.z, 1.0 ) )\n\t\t   + i.y + vec4( 0.0, i1.y, i2.y, 1.0 ) )\n\t\t   + i.x + vec4( 0.0, i1.x, i2.x, 1.0 ) );\n\n\t// Gradients\n\t// ( N*N points uniformly over a square, mapped onto an octahedron.)\n\n\tfloat n_ = 1.0 / 7.0; // N=7\n\n\tvec3 ns = n_ * D.wyz - D.xzx;\n\n\tvec4 j = p - 49.0 * floor( p * ns.z *ns.z );  //  mod(p,N*N)\n\n\tvec4 x_ = floor( j * ns.z );\n\tvec4 y_ = floor( j - 7.0 * x_ );    // mod(j,N)\n\n\tvec4 x = x_ *ns.x + ns.yyyy;\n\tvec4 y = y_ *ns.x + ns.yyyy;\n\tvec4 h = 1.0 - abs( x ) - abs( y );\n\n\tvec4 b0 = vec4( x.xy, y.xy );\n\tvec4 b1 = vec4( x.zw, y.zw );\n\n\n\tvec4 s0 = floor( b0 ) * 2.0 + 1.0;\n\tvec4 s1 = floor( b1 ) * 2.0 + 1.0;\n\tvec4 sh = -step( h, vec4( 0.0 ) );\n\n\tvec4 a0 = b0.xzyw + s0.xzyw * sh.xxyy;\n\tvec4 a1 = b1.xzyw + s1.xzyw * sh.zzww;\n\n\tvec3 p0 = vec3( a0.xy, h.x );\n\tvec3 p1 = vec3( a0.zw, h.y );\n\tvec3 p2 = vec3( a1.xy, h.z );\n\tvec3 p3 = vec3( a1.zw, h.w );\n\n\t// Normalise gradients\n\n\tvec4 norm = taylorInvSqrt( vec4( dot( p0, p0 ), dot( p1, p1 ), dot( p2, p2 ), dot( p3, p3 ) ) );\n\tp0 *= norm.x;\n\tp1 *= norm.y;\n\tp2 *= norm.z;\n\tp3 *= norm.w;\n\n\t// Mix final noise value\n\n\tvec4 m = max( 0.6 - vec4( dot( x0, x0 ), dot( x1, x1 ), dot( x2, x2 ), dot( x3, x3 ) ), 0.0 );\n\tm = m * m;\n\treturn 42.0 * dot( m*m, vec4( dot( p0, x0 ), dot( p1, x1 ),\n\t\t\t\t\t\t\t\t  dot( p2, x2 ), dot( p3, x3 ) ) );\n\n}\n\nfloat surface( vec3 coord ) {\n\n\tfloat n = 0.0;\n\n\tn += 0.7  * abs( snoise( coord ) );\n\tn += 0.25 * abs( snoise( coord * 2.0 ) );\n\n\treturn n;\n\n}\n\nvoid main( void ) {\n\n\tvec3 coord = vec3( vUv, -time );\n\n\tfloat n = surface( coord );\n\n\tgl_FragColor = vec4( color, n * opacity);\n\n}\n\n\t\t"
 
 /***/ }),
-/* 22 */
+/* 30 */
 /***/ (function(module, exports) {
 
 module.exports = "varying vec2 vUv;\n\nvoid main( void ) {\n\tvUv = vec2(uv.x * 2.0, uv.y * 4.0);\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );\n}"
 
 /***/ }),
-/* 23 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /**
@@ -67055,7 +70983,7 @@ module.exports = "varying vec2 vUv;\n\nvoid main( void ) {\n\tvUv = vec2(uv.x * 
  ** @author Jon Lim / http://jonlim.ca
  */
 
-var THREE = window.THREE || __webpack_require__(24);
+var THREE = window.THREE || __webpack_require__(32);
 
 module.exports = TrackballControls = function ( object, domElement ) {
 
@@ -67688,7 +71616,7 @@ TrackballControls.prototype = Object.create( THREE.EventDispatcher.prototype );
 
 
 /***/ }),
-/* 24 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;var self = self || {};// File:src/Three.js
@@ -108266,7 +112194,7 @@ if (true) {
 
 
 /***/ }),
-/* 25 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -108522,34 +112450,7 @@ module.exports = tweenFunctions;
 
 
 /***/ }),
-/* 26 */
-/***/ (function(module, exports) {
-
-var g;
-
-// This works in non-strict mode
-g = (function() {
-	return this;
-})();
-
-try {
-	// This works if eval is allowed (see CSP)
-	g = g || Function("return this")() || (1,eval)("this");
-} catch(e) {
-	// This works if the window reference is available
-	if(typeof window === "object")
-		g = window;
-}
-
-// g can still be undefined, but nothing to do about it...
-// We return undefined, instead of nothing here, so it's
-// easier to handle this case. if(!global) { ...}
-
-module.exports = g;
-
-
-/***/ }),
-/* 27 */
+/* 34 */
 /***/ (function(module, exports) {
 
 module.exports = function(module) {
@@ -108577,7 +112478,7 @@ module.exports = function(module) {
 
 
 /***/ }),
-/* 28 */
+/* 35 */
 /***/ (function(module, exports) {
 
 // Copyright Joyent, Inc. and other Node contributors.
@@ -108882,6 +112783,448 @@ function isObject(arg) {
 function isUndefined(arg) {
   return arg === void 0;
 }
+
+
+/***/ }),
+/* 36 */
+/***/ (function(module, exports) {
+
+// shim for using process in browser
+var process = module.exports = {};
+
+// cached from whatever global is present so that test runners that stub it
+// don't break things.  But we need to wrap it in a try catch in case it is
+// wrapped in strict mode code which doesn't define any globals.  It's inside a
+// function because try/catches deoptimize in certain engines.
+
+var cachedSetTimeout;
+var cachedClearTimeout;
+
+function defaultSetTimout() {
+    throw new Error('setTimeout has not been defined');
+}
+function defaultClearTimeout () {
+    throw new Error('clearTimeout has not been defined');
+}
+(function () {
+    try {
+        if (typeof setTimeout === 'function') {
+            cachedSetTimeout = setTimeout;
+        } else {
+            cachedSetTimeout = defaultSetTimout;
+        }
+    } catch (e) {
+        cachedSetTimeout = defaultSetTimout;
+    }
+    try {
+        if (typeof clearTimeout === 'function') {
+            cachedClearTimeout = clearTimeout;
+        } else {
+            cachedClearTimeout = defaultClearTimeout;
+        }
+    } catch (e) {
+        cachedClearTimeout = defaultClearTimeout;
+    }
+} ())
+function runTimeout(fun) {
+    if (cachedSetTimeout === setTimeout) {
+        //normal enviroments in sane situations
+        return setTimeout(fun, 0);
+    }
+    // if setTimeout wasn't available but was latter defined
+    if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
+        cachedSetTimeout = setTimeout;
+        return setTimeout(fun, 0);
+    }
+    try {
+        // when when somebody has screwed with setTimeout but no I.E. maddness
+        return cachedSetTimeout(fun, 0);
+    } catch(e){
+        try {
+            // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
+            return cachedSetTimeout.call(null, fun, 0);
+        } catch(e){
+            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
+            return cachedSetTimeout.call(this, fun, 0);
+        }
+    }
+
+
+}
+function runClearTimeout(marker) {
+    if (cachedClearTimeout === clearTimeout) {
+        //normal enviroments in sane situations
+        return clearTimeout(marker);
+    }
+    // if clearTimeout wasn't available but was latter defined
+    if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
+        cachedClearTimeout = clearTimeout;
+        return clearTimeout(marker);
+    }
+    try {
+        // when when somebody has screwed with setTimeout but no I.E. maddness
+        return cachedClearTimeout(marker);
+    } catch (e){
+        try {
+            // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
+            return cachedClearTimeout.call(null, marker);
+        } catch (e){
+            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
+            // Some versions of I.E. have different rules for clearTimeout vs setTimeout
+            return cachedClearTimeout.call(this, marker);
+        }
+    }
+
+
+
+}
+var queue = [];
+var draining = false;
+var currentQueue;
+var queueIndex = -1;
+
+function cleanUpNextTick() {
+    if (!draining || !currentQueue) {
+        return;
+    }
+    draining = false;
+    if (currentQueue.length) {
+        queue = currentQueue.concat(queue);
+    } else {
+        queueIndex = -1;
+    }
+    if (queue.length) {
+        drainQueue();
+    }
+}
+
+function drainQueue() {
+    if (draining) {
+        return;
+    }
+    var timeout = runTimeout(cleanUpNextTick);
+    draining = true;
+
+    var len = queue.length;
+    while(len) {
+        currentQueue = queue;
+        queue = [];
+        while (++queueIndex < len) {
+            if (currentQueue) {
+                currentQueue[queueIndex].run();
+            }
+        }
+        queueIndex = -1;
+        len = queue.length;
+    }
+    currentQueue = null;
+    draining = false;
+    runClearTimeout(timeout);
+}
+
+process.nextTick = function (fun) {
+    var args = new Array(arguments.length - 1);
+    if (arguments.length > 1) {
+        for (var i = 1; i < arguments.length; i++) {
+            args[i - 1] = arguments[i];
+        }
+    }
+    queue.push(new Item(fun, args));
+    if (queue.length === 1 && !draining) {
+        runTimeout(drainQueue);
+    }
+};
+
+// v8 likes predictible objects
+function Item(fun, array) {
+    this.fun = fun;
+    this.array = array;
+}
+Item.prototype.run = function () {
+    this.fun.apply(null, this.array);
+};
+process.title = 'browser';
+process.browser = true;
+process.env = {};
+process.argv = [];
+process.version = ''; // empty string to avoid regexp issues
+process.versions = {};
+
+function noop() {}
+
+process.on = noop;
+process.addListener = noop;
+process.once = noop;
+process.off = noop;
+process.removeListener = noop;
+process.removeAllListeners = noop;
+process.emit = noop;
+process.prependListener = noop;
+process.prependOnceListener = noop;
+
+process.listeners = function (name) { return [] }
+
+process.binding = function (name) {
+    throw new Error('process.binding is not supported');
+};
+
+process.cwd = function () { return '/' };
+process.chdir = function (dir) {
+    throw new Error('process.chdir is not supported');
+};
+process.umask = function() { return 0; };
+
+
+/***/ }),
+/* 37 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function(global, process) {(function (global, undefined) {
+    "use strict";
+
+    if (global.setImmediate) {
+        return;
+    }
+
+    var nextHandle = 1; // Spec says greater than zero
+    var tasksByHandle = {};
+    var currentlyRunningATask = false;
+    var doc = global.document;
+    var registerImmediate;
+
+    function setImmediate(callback) {
+      // Callback can either be a function or a string
+      if (typeof callback !== "function") {
+        callback = new Function("" + callback);
+      }
+      // Copy function arguments
+      var args = new Array(arguments.length - 1);
+      for (var i = 0; i < args.length; i++) {
+          args[i] = arguments[i + 1];
+      }
+      // Store and register the task
+      var task = { callback: callback, args: args };
+      tasksByHandle[nextHandle] = task;
+      registerImmediate(nextHandle);
+      return nextHandle++;
+    }
+
+    function clearImmediate(handle) {
+        delete tasksByHandle[handle];
+    }
+
+    function run(task) {
+        var callback = task.callback;
+        var args = task.args;
+        switch (args.length) {
+        case 0:
+            callback();
+            break;
+        case 1:
+            callback(args[0]);
+            break;
+        case 2:
+            callback(args[0], args[1]);
+            break;
+        case 3:
+            callback(args[0], args[1], args[2]);
+            break;
+        default:
+            callback.apply(undefined, args);
+            break;
+        }
+    }
+
+    function runIfPresent(handle) {
+        // From the spec: "Wait until any invocations of this algorithm started before this one have completed."
+        // So if we're currently running a task, we'll need to delay this invocation.
+        if (currentlyRunningATask) {
+            // Delay by doing a setTimeout. setImmediate was tried instead, but in Firefox 7 it generated a
+            // "too much recursion" error.
+            setTimeout(runIfPresent, 0, handle);
+        } else {
+            var task = tasksByHandle[handle];
+            if (task) {
+                currentlyRunningATask = true;
+                try {
+                    run(task);
+                } finally {
+                    clearImmediate(handle);
+                    currentlyRunningATask = false;
+                }
+            }
+        }
+    }
+
+    function installNextTickImplementation() {
+        registerImmediate = function(handle) {
+            process.nextTick(function () { runIfPresent(handle); });
+        };
+    }
+
+    function canUsePostMessage() {
+        // The test against `importScripts` prevents this implementation from being installed inside a web worker,
+        // where `global.postMessage` means something completely different and can't be used for this purpose.
+        if (global.postMessage && !global.importScripts) {
+            var postMessageIsAsynchronous = true;
+            var oldOnMessage = global.onmessage;
+            global.onmessage = function() {
+                postMessageIsAsynchronous = false;
+            };
+            global.postMessage("", "*");
+            global.onmessage = oldOnMessage;
+            return postMessageIsAsynchronous;
+        }
+    }
+
+    function installPostMessageImplementation() {
+        // Installs an event handler on `global` for the `message` event: see
+        // * https://developer.mozilla.org/en/DOM/window.postMessage
+        // * http://www.whatwg.org/specs/web-apps/current-work/multipage/comms.html#crossDocumentMessages
+
+        var messagePrefix = "setImmediate$" + Math.random() + "$";
+        var onGlobalMessage = function(event) {
+            if (event.source === global &&
+                typeof event.data === "string" &&
+                event.data.indexOf(messagePrefix) === 0) {
+                runIfPresent(+event.data.slice(messagePrefix.length));
+            }
+        };
+
+        if (global.addEventListener) {
+            global.addEventListener("message", onGlobalMessage, false);
+        } else {
+            global.attachEvent("onmessage", onGlobalMessage);
+        }
+
+        registerImmediate = function(handle) {
+            global.postMessage(messagePrefix + handle, "*");
+        };
+    }
+
+    function installMessageChannelImplementation() {
+        var channel = new MessageChannel();
+        channel.port1.onmessage = function(event) {
+            var handle = event.data;
+            runIfPresent(handle);
+        };
+
+        registerImmediate = function(handle) {
+            channel.port2.postMessage(handle);
+        };
+    }
+
+    function installReadyStateChangeImplementation() {
+        var html = doc.documentElement;
+        registerImmediate = function(handle) {
+            // Create a <script> element; its readystatechange event will be fired asynchronously once it is inserted
+            // into the document. Do so, thus queuing up the task. Remember to clean up once it's been called.
+            var script = doc.createElement("script");
+            script.onreadystatechange = function () {
+                runIfPresent(handle);
+                script.onreadystatechange = null;
+                html.removeChild(script);
+                script = null;
+            };
+            html.appendChild(script);
+        };
+    }
+
+    function installSetTimeoutImplementation() {
+        registerImmediate = function(handle) {
+            setTimeout(runIfPresent, 0, handle);
+        };
+    }
+
+    // If supported, we should attach to the prototype of global, since that is where setTimeout et al. live.
+    var attachTo = Object.getPrototypeOf && Object.getPrototypeOf(global);
+    attachTo = attachTo && attachTo.setTimeout ? attachTo : global;
+
+    // Don't get fooled by e.g. browserify environments.
+    if ({}.toString.call(global.process) === "[object process]") {
+        // For Node.js before 0.9
+        installNextTickImplementation();
+
+    } else if (canUsePostMessage()) {
+        // For non-IE10 modern browsers
+        installPostMessageImplementation();
+
+    } else if (global.MessageChannel) {
+        // For web workers, where supported
+        installMessageChannelImplementation();
+
+    } else if (doc && "onreadystatechange" in doc.createElement("script")) {
+        // For IE 6–8
+        installReadyStateChangeImplementation();
+
+    } else {
+        // For older browsers
+        installSetTimeoutImplementation();
+    }
+
+    attachTo.setImmediate = setImmediate;
+    attachTo.clearImmediate = clearImmediate;
+}(typeof self === "undefined" ? typeof global === "undefined" ? this : global : self));
+
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3), __webpack_require__(36)))
+
+/***/ }),
+/* 38 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var apply = Function.prototype.apply;
+
+// DOM APIs, for completeness
+
+exports.setTimeout = function() {
+  return new Timeout(apply.call(setTimeout, window, arguments), clearTimeout);
+};
+exports.setInterval = function() {
+  return new Timeout(apply.call(setInterval, window, arguments), clearInterval);
+};
+exports.clearTimeout =
+exports.clearInterval = function(timeout) {
+  if (timeout) {
+    timeout.close();
+  }
+};
+
+function Timeout(id, clearFn) {
+  this._id = id;
+  this._clearFn = clearFn;
+}
+Timeout.prototype.unref = Timeout.prototype.ref = function() {};
+Timeout.prototype.close = function() {
+  this._clearFn.call(window, this._id);
+};
+
+// Does not start the time, just sets up the members needed.
+exports.enroll = function(item, msecs) {
+  clearTimeout(item._idleTimeoutId);
+  item._idleTimeout = msecs;
+};
+
+exports.unenroll = function(item) {
+  clearTimeout(item._idleTimeoutId);
+  item._idleTimeout = -1;
+};
+
+exports._unrefActive = exports.active = function(item) {
+  clearTimeout(item._idleTimeoutId);
+
+  var msecs = item._idleTimeout;
+  if (msecs >= 0) {
+    item._idleTimeoutId = setTimeout(function onTimeout() {
+      if (item._onTimeout)
+        item._onTimeout();
+    }, msecs);
+  }
+};
+
+// setimmediate attaches itself to the global object
+__webpack_require__(37);
+exports.setImmediate = setImmediate;
+exports.clearImmediate = clearImmediate;
 
 
 /***/ })
