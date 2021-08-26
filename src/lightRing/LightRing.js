@@ -28,7 +28,7 @@ export default class LightRing {
     }
 
     innerR(val) {
-        if (!_.isUndefined(val)) {
+        if (val !== undefined) {
             this._innerR = val;
             this.geometry.dispose();
             this.geometry = new RadialRingGeometry(this._innerR, this._outerR, this._segments);
@@ -38,7 +38,7 @@ export default class LightRing {
     }
 
     outerR(val) {
-        if (!_.isUndefined(val)) {
+        if (val !== undefined) {
             this._outerR = val;
             this.geometry.dispose();
             this.geometry = new RadialRingGeometry(this._innerR, this._outerR, this._segments);
@@ -48,7 +48,7 @@ export default class LightRing {
     }
 
     color(val) {
-        if (!_.isUndefined(val)) {
+        if (val !== undefined) {
             this._color = new Color(val);
             this.material.color = this._color;
         }
@@ -56,7 +56,7 @@ export default class LightRing {
     }
 
     opacity(val) {
-        if (!_.isUndefined(val)) {
+        if (val !== undefined) {
             this._opacity = val;
             this.material.opacity = val;
         }

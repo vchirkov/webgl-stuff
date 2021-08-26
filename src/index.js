@@ -1,7 +1,6 @@
 /**
  * Created by vchirkov on 6/23/2017.
  */
-import {extend, each, defaults, isUndefined} from 'lodash';
 import {EventEmitter} from 'events';
 import {Color} from 'three';
 import {easeOutCubic as tween, linear as bgTween} from 'tween-functions';
@@ -43,7 +42,7 @@ export default class WebglStuff extends EventEmitter {
             throw new Error('container element is not found. Please pass it as first argument to WebglStuff constructor');
         }
 
-        this.initial = extend({}, initial, preset);
+        this.initial = {...initial, ...preset};
 
         this.sceneSet = new SceneSet(el, this.initial.background);
 
@@ -64,7 +63,7 @@ export default class WebglStuff extends EventEmitter {
             z: this.initial.z,
         });
 
-        each(this.highCircle.circles, (circle) => this.sceneSet.scene.add(circle.mesh));
+        this.highCircle.circles.forEach(circle => this.sceneSet.scene.add(circle.mesh));
         this.sceneSet.scene.add(this.highCircle.ring.mesh);
 
         this.floats = new Floats({color: this.initial.floatsColor, opacity: this.initial.floatsOpacity});
@@ -99,17 +98,17 @@ export default class WebglStuff extends EventEmitter {
     }
 
     set(preset) {
-        !isUndefined(preset.visible) && this.highCircle.circlesVisible(preset.visible | 0, preset.opacityStep || 1);
-        !isUndefined(preset.pointsColor) && this.highCircle.pointsColor(new Color(preset.pointsColor));
-        !isUndefined(preset.ringColor) && this.highCircle.ringColor(new Color(preset.ringColor));
-        !isUndefined(preset.opacity) && this.highCircle.ring.opacity(preset.opacity);
-        !isUndefined(preset.impact) && this.highCircle.impact(preset.impact);
-        !isUndefined(preset.stabilityStart) && this.highCircle.stabilityStart(preset.stabilityStart);
-        !isUndefined(preset.stabilityEnd) && this.highCircle.stabilityEnd(preset.stabilityEnd);
-        !isUndefined(preset.rotation) && this.highCircle.rotation(preset.rotation);
-        !isUndefined(preset.perlin) && this.highCircle.perlin(preset.perlin);
-        !isUndefined(preset.background) && this.sceneSet.renderer.setClearColor(new Color(preset.background));
-        !isUndefined(preset.floatsOpacity) && (this.floats.material.opacity = preset.floatsOpacity);
+        preset.visible !== undefined && this.highCircle.circlesVisible(preset.visible | 0, preset.opacityStep || 1);
+        preset.pointsColor !== undefined && this.highCircle.pointsColor(new Color(preset.pointsColor));
+        preset.ringColor !== undefined && this.highCircle.ringColor(new Color(preset.ringColor));
+        preset.opacity !== undefined && this.highCircle.ring.opacity(preset.opacity);
+        preset.impact !== undefined && this.highCircle.impact(preset.impact);
+        preset.stabilityStart !== undefined && this.highCircle.stabilityStart(preset.stabilityStart);
+        preset.stabilityEnd !== undefined && this.highCircle.stabilityEnd(preset.stabilityEnd);
+        preset.rotation !== undefined && this.highCircle.rotation(preset.rotation);
+        preset.perlin !== undefined && this.highCircle.perlin(preset.perlin);
+        preset.background !== undefined && this.sceneSet.renderer.setClearColor(new Color(preset.background));
+        preset.floatsOpacity !== undefined && (this.floats.material.opacity = preset.floatsOpacity);
     }
 
     _beginTransition(preset, duration) {
@@ -127,7 +126,8 @@ export default class WebglStuff extends EventEmitter {
             floatsOpacity: this.floats.material.opacity
         };
 
-        this._transitionTo = defaults({}, preset, this._transitionTo, this._transitionFrom);
+        this._transitionTo = {...this._transitionFrom, ...this._transitionTo, ...preset};
+        console.log(preset.pointsColor);
         if (!(this._transitionTo.pointsColor instanceof Color)) {
             this._transitionTo.pointsColor = new Color(this._transitionTo.pointsColor);
         }

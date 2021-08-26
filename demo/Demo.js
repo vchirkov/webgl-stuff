@@ -4,10 +4,8 @@
 import TrackballControls from 'three-trackballcontrols';
 import Stats from 'stats.js';
 import dat from 'dat.gui/build/dat.gui';
-import WebglStuff from '../src';
-
-import {clone, extend, each} from 'lodash';
-import clipboard from 'clipboard-js';
+import WebglStuff from '../src/index';
+import * as clipboard from 'clipboard-polyfill/text';
 import Noty from 'noty';
 import 'noty/lib/noty.css';
 
@@ -17,8 +15,8 @@ const KEYS = [
     16  // 'alt'
 ];
 
-export  default class Demo {
-    constructor(el, preset = clone(WebglStuff.presets.normal), duration = 3000) {
+export default class Demo {
+    constructor(el, preset = {...WebglStuff.presets.normal}, duration = 3000) {
         this.el = el;
         this.preset = preset;
         this.duration = duration;
@@ -42,7 +40,7 @@ export  default class Demo {
         this.gui.add(this, 'duration')
             .min(0).max(60 * 1000)
             .step(100)
-            .onChange(this.transit.bind(this));
+            .onChange(() => this.transit());
 
         this.initGuiPresetButtons().open();
         this.initGuiCircles().open();
@@ -56,55 +54,55 @@ export  default class Demo {
         circles.add(this.preset, 'visible')
             .min(0).max(WebglStuff.initial.circles)
             .step(1)
-            .onChange(this.transit.bind(this));
+            .onChange(() => this.transit());
         circles.add(this.preset, 'opacityStep')
             .min(0).max(1)
             .step(0.1)
-            .onChange(this.transit.bind(this));
+            .onChange(() => this.transit());
         circles.addColor(this.preset, 'pointsColor')
-            .onChange(this.transit.bind(this));
+            .onChange(() => this.transit());
         circles.add(this.preset, 'impact')
             .min(-1).max(1)
             .step(0.001)
-            .onChange(this.transit.bind(this));
+            .onChange(() => this.transit());
         circles.add(this.preset, 'stabilityStart')
             .min(0.5).max(2)
             .step(0.001)
-            .onChange(this.transit.bind(this));
+            .onChange(() => this.transit());
         circles.add(this.preset, 'stabilityEnd')
             .min(0.5).max(2)
             .step(0.001)
-            .onChange(this.transit.bind(this));
+            .onChange(() => this.transit());
         circles.add(this.preset, 'rotation')
             .min(-0.01).max(0.01)
             .step(0.00001)
-            .onChange(this.transit.bind(this));
+            .onChange(() => this.transit());
         circles.add(this.preset, 'perlin')
             .min(-0.01).max(0.01)
             .step(0.00001)
-            .onChange(this.transit.bind(this));
+            .onChange(() => this.transit());
         return circles;
     }
 
     initGuiHighlight() {
         let highlight = this.gui.addFolder('Highlight settings');
         highlight.addColor(this.preset, 'ringColor')
-            .onChange(this.transit.bind(this));
+            .onChange(() => this.transit());
         highlight.add(this.preset, 'opacity')
             .min(0).max(1)
             .step(0.1)
-            .onChange(this.transit.bind(this));
+            .onChange(() => this.transit());
         return highlight;
     }
 
     initGuiBackground() {
         let background = this.gui.addFolder('Background settings');
         background.addColor(this.preset, 'background')
-            .onChange(this.transit.bind(this));
+            .onChange(() => this.transit());
         background.add(this.preset, 'floatsOpacity')
             .min(0).max(1)
             .step(0.01)
-            .onChange(this.transit.bind(this));
+            .onChange(() => this.transit());
         return background;
     }
 
@@ -130,18 +128,18 @@ export  default class Demo {
         let clipboardAction = {
             'copy preset': () => {
                 try {
-                    clipboard.copy(JSON.stringify(this.preset, null, 4));
-                    new Noty({
-                        type: 'success',
-                        text: 'Yay, copied :)',
-                        layout: 'bottomRight',
-                        progressBar: false,
-                        killer: true,
-                        timeout: 1000,
-                        animation: {
-                            close: null
-                        }
-                    }).show();
+                    clipboard.writeText(JSON.stringify(this.preset, null, 4))
+                        .then(() => new Noty({
+                            type: 'success',
+                            text: 'Yay, copied :)',
+                            layout: 'bottomRight',
+                            progressBar: false,
+                            killer: true,
+                            timeout: 1000,
+                            animation: {
+                                close: null
+                            }
+                        }).show());
                 } catch (e) {
                     new Noty({
                         type: 'error',
@@ -158,12 +156,11 @@ export  default class Demo {
     }
 
     transit(preset, update = false) {
-        extend(this.preset, preset);
-        this.wgs.transitTo(this.preset, this.duration);
-
-        if (update) {
-            each(this.gui.__folders, folder => each(folder.__controllers, c => c.updateDisplay()));
+        if (preset) {
+            Object.assign(this.preset, preset);
+            Object.values(this.gui.__folders).forEach(folder => folder.__controllers.forEach(c => c.updateDisplay()));
         }
+        this.wgs.transitTo(this.preset, this.duration);
     }
 
     initControls() {

@@ -1,12 +1,26 @@
 /**
  * Created by vlad.chirkov on 2.6.17.
  */
-import {times, map, isUndefined, each} from 'lodash';
 import CircularPoints from './circularPoints/CircularPoints';
 import LightRing from './lightRing/LightRing';
 
 export default class HighLightedCirclePoints {
-    constructor(circlesNumber, circlesVisible, radius, space, pointsNumber, {pointsColor, ringColor, opacity, impact, stabilityStart, stabilityEnd, diffusion, rotation, perlin, ringInside, ringOutside, x, y, z}) {
+    constructor(circlesNumber, circlesVisible, radius, space, pointsNumber, {
+        pointsColor,
+        ringColor,
+        opacity,
+        impact,
+        stabilityStart,
+        stabilityEnd,
+        diffusion,
+        rotation,
+        perlin,
+        ringInside,
+        ringOutside,
+        x,
+        y,
+        z
+    }) {
         this._circlesNumber = circlesNumber;
         this._circlesVisible = circlesVisible;
         this._radius = radius;
@@ -34,7 +48,7 @@ export default class HighLightedCirclePoints {
         this._outerR = (this._radius + this._space * this._circlesNumber) * this._ringOutside;
         this.circles = [];
 
-        times(this._circlesNumber, (i) => {
+        for (let i = 0; i < this._circlesNumber; i++) {
             let r = this._radius + this._space * i;
             let n = this._pointsNumber - i * this._opts.diffusion | 0;
             this.circles.push(new CircularPoints(r, n, {
@@ -45,7 +59,7 @@ export default class HighLightedCirclePoints {
                 y,
                 z
             }));
-        });
+        }
 
         this.stability(stabilityStart, stabilityEnd);
 
@@ -54,19 +68,19 @@ export default class HighLightedCirclePoints {
 
     uniform(name, valFrom, valTo) {
         if (!valTo) {
-            return map(this.circles, (circle) => circle.uniform(name, valFrom));
+            return this.circles.map((circle) => circle.uniform(name, valFrom));
         } else {
             let valStep = (valTo - valFrom) / this.circles.length;
-            return map(this.circles, (circle, i) => circle.uniform(name, valFrom + valStep * i));
+            return this.circles.map((circle, i) => circle.uniform(name, valFrom + valStep * i));
         }
     }
 
     stability(valFrom, valTo) {
-        if (!isUndefined(valFrom)) {
+        if (valFrom !== undefined) {
             this._opts.stabilityStart = valFrom;
         }
 
-        if (!isUndefined(valTo)) {
+        if (valTo !== undefined) {
             this._opts.stabilityEnd = valTo;
         }
 
@@ -74,7 +88,7 @@ export default class HighLightedCirclePoints {
     }
 
     stabilityStart(val) {
-        if (!isUndefined(val)) {
+        if (val !== undefined) {
             this._opts.stabilityStart = val;
             this.uniform('stability', val, this._opts.stabilityEnd);
         }
@@ -82,7 +96,7 @@ export default class HighLightedCirclePoints {
     }
 
     stabilityEnd(val) {
-        if (!isUndefined(val)) {
+        if (val !== undefined) {
             this._opts.stabilityEnd = val;
             this.uniform('stability', this._opts.stabilityStart, val);
         }
@@ -90,7 +104,7 @@ export default class HighLightedCirclePoints {
     }
 
     impact(val) {
-        if (!isUndefined(val)) {
+        if (val !== undefined) {
             this._opts.impact = val;
             this.uniform('impact', val);
         }
@@ -98,16 +112,16 @@ export default class HighLightedCirclePoints {
     }
 
     pointsColor(val) {
-        if (!isUndefined(val)) {
+        if (val !== undefined) {
             this._pointsColor = val;
-            each(this.circles, (circle) => circle.color(val));
+            this.circles.forEach(circle => circle.color(val));
         }
 
         return this._pointsColor;
     }
 
     ringColor(val) {
-        if (!isUndefined(val)) {
+        if (val !== undefined) {
             this._ringColor = val;
             this.ring.color(val);
         }
@@ -116,14 +130,14 @@ export default class HighLightedCirclePoints {
     }
 
     rotation(speed) {
-        if (!isUndefined(speed)) {
+        if (speed !== undefined) {
             this._rotation.speed = speed;
         }
         return this._rotation.speed;
     }
 
     perlin(speed) {
-        if (!isUndefined(speed)) {
+        if (speed !== undefined) {
             this._perlin.speed = speed;
         }
         return this._perlin.speed;
@@ -138,9 +152,9 @@ export default class HighLightedCirclePoints {
     }
 
     circlesVisible(circlesVisible, opacityStep) {
-        if (!isUndefined(circlesVisible)) {
+        if (circlesVisible !== undefined) {
             this._circlesVisible = circlesVisible | 0;
-            each(this.circles, (circle, i) => {
+            this.circles.forEach((circle, i) => {
                 if (i < this._circlesVisible) {
                     if (circle.opacity() < 1) {
                         circle.opacity(Math.min(circle.opacity() + opacityStep, 1))

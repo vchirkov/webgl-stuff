@@ -30,7 +30,7 @@ export default class CircularPoints {
     }
 
     color(val) {
-        if (!_.isUndefined(val)) {
+        if (val !== undefined) {
             this._color = new Color(val);
             this.material.color = this._color;
         }
@@ -38,14 +38,14 @@ export default class CircularPoints {
     }
 
     visible(val) {
-        if (!_.isUndefined(val)) {
+        if (val !== undefined) {
             this.mesh.visible = val;
         }
         return this.mesh.visible;
     }
 
     opacity(val) {
-        if (!_.isUndefined(val)) {
+        if (val !== undefined) {
             this.material.opacity = val;
         }
         return this.material.opacity;
